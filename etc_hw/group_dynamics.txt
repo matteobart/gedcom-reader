@@ -1,9 +1,20 @@
 1. What programming language is your team using for the project?  Everyone on the team must use the same programming language and contribute code for the group's submission.
 
+We plan on using a combination of both Python + MongoDB. We think this is the best option as Python as it allows us to preform complex operations with minimum lines of code. While Python is considered to be slower to run, we are not concerned about runtime for this project. For our database, MongoDB has great documentation and is easy to set up.  
+
 2. How will the group communicate?  Skype? Google Hangouts?  Email?  Text messages? Something else?  It's your choice, but your must choose a technology.
+
+We have mainly communicated over a group text messaging system and that seems to work well so far. This should be okay to manage since we are in small groups. We are also all living in Hoboken, so we can meet up if need be on campus. If we all can't make it to campus, we will use Google Hangouts.  
 
 3. When will your team communicate?   I recommend that you adopt the concept of a Daily Standup meeting (we'll discuss this in the Week 3 lecture).  You may not need to talk every day, but you should talk together at least once per week.
 
+We will communicate somewhere during the morning or afternoon [depending on the day]. We have all agreed that meeting at night maybe more difficult due to other responsibilities. 
+
 4. What is the URL of your team's GitHub repository?
 
+URL: https://github.com/matteobart/gedcom-reader
+
 5. Identify the roles and responsibilities for each team member.   You'll need to fill the role of developers, testers, and someone to update the Team Report including the burn down chart and sprint retrospective. A single person is likely to have multiple roles.  For each person, identify the roles to be filled for that person.
+
+Matteo Bartalini - Developer + Tester
+[ADD YOUR NAME HERE WITH ROLE] 
