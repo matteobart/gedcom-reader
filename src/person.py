@@ -27,9 +27,9 @@ class Person:
             self.spouse))
 
     def __lt__(self, other):
-        return self.id < self.other
+        return self.id < other.id
     def __le__(self, other):
-        return self.id <= self.other
+        return self.id <= other.id
     def __eq__(self, other):
         if isinstance(other, self.__class__):
             return self.id == other.id
