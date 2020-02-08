@@ -19,3 +19,4 @@ URL: https://github.com/matteobart/gedcom-reader
 Matteo Bartalini - Developer + Tester
 Daniel Kramer - Develoer + Tester
 Michael Dineen - Develper + Report Organizer
++[ADD YOUR NAME + ROLE]
