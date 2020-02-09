@@ -1,17 +1,21 @@
 import argparse
-import family
+from family import Family
+# from person import Person
 import sys
 from prettytable import PrettyTable
-from person import Person
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
 
 optional_tags = ['death', 'spouse', 'child']
 people = []
-families = {}
+families = []
 parsed_output = []
-test = ["id", "name", "gender", "birthday", "age", "alive", "death", "child", "spouse"]
+formatted_families = []
+individual_headers = ["id", "name", "gender", "birthday", "age", "alive", "death", "child", "spouse"]
+family_headers = ["id", "married", "divorced", "husbandId", "husbandName", "wifeId", "wifeName", "children"]
+
 individual_table = PrettyTable()
+family_table = PrettyTable()
 
 #given an array of strings parse the GEDCOM information
 #there is no return but will print to console
@@ -61,16 +65,55 @@ def create_individual_list(parsed_output):
         if not tag in new_person_map.keys():
             new_person_map[tag] = 'NA'
     people.append(new_person_map)
-    print(people)
 
-def build_individual_table(people):
-    print("building table")
-    for item in test:
-        print(item)
-        column = [person[item] for person in people]
-        print(column)
-        individual_table.add_column(item, column)
-    print(individual_table) 
+
+def create_family_list(parsed_output):
+    prev_is_married = False
+    prev_is_divorced = False
+    start_case = False
+    for line in parsed_output:
+        if line[0] == "FAM":
+            if start_case == True:
+                families.append(z)
+            start_case = True
+            line[1] = line[1].replace('@', '')
+            z = Family(line[1])
+        elif line[0] == "MARR":
+            prev_is_married = True
+        elif line[0] == "DATE" and prev_is_married == True:
+            z.married = line[1]
+            prev_is_married = False
+        elif line[0] == "DIV":
+            prev_is_divorced = True
+        elif line[0] == "DATE" and prev_is_divorced == True:
+            z.divorced = line[1]
+            prev_is_married = False
+        elif line[0] == "HUSB":
+            line[1] = line[1].replace('@', '')
+            z.husbandId = line[1]
+            z.husbandName= person_lookup(line[1])
+        elif line[0] == "WIFE":
+            line[1] = line[1].replace('@', '')
+            z.wifeId = line[1]
+            z.wifeName = person_lookup(line[1])
+        elif line[0] == "CHIL":
+            line[1] = line[1].replace('@', '')
+            if len(z.children) > 0:
+                z.children.append(line[1])
+            else: 
+                z.children = [line[1]]
+    families.append(z)
+            
+def person_lookup(ID):
+    for person in people:
+        if person['id'] == ID:
+            return person['name']
+
+def build_table(table, headers, data):
+    for header in headers:
+        column = [item[header] for item in data]
+        table.add_column(header, column)
+    print(table)
 
 def parse(lines):
     for line in lines:
@@ -79,7 +122,6 @@ def parse(lines):
         split = line.split(" ", 2)
         if len(split) == 2: #if it has no extra args, add an empty one
             split.append("")
-
         if split[0] == "0":
             if split[2] == "INDI":
                 print_out(0, "INDI", True, split[1])
@@ -118,6 +160,7 @@ def parse(lines):
                 print_out(2, split[1], False, split[2])
         else: 
             print_out(split[0], split[1], False, split[2])
+
 def print_in(str):
     print("-->", str)
 
@@ -126,7 +169,7 @@ def print_out(level, tag, valid, arg):
         # valid_str = "<--" + str(level) + "|" + str(tag) + "|" + ("Y" if valid else "N") + "|" + str(arg)
         valid_str_arr = [str(tag), str(arg)]
         parsed_output.append(valid_str_arr)
-        print(parsed_output[-1])
+        # print(parsed_output[-1])
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Homemade GEDCOM reader')
@@ -137,7 +180,17 @@ if __name__ == "__main__":
         lines = file.readlines()
         parse(lines)
     create_individual_list(parsed_output)
-    build_individual_table(people)
+    create_family_list(parsed_output)
+    for family in families:
+        family = family.format_tuple()
+        formatted_families.append(family)
+    print("--------------------------------------INDIVIDUAL TABLE--------------------------------------")
+    build_table(individual_table, individual_headers, people)
+    print("--------------------------------------FAMILY TABLE--------------------------------------")
+    build_table(family_table, family_headers, formatted_families)
+    
+    
+
 
 
 
