@@ -22,5 +22,5 @@ Matteo Bartalini - Developer + Tester
 Daniel Kramer - Develoer + Tester
 Michael Dineen - Develper + Report Organizer
 Brenden Brusberg - Developer + Tester
-+[ADD YOUR NAME + ROLE]
+Chaeli Vieira - Developer + Report Organizer
 
