@@ -119,8 +119,13 @@ def build_table(table, headers, data):
     for header in headers:
         column = [item[header] for item in data]
         table.add_column(header, column)
+<<<<<<< HEAD
     print(table.get_string(sortby="id"))
 
+=======
+        table.sortby = "id"
+    print(table)
+>>>>>>> 40aa1469728acd21b63bdb02288e84fac7e7c868
 
 def parse(lines):
     for line in lines:
@@ -195,7 +200,7 @@ if __name__ == "__main__":
     for family in families:
         family = family.format_tuple()
         formatted_families.append(family)
-    print("--------------------------------------INDIVIDUAL TABLE--------------------------------------")
+    print("----------------------------------------INDIVIDUAL TABLE----------------------------------------")
     build_table(individual_table, individual_headers, people)
-    print("--------------------------------------FAMILY TABLE--------------------------------------")
+    print("\n-------------------------------------------------------FAMILY TABLE-------------------------------------------------------")
     build_table(family_table, family_headers, formatted_families)

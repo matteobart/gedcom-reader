@@ -16,7 +16,11 @@ URL: https://github.com/matteobart/gedcom-reader
 
 5. Identify the roles and responsibilities for each team member.   You'll need to fill the role of developers, testers, and someone to update the Team Report including the burn down chart and sprint retrospective. A single person is likely to have multiple roles.  For each person, identify the roles to be filled for that person.
 
+At every sprint, the selection of members who will be be developers and testers or both will be choosen depending on the requirements of the sprint.
+
 Matteo Bartalini - Developer + Tester
 Daniel Kramer - Develoer + Tester
 Michael Dineen - Develper + Report Organizer
-+[ADD YOUR NAME + ROLE]
+Brenden Brusberg - Developer + Tester
+Chaeli Vieira - Developer + Report Organizer
+
