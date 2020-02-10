@@ -119,13 +119,8 @@ def build_table(table, headers, data):
     for header in headers:
         column = [item[header] for item in data]
         table.add_column(header, column)
-<<<<<<< HEAD
-    print(table.get_string(sortby="id"))
-
-=======
-        table.sortby = "id"
+    table.sortby = "id"
     print(table)
->>>>>>> 40aa1469728acd21b63bdb02288e84fac7e7c868
 
 def parse(lines):
     for line in lines:
