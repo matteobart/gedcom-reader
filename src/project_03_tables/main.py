@@ -6,6 +6,7 @@ from prettytable import PrettyTable
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
 
+
 optional_tags = ['death', 'spouse', 'child']
 people = []
 families = []
@@ -179,6 +180,11 @@ def print_out(level, tag, valid, arg):
         valid_str_arr = [str(tag), str(arg)]
         parsed_output.append(valid_str_arr)
         # print(parsed_output[-1])
+
+# given a string that looks like a date in form: 10 FEB 1999
+# will return a date object 
+def parse_date(date_str):
+    return datetime.strptime(date_str, "%d %b %Y")
 
 
 if __name__ == "__main__":
