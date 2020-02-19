@@ -14,7 +14,7 @@ This is where our codebase is going to go
 `extras.py` -> Has all the bonus functions that we write for the sprints ex. `list_upcoming_birthdays` and `fewer_than_15_siblings`  
 `person.py` -> Defines the `Person` object  
 `family.py` -> Defines the `Family` object  
-`unittest.py` -> Has all the unit tests for the project run using: `python3 unittest.py`  
+`tests.py` -> Has all the unit tests for the project run using: `python3 tests.py`  
 
 
 ## test_files 
