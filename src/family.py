@@ -1,7 +1,13 @@
 class Family:
-    # Args:
-    # id: String, married: String/None, divorced: String/None, husband: Person, wife: Person, children: [String (id)]
-    def __init__(self, id, married='NA', divorced='NA', husbandId='NA', husbandName='NA', wifeName='NA', wifeId='NA', children=[]):
+    def __init__(self,
+                 id, 
+                 married=None, 
+                 divorced=None, 
+                 husbandId=None, 
+                 husbandName=None, 
+                 wifeName=None, 
+                 wifeId=None, 
+                 children=[]):
         self.id = id
         self.married = married
         self.divorced = divorced
@@ -10,8 +16,18 @@ class Family:
         self.wifeId = wifeId
         self.wifeName = wifeName
         self.children = children
-    def format_tuple(self):
-        return {'id': self.id, 'married': self.married, 'divorced': self.divorced, 'husbandId': self.husbandId, 'husbandName': self.husbandName, 'wifeId': self.wifeId, 'wifeName': self.wifeName, 'children': self.children}
+
+    def toTuple(self):
+        return(
+            self.id, 
+            self.married,
+            self.divorced,
+            self.husbandId,
+            self.husbandName,
+            self.wifeId,
+            self.wifeName,
+            self.children)
+
     def __str__(self):
         return("{}|{}|{}|{}|{}|{}|{}|{}".format(
             self.id, 

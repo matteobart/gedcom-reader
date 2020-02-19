@@ -1,8 +1,14 @@
 class Person:
-    # Args:
-    # Gender: True -> Male, False -> Female
-    # id: String, name: String, gender: bool, birthday: String, age: int, alive: bool, death: String, children: [String (id)], spouse: [String (id)]
-    def __init__(self, id, name, gender, birthday, age, alive, death, children, spouse):
+    def __init__(self, 
+                id, 
+                name=None, 
+                gender=None, 
+                birthday=None, 
+                age=None, 
+                alive=None, 
+                death=None, 
+                children=[], 
+                spouse=[]):
         self.id = id
         self.name = name
         self.gender = gender
@@ -14,8 +20,20 @@ class Person:
         self.spouse = spouse
 
 
+    def toTuple(self):
+        return(
+            self.id, 
+            self.name,
+            self.gender,
+            self.birthday,
+            self.age,
+            self.alive,
+            self.death,
+            self.children,
+            self.spouse)
+
     def __str__(self):
-        print("{}|{}|{}|{}|{}|{}|{}|{}|{}".format(
+        return("{}|{}|{}|{}|{}|{}|{}|{}|{}".format(
             self.id, 
             self.name,
             "M" if self.gender else "F",
@@ -23,7 +41,7 @@ class Person:
             self.age,
             self.alive,
             self.death,
-            self.child,
+            self.children,
             self.spouse))
 
     def __lt__(self, other):
