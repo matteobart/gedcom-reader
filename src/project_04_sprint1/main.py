@@ -8,14 +8,14 @@ from dateutil.relativedelta import relativedelta
 
 
 optional_tags = ['death', 'spouse', 'child']
-people = []
-families = []
-parsed_output = []
-formatted_families = []
+people = [] # list of dicts with keys: ["id", "name", "gender", "birthday","age", "alive", "death", "child", "spouse"]
+families = [] # Family list
+parsed_output = [] #output of parser, fed into interpreter
+formatted_families = [] # Family objects converted into tuples
 individual_headers = ["id", "name", "gender", "birthday",
-                      "age", "alive", "death", "child", "spouse"]
+                      "age", "alive", "death", "child", "spouse"] # Headers for individuals PrettyTable
 family_headers = ["id", "married", "divorced", "husbandId",
-                  "husbandName", "wifeId", "wifeName", "children"]
+                  "husbandName", "wifeId", "wifeName", "children"] # Headers for families PrettyTable
 
 individual_table = PrettyTable()
 family_table = PrettyTable()
@@ -25,7 +25,7 @@ family_table = PrettyTable()
 
 
 def create_individual_list(parsed_output):
-    start_case = False
+    start_case = False #not needed in redesign :P. Literally determines if any individuals have been created yet
     for line in parsed_output:
         if line[0] == "INDI":
             if start_case == True:
@@ -73,9 +73,9 @@ def create_individual_list(parsed_output):
 
 
 def create_family_list(parsed_output):
-    prev_is_married = False
+    prev_is_married = False #originally needed because DATE of marriage/divorce is on a different line than the MARR and DIV tags
     prev_is_divorced = False
-    start_case = False
+    start_case = False #not needed in redesign :P. Literally determines if any individuals have been created yet
     for line in parsed_output:
         if line[0] == "FAM":
             if start_case == True:
@@ -186,7 +186,7 @@ def print_out(level, tag, valid, arg):
 def parse_date(date_str):
     return datetime.strptime(date_str, "%d %b %Y")
 
-def fewer_than_15_siblings(families):
+def fewer_than_15_siblings(families): #amazing concise util function ;D
     # We choose to determine siblings indicated by which family they are in
     for family in families:
         if len(family["children"]) > 15:
@@ -234,5 +234,6 @@ if __name__ == "__main__":
     build_table(individual_table, individual_headers, people)
     print("\n-------------------------------------------------------FAMILY TABLE-------------------------------------------------------")
     build_table(family_table, family_headers, formatted_families)
+    # below functions to be moved into utils file
     fewer_than_15_siblings(formatted_families)
     list_upcoming_birthdays(people)
