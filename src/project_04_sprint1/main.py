@@ -186,6 +186,15 @@ def print_out(level, tag, valid, arg):
 def parse_date(date_str):
     return datetime.strptime(date_str, "%d %b %Y")
 
+def fewer_than_15_siblings(families):
+    # We choose to determine siblings indicated by which family they are in
+    for family in families:
+        if len(family["children"]) > 15:
+            return False
+    return True
+        
+
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Homemade GEDCOM reader')
@@ -205,3 +214,4 @@ if __name__ == "__main__":
     build_table(individual_table, individual_headers, people)
     print("\n-------------------------------------------------------FAMILY TABLE-------------------------------------------------------")
     build_table(family_table, family_headers, formatted_families)
+    fewer_than_15_siblings(formatted_families)
