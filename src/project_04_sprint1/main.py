@@ -3,7 +3,7 @@ from family import Family
 # from person import Person
 import sys
 from prettytable import PrettyTable
-from datetime import datetime
+from datetime import datetime, date, timedelta
 from dateutil.relativedelta import relativedelta
 
 
@@ -193,7 +193,27 @@ def fewer_than_15_siblings(families):
             return False
     return True
         
+def list_upcoming_birthdays(people):
+    birthdayList = []
+    for person in people:
+        current_date = date.today().isoformat() # get today's date
+        current_year = str(current_date)[:5] 
+        person_birthday = datetime.strptime(str(current_year + str(person["birthday"][5:])), "%Y-%m-%d")
+        days_after = str(date.today()+timedelta(days=30)) #get 30 days later
+        da = datetime.strptime(days_after, "%Y-%m-%d")
+        delta = da - person_birthday 
+        days = int(str(delta).split(" ")[0]) % 365
+        if days<31:
+            birthdayList.append(current_year + str(person["birthday"][5:]))
+    return birthdayList
 
+        # print("\nCurrent Date: ",current_date)
+        # print("30 days before current date: ",days_before)
+        # print("30 days after current date : ",days_after)
+        # print(str(person["birthday"][5:])
+        # print()
+        # thisYear = 
+        # if (datetime.now())
 
 
 if __name__ == "__main__":
@@ -215,3 +235,4 @@ if __name__ == "__main__":
     print("\n-------------------------------------------------------FAMILY TABLE-------------------------------------------------------")
     build_table(family_table, family_headers, formatted_families)
     fewer_than_15_siblings(formatted_families)
+    list_upcoming_birthdays(people)
