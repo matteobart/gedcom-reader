@@ -20,11 +20,22 @@ def list_upcoming_birthdays(people):
             next_birthday = datetime(year, month, day)
             
             # actual check
-            if ((next_birthday-today).days) < 30:
+            if ((next_birthday-today).days) < 30 and person.alive:
                 birthdayList.append(person)
     return birthdayList
 
-# returns False if any family has more than 15 siblings
-# otherwise True
+
+
+
+
+
+
+
+
 def fewer_than_15_siblings(family): 
+    # returns False if any family has more than 15 siblings
+    # otherwise True
     return False if (family.children and len(family.children) > 15) else True
+
+def marriage_before_death(family):
+    print("")
