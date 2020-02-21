@@ -74,6 +74,7 @@ def parse(lines):
                 next_line = next(iterator)
                 next_split = next_line.replace("\n","").split(" ", 2)
                 date = utils.parse_date(next_split[2])
+                utils.marriage_before_death(current_entity, people)
                 current_entity.married = date
             elif split[1] == "HUSB": # FAMILY ONLY
                 husbandId = split[2].replace("@","")

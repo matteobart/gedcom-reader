@@ -37,20 +37,6 @@ def fewer_than_15_siblings(family):
     # otherwise True
     return False if (family.children and len(family.children) > 15) else True
 
-def marriage_before_death(family, people):
-    #family, singluar. people, entire dict of individuals
-    married_date = family.married #called RIGHT AFTER family is married, so married date assumed to be set
-    husband = people[family.husbandId]
-    wife = people[family.wifeId]
-    today = datetime.now()
-    if not wife.alive:
-        
-    return True
-    # husband = husbCall #replace with database call on individuals table with id of husband, for now assume correct results
-    # wife = wifeCall #replace with database call on individuals table with id of husband, for now assume correct results
-    # if not husband.alive or not wife.alive:
-    return True
-
 def list_recent_births(people):
     ret = []
     for person in people:
