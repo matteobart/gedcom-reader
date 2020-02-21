@@ -1,11 +1,28 @@
 from datetime import datetime, date, timedelta
 from dateutil.relativedelta import relativedelta
 
+from mock import patch, MagicMock
+
+
+@patch.object(datetime.now, None)
 def list_upcoming_birthdays(people):
     birthdayList = []
     for person in people:
         if person.birthday is not None:
-            if (date.today() - person.birthday).days < 30:
+            today = datetime.now()
+            month = person.birthday.month
+            day = person.birthday.day
+            year = today.year
+            if (month < today.month or (month == today.month and day < today.day)): # if birthday passed go next year
+                year += 1
+            if (month == 1 and day == 29 and year % 4 != 0): # if birthday is on leap day and not leap year 
+                month = 2
+                day = 1
+            next_birthday = datetime(year, month, day)
+            
+            print(next_birthday)
+            # actual check
+            if ((next_birthday-today).days) < 30:
                 birthdayList.append(person)
     return birthdayList
 
