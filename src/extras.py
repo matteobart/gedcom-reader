@@ -4,7 +4,6 @@ from dateutil.relativedelta import relativedelta
 from mock import patch, MagicMock
 
 
-@patch.object(datetime.now, None)
 def list_upcoming_birthdays(people):
     birthdayList = []
     for person in people:
@@ -20,7 +19,6 @@ def list_upcoming_birthdays(people):
                 day = 1
             next_birthday = datetime(year, month, day)
             
-            print(next_birthday)
             # actual check
             if ((next_birthday-today).days) < 30:
                 birthdayList.append(person)

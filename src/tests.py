@@ -41,6 +41,17 @@ class TestGedcomMethods(unittest.TestCase):
         p6 = Person("@20@", birthday=utils.parse_date("20 FEB 1961"))
         self.assertEqual([p2, p4, p6], extras.list_upcoming_birthdays([p1, p2, p3, p4, p5, p6]))
 
+    def test_parse_un_unique_indi_ids(self):
+        self.assertRaises(
+            Exception, 
+            ged_parser.parse, 
+            ["0 @32@ INDI", "0 @43@ INDI", "0 @43@ INDI"])
+
+    def test_parse_un_unique_fam_ids(self):
+        self.assertRaises(
+            Exception, 
+            ged_parser.parse, 
+            ["0 @32@ FAM", "0 @43@ FAM", "0 @43@ FAM"])
 
 #make sure your functions start with the word 'test' and have one 
 #parameter self (just because its in a class dw about why)

@@ -26,12 +26,15 @@ def parse(lines):
         if split[0] == "0": # level 0 tag
             if split[2] == "INDI": # PERSON ONLY
                 id = split[1].replace("@","")
+                if people.get(id) != None:
+                    raise Exception("This INDI ID is not unique:", id)
                 # NOTE children & spouse must be set here otherwise Python will share list across all instances
                 current_entity = Person(id, alive=True, children=[], spouse=[]) # ASSUME alive!  
                 people[id] = current_entity
-                print(current_entity)
             elif split[2] == "FAM": # FAMILY ONLY
                 id = split[1].replace("@","")
+                if families.get(id) != None:
+                    raise Exception("This FAM ID is not unique:", id)
                 # NOTE children must be set here otherwise Python will share list across all instances
                 current_entity = Family(id, children=[])
                 families[id] = current_entity # create a family add it to the dict
