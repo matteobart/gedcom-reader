@@ -58,8 +58,12 @@ def parse(lines):
                 # NOT YET USED!
                 pass
             elif split[1] == "DEAT":
+                # can check if "Y" is in split[2] if youd like
                 current_entity.alive = False
-                current_entity.death = split[2] # possible better to format this
+                next_line = next(iterator)
+                next_split = next_line.replace("\n","").split(" ", 2)
+                date = utils.parse_date(next_split[2]) 
+                current_entity.death = date
             elif split[1] == "FAMC":
                 childId = split[2].replace("@","")
                 current_entity.children.append(childId)

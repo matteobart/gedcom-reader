@@ -17,6 +17,7 @@ def print_families(families):
                         "Children"))
     for family in families:
         table.add_row(family.toTuple())
+    table.sortby = "ID"
     print(table)
 
 def print_people(people):
@@ -31,4 +32,5 @@ def print_people(people):
                         "Spouse"))
     for person in people:
         table.add_row(person.toTuple())
+    table.sortby = "ID"
     print(table)
