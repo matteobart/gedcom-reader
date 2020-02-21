@@ -28,3 +28,12 @@ def list_upcoming_birthdays(people):
 # otherwise True
 def fewer_than_15_siblings(family): 
     return False if (family.children and len(family.children) > 15) else True
+
+def list_recent_births(people):
+    ret = []
+    for person in people:
+        if person.birthday is not None:
+            today = datetime.now()
+            if (today - person.birthday).days < 30:
+                ret.append(person)
+    return ret
