@@ -53,6 +53,31 @@ class TestGedcomMethods(unittest.TestCase):
             ged_parser.parse, 
             ["0 @32@ FAM", "0 @43@ FAM", "0 @43@ FAM"])
 
+    def test_recent_birthday_some(self): # this test is RELATIVE to the actual day of code running
+        # MUST USE THE PYTHON MOCK LIBRARY!
+        # MOCK SHOULD PRETEND TODAY IS FEB 20, 2020
+        #BETTER TO USE DATETIME DIRECTLY HERE RATHER THAN utils.parse_date()
+        p1 = Person("@54@")
+        p2 = Person("@43@", birthday=utils.parse_date("20 FEB 2020"))
+        p3 = Person("@42@")
+        p4 = Person("@22@", birthday=utils.parse_date("1 FEB 2020"))
+        p5 = Person("@21@", birthday=utils.parse_date("19 JAN 2019"))
+        p6 = Person("@20@", birthday=utils.parse_date("1 FEB 1961"))
+        self.assertEqual([p2, p4], extras.list_recent_births([p1, p2, p3, p4, p5, p6]))
+
+
+    def test_recent_birthday_none(self): # this test is RELATIVE to the actual day of code running
+        # MUST USE THE PYTHON MOCK LIBRARY!
+        # MOCK SHOULD PRETEND TODAY IS FEB 20, 2020
+        #BETTER TO USE DATETIME DIRECTLY HERE RATHER THAN utils.parse_date()
+        p1 = Person("@54@")
+        p2 = Person("@43@", birthday=utils.parse_date("29 FEB 2016"))
+        p3 = Person("@42@")
+        p4 = Person("@22@", birthday=utils.parse_date("29 FEB 1960"))
+        p5 = Person("@21@", birthday=utils.parse_date("19 FEB 1960"))
+        p6 = Person("@20@", birthday=utils.parse_date("20 FEB 1961"))
+        self.assertEqual([], extras.list_recent_births([p1, p2, p3, p4, p5, p6]))
+
 #make sure your functions start with the word 'test' and have one 
 #parameter self (just because its in a class dw about why)
 #ex test_great_name_(self):
