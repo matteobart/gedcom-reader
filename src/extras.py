@@ -37,10 +37,9 @@ def fewer_than_15_siblings(family):
     # otherwise True
     return False if (family.children and len(family.children) > 15) else True
 
-<<<<<<< HEAD
 def marriage_before_death(family):
     print("")
-=======
+
 def list_recent_births(people):
     ret = []
     for person in people:
@@ -48,5 +47,4 @@ def list_recent_births(people):
             today = datetime.now()
             if (today - person.birthday).days < 30:
                 ret.append(person)
-    return ret
->>>>>>> 0ee0a39f3b5ab23764fff0a6e1a98709b0696b4d
+    return ret 
