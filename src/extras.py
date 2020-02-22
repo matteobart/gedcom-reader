@@ -24,14 +24,6 @@ def list_upcoming_birthdays(people):
                 birthdayList.append(person)
     return birthdayList
 
-
-
-
-
-
-
-
-
 def fewer_than_15_siblings(family): 
     # returns False if any family has more than 15 siblings
     # otherwise True
@@ -45,3 +37,5 @@ def list_recent_births(people):
             if (today - person.birthday).days < 30:
                 ret.append(person)
     return ret 
+
+    
