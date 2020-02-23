@@ -143,6 +143,26 @@ class TestGedcomMethods(unittest.TestCase):
             ged_parser.parse,
             ["0 @I32@ INDI", "1 BIRT Y", "2 DATE 6 MAY 1961", "1 DEAT Y", "2 DATE 6 MAY 1960",  "1 FAMS @F1@"])
 
+    def test_divorce_before_death(self):
+        try:
+            ged_parser.parse(["0 @I32@ INDI", "1 DEAT Y", "2 DATE 6 MAY 1961", "1 FAMS @F1@",
+                              "0 @I43@ INDI", "1 DEAT Y", "2 DATE 6 MAY 1971", "1 FAMS @F1@",
+                              "0 @F1@ FAM", "1 HUSB @I32@", "1 WIFE @I43@", "1 DIV", "2 DATE 5 MAY 1930"])
+        except Exception:
+            self.fail("marriage_before_death() raised Exception unexpectedly!")
+
+    def test_divorce_before_death_exception(self):
+        self.assertRaises(
+            Exception,
+            ged_parser.parse,
+            ["0 @I32@ INDI", "1 DEAT Y", "2 DATE 6 MAY 1961", "1 FAMS @F1@",
+             "0 @I43@ INDI", "1 DEAT Y", "2 DATE 6 MAY 1971", "1 FAMS @F1@",
+             "0 @F1@ FAM", "1 HUSB @I32@", "1 WIFE @I43@", "1 DIV", "2 DATE 3 MAY 1966"])
+
+#make sure your functions start with the word 'test' and have at least one 
+#parameter self (just because its in a class dw about why)
+#ex test_great_name_(self, other_params):
+
     def test_reject_illegitimate_dates_edge_case(self):
         self.assertEqual(True, utils.reject_illegitimate_dates("29 FEB 2016"))
 
@@ -155,7 +175,6 @@ class TestGedcomMethods(unittest.TestCase):
 # make sure your functions start with the word 'test' and have at least one
 # parameter self (just because its in a class dw about why)
 # ex test_great_name_(self, other_params):
-
 
 if __name__ == '__main__':
     unittest.main()
