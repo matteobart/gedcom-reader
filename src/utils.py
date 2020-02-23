@@ -58,5 +58,9 @@ def marriage_before_death(family, people):
 
 def reject_illegitimate_dates(date):
     formatted_date = parse_date(date)
-    datetime(year=formatted_date.year,
-             month=formatted_date.month, day=formatted_date.day)
+    try:
+        datetime(year=formatted_date.year,
+                 month=formatted_date.month, day=formatted_date.day)
+        return True
+    except ValueError:
+        return False
