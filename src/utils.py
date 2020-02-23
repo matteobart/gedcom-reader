@@ -55,6 +55,51 @@ def marriage_before_death(family, people):
                 "Married Date should be before death date of husband in family:", family.id)
     return True
 
+def birth_before_death(person):
+    """
+    Checks person's birthday is in fact before death
+
+    written by: Chaeli and Brenden
+
+    :param person: person object
+    :return: Boolean
+    """
+
+    birth_date = person.birthday
+    death_date = person.death
+    if  (death_date - birth_date).days < 0:
+        print( death_date- birth_date )
+        print(birth_date)
+        print(death_date)
+
+        raise Exception(
+            "Death Date should not be before birth date of person:", person.id)
+    return True
+
+
+def birth_before_marriage(family, people):
+    """
+    Checks marriage date is in fact after birth of both spouses
+
+    written by: Chaeli and Brenden
+
+    :param family: family object
+    :param people: person dictionary
+    :return: Boolean
+    """
+    married_date = family.married
+    husband = people[family.husbandId]
+    wife = people[family.wifeId]
+
+    if (married_date - wife.birthday).days < 0:
+        raise Exception(
+            "Married Date should  not be before birth date of wife in family:", family.id)
+
+    if (married_date - husband.birthday).days < 0:
+        raise Exception(
+            "Married Date should  not be before birth date of husband in family:", family.id)
+    return True
+
 
 def reject_illegitimate_dates(date):
     formatted_date = parse_date(date)

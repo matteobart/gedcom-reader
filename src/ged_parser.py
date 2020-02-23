@@ -64,6 +64,7 @@ def parse(lines):
                 next_split = next_line.replace("\n","").split(" ", 2)
                 date = utils.parse_date(next_split[2]) 
                 current_entity.death = date
+                utils.birth_before_death(current_entity)
             elif split[1] == "FAMC":
                 childId = split[2].replace("@","")
                 current_entity.children.append(childId)
@@ -75,6 +76,7 @@ def parse(lines):
                 next_split = next_line.replace("\n","").split(" ", 2)
                 date = utils.parse_date(next_split[2])
                 current_entity.married = date
+                utils.birth_before_marriage(current_entity, people)
                 utils.marriage_before_death(current_entity, people) # WARNING: this may throw an exception if marriage is before death of individuals
             elif split[1] == "HUSB": # FAMILY ONLY
                 husbandId = split[2].replace("@","")
