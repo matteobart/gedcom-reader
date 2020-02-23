@@ -110,15 +110,6 @@ class TestGedcomMethods(unittest.TestCase):
              "0 @I43@ INDI", "1 DEAT Y", "2 DATE 6 MAY 1971", "1 FAMS @F1@",
              "0 @F1@ FAM", "1 HUSB @I32@", "1 WIFE @I43@", "1 MARR", "2 DATE 3 MAY 1962"])
 
-    def test_reject_illegitimate_dates_edge_case(self):
-        self.assertEqual(True, utils.reject_illegitimate_dates("29 FEB 2016"))
-
-    def test_reject_illegitimate_false(self):
-        self.assertEqual(True, utils.reject_illegitimate_dates("31 FEB 2021"))
-
-    def test_reject_illegitimate_dates_true(self):
-        self.assertEqual(True, utils.reject_illegitimate_dates("26 MAR 2010"))
-
 # make sure your functions start with the word 'test' and have at least one
 # parameter self (just because its in a class dw about why)
 # ex test_great_name_(self, other_params):
@@ -151,6 +142,15 @@ class TestGedcomMethods(unittest.TestCase):
             Exception,
             ged_parser.parse,
             ["0 @I32@ INDI", "1 BIRT Y", "2 DATE 6 MAY 1961", "1 DEAT Y", "2 DATE 6 MAY 1960",  "1 FAMS @F1@"])
+
+     def test_reject_illegitimate_dates_edge_case(self):
+        self.assertEqual(True, utils.reject_illegitimate_dates("29 FEB 2016"))
+
+    def test_reject_illegitimate_false(self):
+        self.assertEqual(True, utils.reject_illegitimate_dates("31 FEB 2021"))
+
+    def test_reject_illegitimate_dates_true(self):
+        self.assertEqual(True, utils.reject_illegitimate_dates("26 MAR 2010"))
 
 # make sure your functions start with the word 'test' and have at least one
 # parameter self (just because its in a class dw about why)
