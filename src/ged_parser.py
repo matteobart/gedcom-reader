@@ -96,6 +96,7 @@ def parse(lines):
                 next_split = next_line.replace("\n","").split(" ", 2)
                 date = utils.parse_date(next_split[2])
                 current_entity.divorced = date
+                utils.divorce_before_death(current_entity, people)
             else:
                 pass 
                 # this following line is a-okay!
