@@ -77,6 +77,26 @@ def birth_before_death(person):
     return True
 
 
+def marriage_before_divorce(family):
+    """
+    Checks marriage date is in fact before divorce of both spouses
+
+    written by: Brenden
+
+    :param family: family object
+    :param people: person dictionary
+    :return: Boolean
+    """
+    married_date = family.married
+    divorce_date = family.divorced
+
+    if (divorce_date - married_date).days < 0:
+        raise Exception(
+            "Married Date should be before  date of wife in family:", family.id)
+
+    return True
+
+
 def birth_before_marriage(family, people):
     """
     Checks marriage date is in fact after birth of both spouses

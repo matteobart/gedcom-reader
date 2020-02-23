@@ -159,6 +159,18 @@ class TestGedcomMethods(unittest.TestCase):
              "0 @I43@ INDI", "1 DEAT Y", "2 DATE 6 MAY 1971", "1 FAMS @F1@",
              "0 @F1@ FAM", "1 HUSB @I32@", "1 WIFE @I43@", "1 DIV", "2 DATE 3 MAY 1966"])
 
+    def test_marriage_before_divorce(self):
+        try:
+            ged_parser.parse(["0 @F1@ FAM", "1 HUSB @I32@", "1 WIFE @I43@", "1 MARR", "2 DATE 3 MAY 1962", "1 DIV", "2 DATE 5 MAY 1970"])
+        except Exception:
+            self.fail("marriage_before_death() raised Exception unexpectedly!")
+
+    def test_marriage_before_divorce_exception(self):
+        self.assertRaises(
+            Exception,
+            ged_parser.parse,
+            ["0 @F1@ FAM", "1 HUSB @I32@", "1 WIFE @I43@", "1 MARR", "2 DATE 3 MAY 1962", "1 DIV", "2 DATE 5 MAY 1930"])
+
 #make sure your functions start with the word 'test' and have at least one 
 #parameter self (just because its in a class dw about why)
 #ex test_great_name_(self, other_params):
