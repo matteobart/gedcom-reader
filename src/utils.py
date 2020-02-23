@@ -64,16 +64,11 @@ def birth_before_death(person):
     :param person: person object
     :return: Boolean
     """
-
     birth_date = person.birthday
     death_date = person.death
     if birth_date is None or death_date is None:
         return True
     if  (death_date - birth_date).days < 0:
-        print( death_date- birth_date )
-        print(birth_date)
-        print(death_date)
-
         raise Exception(
             "Death Date should not be before birth date of person:", person.id)
     return True
@@ -139,18 +134,10 @@ def divorce_before_death(family, people):
     wife = people[family.wifeId]
 
     if (divorce_date - wife.death).days > 0:
-        print("wife")
-        print(divorce_date - wife.death)
-        print(divorce_date)
-        print(wife.death)
         raise Exception(
             "Divorce Date should  not be before death date of wife in family:", family.id)
 
     if (divorce_date - husband.death).days > 0:
-        print("husb")
-        print(divorce_date - husband.death)
-        print(divorce_date)
-        print(husband.death)
         raise Exception(
             "Divorce Date should  not be before death date of husband in family:", family.id)
     return True

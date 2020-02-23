@@ -155,8 +155,9 @@ class TestGedcomMethods(unittest.TestCase):
              "0 @F1@ FAM", "1 HUSB @I32@", "1 WIFE @I43@", "1 DIV", "2 DATE 3 MAY 1966"])
 
     def test_marriage_before_divorce(self):
-        pass
-        #ged_parser.parse(["0 @F1@ FAM", "1 MARR", "2 DATE 3 MAY 1962", "1 DIV", "2 DATE 5 MAY 1970"])
+        testFam = Family("@F1@", married=utils.parse_date("5 MAY 1960"),
+                         divorced=utils.parse_date("5 MAY 1980"), husbandId= "@22@",  wifeId="@21@")
+        utils.marriage_before_divorce(testFam)
 
     def test_marriage_before_divorce_exception(self):
         self.assertRaises(
