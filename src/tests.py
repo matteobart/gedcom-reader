@@ -143,7 +143,7 @@ class TestGedcomMethods(unittest.TestCase):
             ged_parser.parse,
             ["0 @I32@ INDI", "1 BIRT Y", "2 DATE 6 MAY 1961", "1 DEAT Y", "2 DATE 6 MAY 1960",  "1 FAMS @F1@"])
 
-     def test_reject_illegitimate_dates_edge_case(self):
+    def test_reject_illegitimate_dates_edge_case(self):
         self.assertEqual(True, utils.reject_illegitimate_dates("29 FEB 2016"))
 
     def test_reject_illegitimate_false(self):
