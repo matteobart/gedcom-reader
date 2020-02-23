@@ -67,6 +67,8 @@ def birth_before_death(person):
 
     birth_date = person.birthday
     death_date = person.death
+    if birth_date is None or death_date is None:
+        return True
     if  (death_date - birth_date).days < 0:
         print( death_date- birth_date )
         print(birth_date)
@@ -89,10 +91,11 @@ def marriage_before_divorce(family):
     """
     married_date = family.married
     divorce_date = family.divorced
-
+    if married_date is None or divorce_date is None:
+        return True
     if (divorce_date - married_date).days < 0:
         raise Exception(
-            "Married Date should be before  date of wife in family:", family.id)
+            "Married Date should be before date of wife in family:", family.id)
 
     return True
 
@@ -110,12 +113,13 @@ def birth_before_marriage(family, people):
     married_date = family.married
     husband = people[family.husbandId]
     wife = people[family.wifeId]
-
-    if (married_date - wife.birthday).days < 0:
+    if married_date is None:
+        return
+    if wife.birthday is not None and (married_date - wife.birthday).days < 0:
         raise Exception(
             "Married Date should  not be before birth date of wife in family:", family.id)
 
-    if (married_date - husband.birthday).days < 0:
+    if husband.birthday is not None and (married_date - husband.birthday).days < 0:
         raise Exception(
             "Married Date should  not be before birth date of husband in family:", family.id)
     return True
@@ -153,10 +157,8 @@ def divorce_before_death(family, people):
 
 
 def reject_illegitimate_dates(date):
-    formatted_date = parse_date(date)
     try:
-        datetime(year=formatted_date.year,
-                 month=formatted_date.month, day=formatted_date.day)
+        parse_date(date)
         return True
     except ValueError:
         return False
