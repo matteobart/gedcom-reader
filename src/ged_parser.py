@@ -31,7 +31,7 @@ def parse(lines):
             if split[2] == "INDI":  # PERSON ONLY
                 id = split[1].replace("@", "")
                 if people.get(id) != None:
-                    print("ERROR: PERSON: US22: This INDI ID is not unique:", id)
+                    raise Exception("This INDI ID is not unique:", id)
                 # NOTE children & spouse must be set here otherwise Python will share list across all instances
                 current_entity = Person(
                     id, alive=True, children=[], spouse=[])  # ASSUME alive!
@@ -39,7 +39,7 @@ def parse(lines):
             elif split[2] == "FAM":  # FAMILY ONLY
                 id = split[1].replace("@", "")
                 if families.get(id) != None:
-                    print("ERROR: FAMILY: US22: This FAM ID is not unique:", id)
+                    raise Exception("This FAM ID is not unique:", id)
                 # NOTE children must be set here otherwise Python will share list across all instances
                 current_entity = Family(id, children=[])
                 # create a family add it to the dict
@@ -68,8 +68,7 @@ def parse(lines):
                 current_entity.alive = False
                 next_line = next(iterator)
                 next_split = next_line.replace("\n", "").split(" ", 2)
-                utils.reject_illegitimate_dates(next_split[2])
-                date = utils.parse_date(next_split[2])
+                date = utils.reject_illegitimate_dates(next_split[2])
                 current_entity.death = date
                 utils.birth_before_death(current_entity)
             elif split[1] == "FAMC":
@@ -81,8 +80,8 @@ def parse(lines):
             elif split[1] == "MARR":  # FAMILY ONLY
                 next_line = next(iterator)
                 next_split = next_line.replace("\n", "").split(" ", 2)
-                utils.reject_illegitimate_dates(next_split[2])
-                date = utils.parse_date(next_split[2])
+
+                date = utils.reject_illegitimate_dates(next_split[2])
                 current_entity.married = date
                 utils.birth_before_marriage(current_entity, people)
                 # WARNING: this may throw an exception if marriage is before death of individuals
@@ -103,8 +102,7 @@ def parse(lines):
             elif split[1] == "DIV":  # FAMILY ONLY
                 next_line = next(iterator)
                 next_split = next_line.replace("\n", "").split(" ", 2)
-                utils.reject_illegitimate_dates(next_split[2])
-                date = utils.parse_date(next_split[2])
+                date = utils.reject_illegitimate_dates(next_split[2])
                 current_entity.divorced = date
                 utils.divorce_before_death(current_entity, people)
                 utils.marriage_before_divorce(current_entity)
@@ -115,8 +113,8 @@ def parse(lines):
 
         elif split[0] == "2":  # level 2 tag
             if split[1] == "DATE":
-                utils.reject_illegitimate_dates(split[2])
-                date = utils.parse_date(split[2])
+
+                date = utils.reject_illegitimate_dates(split[2])
                 # this tag can be used for either person OR family
                 if isinstance(current_entity, Person):
                     diff = relativedelta(datetime.now(), date)
