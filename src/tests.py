@@ -55,16 +55,10 @@ class TestGedcomMethods(unittest.TestCase):
             [p1, p2, p3, p4, p5, p6]))
 
     def test_parse_un_unique_indi_ids(self):
-        self.assertRaises(
-            Exception,
-            ged_parser.parse,
-            ["0 @32@ INDI", "0 @43@ INDI", "0 @43@ INDI"])
+        ged_parser.parse(["0 @32@ INDI", "0 @43@ INDI", "0 @43@ INDI"])
 
     def test_parse_un_unique_fam_ids(self):
-        self.assertRaises(
-            Exception,
-            ged_parser.parse,
-            ["0 @32@ FAM", "0 @43@ FAM", "0 @43@ FAM"])
+            ged_parser.parse(["0 @32@ FAM", "0 @43@ FAM", "0 @43@ FAM"])
 
     # this test is RELATIVE to the actual day of code running
     def test_recent_birthday_some(self):
