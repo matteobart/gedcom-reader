@@ -1,5 +1,6 @@
 import argparse
 import ged_parser
+import extras
 from utils import print_families
 from utils import print_people
 
@@ -14,6 +15,7 @@ if __name__ == "__main__":
         tup = ged_parser.parse(lines)
         people = tup[0]
         families = tup[1]
+        birthday_list = extras.list_upcoming_birthdays(people)
+        print("\nUPCOMING BIRTHDAY(S): ", birthday_list)
         print_families(families)
         print_people(people)
-

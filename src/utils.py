@@ -55,6 +55,7 @@ def marriage_before_death(family, people):
                 "Married Date should be before death date of husband in family:", family.id)
     return True
 
+
 def birth_before_death(person):
     """
     Checks person's birthday is in fact before death
@@ -68,7 +69,7 @@ def birth_before_death(person):
     death_date = person.death
     if birth_date is None or death_date is None:
         return True
-    if  (death_date - birth_date).days < 0:
+    if (death_date - birth_date).days < 0:
         raise Exception(
             "Death Date should not be before birth date of person:", person.id)
     return True
@@ -119,6 +120,7 @@ def birth_before_marriage(family, people):
             "Married Date should  not be before birth date of husband in family:", family.id)
     return True
 
+
 def divorce_before_death(family, people):
     """
     Checks divorce date is in fact beofre death of both spouses
@@ -148,4 +150,5 @@ def reject_illegitimate_dates(date):
         parse_date(date)
         return True
     except ValueError:
+        print("Invalid Date: ", date)
         return False
