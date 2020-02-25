@@ -24,10 +24,10 @@ def list_upcoming_birthdays(people):
             # actual check
             if ((next_birthday-today).days) < 30 and person.alive:
                 birthdayList.append(person)
-
-    print("ANAMOLY: INDIVIDUALS: US38: Person {} has an upcoming birthday").format(
-        person.id)
-
+    if(len(birthdayList) > 0):
+        for member in birthdayList:
+            print("\nANAMOLY: INDIVIDUALS: US38: Person '" +
+                  member.id + "' has an upcoming birthday")
     return birthdayList
 
 
@@ -35,7 +35,7 @@ def fewer_than_15_siblings(family):
     # returns False if any family has more than 15 siblings, and prints the family
     # otherwise True
     if (family.children and len(family.children) > 15):
-        print("ERROR: FAMILY: US15: fewer_than_15_siblings(): Family {} has more than 15 child siblings".format(family.id))
+        print("\nERROR: FAMILY: US15: fewer_than_15_siblings(): Family {} has more than 15 child siblings".format(family.id))
         return False
     return True
 

@@ -49,12 +49,12 @@ def marriage_before_death(family, people):
     wife = people[family.wifeId]
     if not wife.alive:
         if (married_date - wife.death).days > 0:
-            print("ERROR: FAMILY: US05: marriage_before_death(): Family {}: married Date {} should be before death date of wife on {}".format(
+            print("\nERROR: FAMILY: US05: marriage_before_death(): Family {}: married Date {} should be before death date of wife on {}".format(
                 family.id, married_date, wife.death))
             return False
     if not husband.alive:
         if (married_date - husband.death).days > 0:
-            print("ERROR: FAMILY: US05: marriage_before_death(): Family {}: married Date {} should be before death date of husband on {}".format(
+            print("\nERROR: FAMILY: US05: marriage_before_death(): Family {}: married Date {} should be before death date of husband on {}".format(
                 family.id, married_date, husband.death))
             return False
     return True
@@ -74,7 +74,7 @@ def birth_before_death(person):
     if birth_date is None or death_date is None:
         return True
     if (death_date - birth_date).days < 0:
-        print("ERROR: PERSON: US03: birth_before_death(): Person {}:  "
+        print("\nERROR: PERSON: US03: birth_before_death(): Person {}:  "
               "birth date {} should be before death_ date {} of person:".format(person.id, birth_date, death_date))
         return False
     return True
@@ -95,7 +95,7 @@ def marriage_before_divorce(family):
     if married_date is None or divorce_date is None:
         return True
     if (divorce_date - married_date).days < 0:
-        print("ERROR: FAMILY: US04: marriage_before_divorce(): Family {}:  "
+        print("\nERROR: FAMILY: US04: marriage_before_divorce(): Family {}:  "
               "marriage date {} should be before divorce date {} of family:".format(family.id,
                                                                                     married_date,
                                                                                     divorce_date))
@@ -118,18 +118,18 @@ def birth_before_marriage(family, people):
     husband = people[family.husbandId]
     wife = people[family.wifeId]
     if married_date is None:
-        print("ERROR: FAMILY: US08: birth_before_marriage(): Family {}:  "
+        print("\nERROR: FAMILY: US08: birth_before_marriage(): Family {}:  "
               "invalid marriage date {} :".format(family.id, married_date))
         return False
     if wife.birthday is not None and (married_date - wife.birthday).days < 0:
-        print("ERROR: FAMILY: US08: birth_before_marriage(): Family {}:  "
+        print("\nERROR: FAMILY: US08: birth_before_marriage(): Family {}:  "
               "birth date {} should be before marriage date {} of wife {}:".format(family.id, wife.birthday,
                                                                                    married_date,
                                                                                    wife.id))
         return False
 
     if husband.birthday is not None and (married_date - husband.birthday).days < 0:
-        print("ERROR: FAMILY: US08: birth_before_marriage(): Family {}:  "
+        print("\nERROR: FAMILY: US08: birth_before_marriage(): Family {}:  "
               "birth date {} should be before marriage date {} of husband {}:".format(family.id, husband.birthday,
                                                                                       married_date,
                                                                                       husband.id))
@@ -152,18 +152,18 @@ def divorce_before_death(family, people):
     wife = people[family.wifeId]
 
     if divorce_date is None:
-        print("ERROR: FAMILY: US06: divorce_before_death(): Family {}:  "
+        print("\nERROR: FAMILY: US06: divorce_before_death(): Family {}:  "
               "invalid divorce date {} :".format(family.id, divorce_date))
         return False
 
     if (divorce_date - wife.death).days > 0:
-        print("ERROR: FAMILY: US06: divorce_before_death(): Family {}:  "
+        print("\nERROR: FAMILY: US06: divorce_before_death(): Family {}:  "
               "divorce date {} should be before death_ date {} of wife {}:".format(family.id, divorce_date, wife.death,
                                                                                    wife.id))
         return False
 
     if (divorce_date - husband.death).days > 0:
-        print("ERROR: FAMILY: US06: divorce_before_death(): Family {}:  "
+        print("\nERROR: FAMILY: US06: divorce_before_death(): Family {}:  "
               "divorce date {} should be before death_ date {} of husbdan {}:".format(family.id, divorce_date, husband.death,
                                                                                       husband.id))
         return False
@@ -175,4 +175,4 @@ def reject_illegitimate_dates(date):
         parse_date(date)
         return parse_date(date)
     except ValueError:
-        print("ERROR: DATE: US42 " + date + " is an invalid date")
+        print("\nERROR: DATE: US42 " + date + " is an invalid date")
