@@ -25,9 +25,12 @@ def list_upcoming_birthdays(people):
     return birthdayList
 
 def fewer_than_15_siblings(family): 
-    # returns False if any family has more than 15 siblings
+    # returns False if any family has more than 15 siblings, and prints the family
     # otherwise True
-    return False if (family.children and len(family.children) > 15) else True
+    if (family.children and len(family.children) > 15):
+        print("ERROR: FAMILY: US15: fewer_than_15_siblings(): Family {} has more than 15 child siblings".format(family.id)) 
+        return False
+    return True
 
 def list_recent_births(people):
     ret = []

@@ -95,18 +95,14 @@ class TestGedcomMethods(unittest.TestCase):
             [p1, p2, p3, p4, p5, p6]))
 
     def test_marriage_before_death(self):
-        ged_parser.parse(["0 @I32@ INDI", "1 DEAT Y", "2 DATE 6 MAY 1961", "1 FAMS @F1@",
-                              "0 @I43@ INDI", "1 DEAT Y", "2 DATE 6 MAY 1971", "1 FAMS @F1@",
-                              "0 @F1@ FAM", "1 HUSB @I32@", "1 WIFE @I43@", "1 MARR", "2 DATE 5 MAY 1961"])
-
+        testPeeps = {"@22@": Person("@22@", alive=False, death=utils.parse_date("28 FEB 1960")), "@21@": Person("@21@", alive=False, death=utils.parse_date("19 FEB 1960"))}
+        testFam = Family("@F1@", married=utils.parse_date("5 MAY 1959"), husbandId= "@22@",  wifeId="@21@")
+        self.assertEqual(True, utils.marriage_before_death(testFam, testPeeps))
 
     def test_marriage_before_death_exception(self):
-        self.assertRaises(
-            Exception,
-            ged_parser.parse,
-            ["0 @I32@ INDI", "1 DEAT Y", "2 DATE 6 MAY 1961", "1 FAMS @F1@",
-             "0 @I43@ INDI", "1 DEAT Y", "2 DATE 6 MAY 1971", "1 FAMS @F1@",
-             "0 @F1@ FAM", "1 HUSB @I32@", "1 WIFE @I43@", "1 MARR", "2 DATE 3 MAY 1962"])
+        testPeeps = {"@22@": Person("@22@", alive=False, death=utils.parse_date("28 FEB 1965")), "@21@": Person("@21@", alive=False, death=utils.parse_date("19 FEB 1960"))}
+        testFam = Family("@F1@", married=utils.parse_date("5 MAY 1961"), husbandId= "@22@",  wifeId="@21@")
+        self.assertEqual(False, utils.marriage_before_death(testFam, testPeeps))
 
 # make sure your functions start with the word 'test' and have at least one
 # parameter self (just because its in a class dw about why)

@@ -42,17 +42,19 @@ def print_people(people):
 def marriage_before_death(family, people):
     # family, singluar. people, entire dict of individuals
     # called RIGHT AFTER family is married, so married date assumed to be set
+    # returns false if death before marriage
+    # returns true if valid
     married_date = family.married
     husband = people[family.husbandId]
     wife = people[family.wifeId]
     if not wife.alive:
         if (married_date - wife.death).days > 0:
-            raise Exception(
-                "Married Date should be before death date of wife in family:", family.id)
+            print("ERROR: FAMILY: US05: marriage_before_death(): Family {}: married Date {} should be before death date of wife on {}".format(family.id, married_date, wife.death))
+            return False
     if not husband.alive:
         if (married_date - husband.death).days > 0:
-            raise Exception(
-                "Married Date should be before death date of husband in family:", family.id)
+            print("ERROR: FAMILY: US05: marriage_before_death(): Family {}: married Date {} should be before death date of husband on {}".format(family.id, married_date, husband.death))
+            return False
     return True
 
 
