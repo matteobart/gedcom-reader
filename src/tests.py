@@ -109,57 +109,63 @@ class TestGedcomMethods(unittest.TestCase):
 # ex test_great_name_(self, other_params):
 
     def test_birth_before_marriage(self):
-        try:
-            ged_parser.parse(["0 @I32@ INDI", "1 BIRT Y", "2 DATE 6 MAY 1961", "1 FAMS @F1@",
-                              "0 @I43@ INDI", "1 BIRT Y", "2 DATE 6 MAY 1971", "1 FAMS @F1@",
-                              "0 @F1@ FAM", "1 HUSB @I32@", "1 WIFE @I43@", "1 MARR", "2 DATE 5 MAY 2000"])
-        except Exception:
-            self.fail("marriage_before_death() raised Exception unexpectedly!")
+
+            testFam = Family("@F1@", married=utils.parse_date("5 MAY 1970"),
+                             divorced=utils.parse_date("5 MAY 1980"), husbandId="@22@", wifeId="@21@")
+            testPeople = {"@22@": Person("@22@", alive=False, birthday=utils.parse_date("28 FEB 1960")),
+                          "@21@": Person("@21@", alive=False, birthday=utils.parse_date("19 FEB 1960"))}
+
+            self.assertEqual(True, utils.birth_before_marriage(testFam,testPeople))
 
     def test_birth_before_marriage_exception(self):
-        self.assertRaises(
-            Exception,
-            ged_parser.parse,
-            ["0 @I32@ INDI", "1 BIRT Y", "2 DATE 6 MAY 1961", "1 FAMS @F1@",
-             "0 @I43@ INDI", "1 BIRT Y", "2 DATE 6 MAY 1971", "1 FAMS @F1@",
-             "0 @F1@ FAM", "1 HUSB @I32@", "1 WIFE @I43@", "1 MARR", "2 DATE 3 MAY 1962"])
+        testFam = Family("@F1@", married=utils.parse_date("5 MAY 1950"),
+                         divorced=utils.parse_date("5 MAY 1980"), husbandId="@22@", wifeId="@21@")
+        testPeople = {"@22@": Person("@22@", alive=False, birthday=utils.parse_date("28 FEB 1960")),
+                      "@21@": Person("@21@", alive=False, birthday=utils.parse_date("19 FEB 1960"))}
+
+        self.assertEqual(False, utils.birth_before_marriage(testFam, testPeople))
 
     def test_birth_before_death(self):
-        try:
-            ged_parser.parse(["0 @I32@ INDI", "1 BIRT Y", "2 DATE 6 MAY 1961",
-                              "1 DEAT Y", "2 DATE 6 MAY 1962",  "1 FAMS @F1@"])
-        except Exception:
-            self.fail("marriage_before_death() raised Exception unexpectedly!")
+        testPerson = Person("@22@", alive=False, birthday=utils.parse_date("28 FEB 1960"),
+                            death=utils.parse_date("28 FEB 1980"))
+
+        self.assertEqual(True, utils.birth_before_death(testPerson))
 
     def test_birth_before_death_exception(self):
-        self.assertRaises(
-            Exception,
-            ged_parser.parse,
-            ["0 @I32@ INDI", "1 BIRT Y", "2 DATE 6 MAY 1961", "1 DEAT Y", "2 DATE 6 MAY 1960",  "1 FAMS @F1@"])
+        testPerson = Person("@22@", alive=False, birthday=utils.parse_date("28 FEB 1980"),
+                            death=utils.parse_date("28 FEB 1960"))
+
+        self.assertEqual(False, utils.birth_before_death(testPerson))
 
     def test_divorce_before_death(self):
-        ged_parser.parse(["0 @I32@ INDI", "1 DEAT Y", "2 DATE 6 MAY 1961", "1 FAMS @F1@",
-                              "0 @I43@ INDI", "1 DEAT Y", "2 DATE 6 MAY 1971", "1 FAMS @F1@",
-                              "0 @F1@ FAM", "1 HUSB @I32@", "1 WIFE @I43@", "1 DIV", "2 DATE 5 MAY 1930"])
+        testFam = Family("@F1@", married=utils.parse_date("5 MAY 1961"),
+                         divorced=utils.parse_date("5 MAY 1965"), husbandId="@22@", wifeId="@21@")
+        testPeople = {"@22@": Person("@22@", alive=False, birthday=utils.parse_date("28 FEB 1960"),
+                                     death=utils.parse_date("28 FEB 1970")),
+                      "@21@": Person("@21@", alive=False, birthday=utils.parse_date("19 FEB 1960"),
+                                     death=utils.parse_date("28 FEB 1970"))}
+        self.assertEqual(True, utils.divorce_before_death(testFam, testPeople))
 
     def test_divorce_before_death_exception(self):
-        self.assertRaises(
-            Exception,
-            ged_parser.parse,
-            ["0 @I32@ INDI", "1 DEAT Y", "2 DATE 6 MAY 1961", "1 FAMS @F1@",
-             "0 @I43@ INDI", "1 DEAT Y", "2 DATE 6 MAY 1971", "1 FAMS @F1@",
-             "0 @F1@ FAM", "1 HUSB @I32@", "1 WIFE @I43@", "1 DIV", "2 DATE 3 MAY 1966"])
+        testFam = Family("@F1@", married=utils.parse_date("5 MAY 1961"),
+                         divorced=utils.parse_date("5 MAY 1980"), husbandId="@22@", wifeId="@21@")
+        testPeople = {"@22@": Person("@22@", alive=False, birthday=utils.parse_date("28 FEB 1960"),
+                                     death=utils.parse_date("28 FEB 1970")),
+                      "@21@": Person("@21@", alive=False, birthday=utils.parse_date("19 FEB 1960"),
+                                     death=utils.parse_date("28 FEB 1970"))}
+        self.assertEqual(False, utils.divorce_before_death(testFam, testPeople))
 
     def test_marriage_before_divorce(self):
         testFam = Family("@F1@", married=utils.parse_date("5 MAY 1960"),
                          divorced=utils.parse_date("5 MAY 1980"), husbandId= "@22@",  wifeId="@21@")
-        utils.marriage_before_divorce(testFam)
+
+        self.assertEqual(True, utils.marriage_before_divorce(testFam))
 
     def test_marriage_before_divorce_exception(self):
-        self.assertRaises(
-            Exception,
-            ged_parser.parse,
-            ["0 @F1@ FAM", "1 HUSB @I32@", "1 WIFE @I43@", "1 MARR", "2 DATE 3 MAY 1962", "1 DIV", "2 DATE 5 MAY 1930"])
+        testFam = Family("@F1@", married=utils.parse_date("5 MAY 1980"),
+                         divorced=utils.parse_date("5 MAY 1960"), husbandId="@22@", wifeId="@21@")
+
+        self.assertEqual(False, utils.marriage_before_divorce(testFam))
 
 #make sure your functions start with the word 'test' and have at least one 
 #parameter self (just because its in a class dw about why)
