@@ -18,6 +18,10 @@ if __name__ == "__main__":
         print_families(families)
         print_people(people)
         birthday_list = extras.list_upcoming_birthdays(people)
+        print("Birthday List:", birthday_list)
+        births_list = extras.list_recent_births(people)
+        print("Births List:", birthday_list)
+
         for family in families:
             # run ALL family-based "extras" tests
             extras.fewer_than_15_siblings(family)

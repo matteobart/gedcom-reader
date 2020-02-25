@@ -173,6 +173,7 @@ def divorce_before_death(family, people):
 def reject_illegitimate_dates(date):
     try:
         parse_date(date)
-        return parse_date(date)
+        return True
     except ValueError:
         print("\nERROR: DATE: US42 " + date + " is an invalid date")
+        return False
