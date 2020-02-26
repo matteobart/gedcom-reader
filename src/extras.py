@@ -24,10 +24,10 @@ def list_upcoming_birthdays(people):
             # actual check
             if ((next_birthday-today).days) < 30 and person.alive:
                 birthdayList.append(person)
-    if(len(birthdayList) > 0):
-        for member in birthdayList:
-            print("\nANAMOLY: INDIVIDUALS: US38: list_upcoming_birthdays(): Person '" +
-                  member.id + "' has an upcoming birthday")
+    # if(len(birthdayList) > 0):
+    #     for member in birthdayList:
+    #         print("\nANAMOLY: INDIVIDUALS: US38: list_upcoming_birthdays(): Person '" +
+    #               member.id + "' has an upcoming birthday")
     return birthdayList
 
 

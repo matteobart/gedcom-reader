@@ -18,9 +18,9 @@ if __name__ == "__main__":
         print_families(families)
         print_people(people)
         birthday_list = extras.list_upcoming_birthdays(people)
-        print("Birthday List:", birthday_list)
+        print("Birthday List [US38]:", birthday_list)
         births_list = extras.list_recent_births(people)
-        print("Births List:", birthday_list)
+        print("Births List [US35]:", birthday_list)
 
         for family in families:
             # run ALL family-based "extras" tests
