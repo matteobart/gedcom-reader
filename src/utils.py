@@ -175,5 +175,6 @@ def reject_illegitimate_dates(date):
         parse_date(date)
         return True
     except ValueError:
-        print("\nERROR: DATE: US42 " + date + " is an invalid date")
+        print("\nERROR: DATE: US42: reject_illegitimate_dates(): " +
+              date + " is an invalid date")
         return False
