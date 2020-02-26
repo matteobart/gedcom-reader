@@ -31,7 +31,7 @@ def parse(lines):
             if split[2] == "INDI":  # PERSON ONLY
                 id = split[1].replace("@", "")
                 if people.get(id) != None:
-                    print("This INDI ID is not unique: {}".format(id))
+                    print("ERROR: PERSON: US22: This INDI ID is not unique: {}".format(id))
                 # NOTE children & spouse must be set here otherwise Python will share list across all instances
                 current_entity = Person(
                     id, alive=True, children=[], spouse=[])  # ASSUME alive!
@@ -39,7 +39,7 @@ def parse(lines):
             elif split[2] == "FAM":  # FAMILY ONLY
                 id = split[1].replace("@", "")
                 if families.get(id) != None:
-                    print("This FAM ID is not unique: {}".format(id))
+                    print("ERROR: FAMILY: US22: This FAM ID is not unique: {}".format(id))
                 # NOTE children must be set here otherwise Python will share list across all instances
                 current_entity = Family(id, children=[])
                 # create a family add it to the dict
