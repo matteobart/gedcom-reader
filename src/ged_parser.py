@@ -21,7 +21,6 @@ def parse(lines):
     current_entity = None  # reference to the last edited object!
 
     for line in iterator:
-        # clean up the line
         # this is probably the most confusing line
         split = line.strip().replace("\n", "").split(" ", 2)
         if (len(split) == 2):
@@ -31,7 +30,9 @@ def parse(lines):
             if split[2] == "INDI":  # PERSON ONLY
                 id = split[1].replace("@", "")
                 if people.get(id) != None:
-                    print("ERROR: PERSON: US22: This INDI ID is not unique: {}".format(id))
+                    print("ERROR: Line {}: PERSON: US22: This INDI ID is not unique: {}".format(
+                        utils.get_line_number(line, lines),
+                        id))
                 # NOTE children & spouse must be set here otherwise Python will share list across all instances
                 current_entity = Person(
                     id, alive=True, children=[], spouse=[])  # ASSUME alive!
@@ -39,7 +40,9 @@ def parse(lines):
             elif split[2] == "FAM":  # FAMILY ONLY
                 id = split[1].replace("@", "")
                 if families.get(id) != None:
-                    print("ERROR: FAMILY: US22: This FAM ID is not unique: {}".format(id))
+                    print("ERROR: Line {}: FAMILY: US22: This FAM ID is not unique: {}".format(
+                        utils.get_line_number(line, lines),
+                        id))
                 # NOTE children must be set here otherwise Python will share list across all instances
                 current_entity = Family(id, children=[])
                 # create a family add it to the dict
@@ -58,11 +61,23 @@ def parse(lines):
         elif split[0] == "1":  # level 1 tag
             if split[1] == "NAME":  # PERSON ONLY
                 current_entity.name = split[2]
+                if not utils.check_unique_birth_and_name(current_entity, people):
+                    print("ERROR: Line {}: PERSON: US40: This INDI name w/ birthday is not unique: {}".format(
+                        utils.get_line_number(line, lines),
+                        current_entity.id))
             elif split[1] == "SEX":  # PERSON ONLY
                 current_entity.gender = split[2]
             elif split[1] == "BIRT":  # PERSON ONLY
-                # NOT YET USED!
-                pass
+                next_line = next(iterator)
+                next_split = next_line.replace("\n", "").split(" ", 2)
+                date = utils.reject_illegitimate_dates(next_split[2])
+                diff = relativedelta(datetime.now(), date)
+                current_entity.age = diff.years
+                current_entity.birthday = date
+                if not utils.check_unique_birth_and_name(current_entity, people):
+                    print("ERROR: Line {}: PERSON: US40: This INDI name w/ birthday is not unique: {}".format(
+                        utils.get_line_number(line, lines),
+                        current_entity.id))
             elif split[1] == "DEAT":
                 # can check if "Y" is in split[2] if youd like
                 current_entity.alive = False
@@ -117,9 +132,9 @@ def parse(lines):
                 date = utils.reject_illegitimate_dates(split[2])
                 # this tag can be used for either person OR family
                 if isinstance(current_entity, Person):
-                    diff = relativedelta(datetime.now(), date)
-                    current_entity.age = diff.years
-                    current_entity.birthday = date
+                    # code should never come here
+                    # please see BIRT      
+                    pass              
                 elif isinstance(current_entity, Family):
                     # code should never come here
                     # please see DIV & MARR
