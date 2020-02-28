@@ -48,3 +48,12 @@ def list_recent_births(people):
             if (today - person.birthday).days < 30:
                 ret.append(person)
     return ret
+
+def list_recent_deaths(people):
+    ret = []
+    for person in people:
+        if person.death is not None:
+            today = datetime.now()
+            if (today - person.death).days < 30:
+                ret.append(person)
+    return ret

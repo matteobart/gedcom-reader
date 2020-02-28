@@ -237,6 +237,28 @@ class TestGedcomMethods(unittest.TestCase):
 
         self.assertEqual(True, utils.marriage_after_14(testFam, testPeople))
 
+    # this test is RELATIVE to the actual day of code running
+    def test_list_recent_deaths_some(self):
+        p1 = Person("@54@")
+        p2 = Person("@43@", death=utils.parse_date("20 MAR 2020"))
+        p3 = Person("@42@")
+        p4 = Person("@22@", death=utils.parse_date("18 MAR 2020"))
+        p5 = Person("@21@", death=utils.parse_date("19 JAN 2019"))
+        p6 = Person("@20@", death=utils.parse_date("1 FEB 1961"))
+        self.assertEqual([p2, p4], extras.list_recent_deaths(
+            [p1, p2, p3, p4, p5, p6]))
+
+    # this test is RELATIVE to the actual day of code running
+    def test_list_recent_deaths_none(self):
+        p1 = Person("@54@")
+        p2 = Person("@43@", death=utils.parse_date("29 FEB 2016"))
+        p3 = Person("@42@")
+        p4 = Person("@22@", death=utils.parse_date("29 FEB 1960"))
+        p5 = Person("@21@", death=utils.parse_date("19 FEB 1960"))
+        p6 = Person("@20@", death=utils.parse_date("20 FEB 1961"))
+        self.assertEqual([], extras.list_recent_deaths(
+            [p1, p2, p3, p4, p5, p6]))
+
 # make sure your functions start with the word 'test' and have at least one
 # parameter self (just because its in a class dw about why)
 # ex test_great_name_(self, other_params):
