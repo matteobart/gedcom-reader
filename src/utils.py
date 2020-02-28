@@ -2,6 +2,7 @@ from prettytable import PrettyTable
 import person
 import family
 from datetime import datetime
+from dateutil.relativedelta import relativedelta
 
 
 def parse_date(date_str):
@@ -47,17 +48,18 @@ def marriage_before_death(family, people):
     married_date = family.married
     husband = people[family.husbandId]
     wife = people[family.wifeId]
+    returnable = True
     if not wife.alive:
         if (married_date - wife.death).days > 0:
             print("\nERROR: FAMILY: US05: marriage_before_death(): Family {}: married Date {} should be before death date of wife on {}".format(
                 family.id, married_date, wife.death))
-            return False
+            returnable = False
     if not husband.alive:
         if (married_date - husband.death).days > 0:
             print("\nERROR: FAMILY: US05: marriage_before_death(): Family {}: married Date {} should be before death date of husband on {}".format(
                 family.id, married_date, husband.death))
-            return False
-    return True
+            returnable = False
+    return returnable
 
 
 def birth_before_death(person):
@@ -196,4 +198,28 @@ def check_unique_birth_and_name(person, people):
             return False # not unique
     return True
 
+def marriage_after_14(family, people):
+    # family, singluar. people, entire dict of individuals
+    # called RIGHT AFTER family is married, so married date assumed to be set
+    # returns false if death before marriage
+    # returns true if valid
+    married_date = family.married
+    husband = people[family.husbandId]
+    wife = people[family.wifeId]
+    returnable = True
+    date_cutoff = get_delta_years(14, married_date) #get date 14 years ago
+    if wife.birthday is not None and (date_cutoff - wife.birthday).days < 0:
+        print("\nERROR: FAMILY: US10: marriage_after_14(): Family {}:  "
+              "marriage date {} should be at least 14 years after birth date {} of wife {}:".format(family.id, married_date, wife.birthday, wife.id))
+        returnable = False
 
+    if husband.birthday is not None and (date_cutoff - husband.birthday).days < 0:
+        print("\nERROR: FAMILY: US10: marriage_after_14(): Family {}:  "
+              "marriage date {} should be at least 14 years after birth date {} of husband {}:".format(family.id, married_date, husband.birthday, husband.id))
+        returnable = False
+    return returnable
+
+def get_delta_years(years, from_date=None): # inspired by SO question 765797, integrated into project by Daniel Kramer
+    if from_date is None:
+        from_date = datetime.now()
+    return from_date - relativedelta(years=years)
