@@ -177,3 +177,23 @@ def reject_illegitimate_dates(date):
         print("\nERROR: DATE: US42: reject_illegitimate_dates(): " +
               date + " is an invalid date")
         return False
+
+# given the line (str) and lines ([str]) 
+# will return the line number (int) [index starting @ 1]
+# WARNING: If two lines are the same in the file, will ALWAYS return the first one
+def get_line_number(line, lines):
+    return lines.index(line) + 1
+
+# given a person (Person) and people (id:Person)
+# will return a boolean if person's name and birthday is unique 
+def check_unique_birth_and_name(person, people):
+    if person.name == None or person.birthday == None:
+        return True # not enough information yet
+    for p in people.values():
+        if p.id == person.id:
+            continue
+        if p.name == person.name and p.birthday == person.birthday:
+            return False # not unique
+    return True
+
+

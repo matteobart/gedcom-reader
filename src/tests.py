@@ -161,10 +161,6 @@ class TestGedcomMethods(unittest.TestCase):
 
         self.assertEqual(False, utils.marriage_before_divorce(testFam))
 
-#make sure your functions start with the word 'test' and have at least one 
-#parameter self (just because its in a class dw about why)
-#ex test_great_name_(self, other_params):
-
     def test_reject_illegitimate_dates_edge_case(self):
         self.assertNotEqual(False, utils.reject_illegitimate_dates("29 FEB 2016"))
         
@@ -173,6 +169,57 @@ class TestGedcomMethods(unittest.TestCase):
 
     def test_reject_illegitimate_dates_true(self):
         self.assertNotEqual(False, utils.reject_illegitimate_dates("26 MAR 2010"))
+
+    def test_get_line_number(self):
+        self.assertEqual(3, utils.get_line_number(
+            "hello", 
+            ["this", "is", "hello"]))
+
+    def test_get_line_number_1(self):
+        self.assertEqual(1, utils.get_line_number(
+            "hello", 
+            ["hello", "is", "hello"]))
+
+    def test_get_line_number_err(self):
+        self.assertRaises(ValueError, utils.get_line_number,
+            "hello", 
+            ["this", "is", "a", "test"])
+
+    def test_check_unique_name_and_birth(self):
+        p1 = Person("@15@", 
+                name="john", 
+                birthday=utils.parse_date("15 MAY 1999"))
+        p2 = Person("@1@", 
+                name="luke", 
+                birthday=utils.parse_date("15 MAY 1999"))
+        p3 = Person("@13@", 
+                name="john", 
+                birthday=utils.parse_date("16 MAY 1999"))
+        d = {"@15@": p1, "@1@": p2, "@13@": p3}
+        self.assertEqual(True, 
+            utils.check_unique_birth_and_name(p1, d))
+        self.assertEqual(True, 
+            utils.check_unique_birth_and_name(p2, d))
+        self.assertEqual(True, 
+            utils.check_unique_birth_and_name(p3, d))
+
+    def test_check_un_unique_name_and_birth_(self):
+        p1 = Person("@15@", 
+                name="john", 
+                birthday=utils.parse_date("15 MAY 1999"))
+        p2 = Person("@1@", 
+                name="luke", 
+                birthday=utils.parse_date("15 MAY 1999"))
+        p3 = Person("@13@", 
+                name="john", 
+                birthday=utils.parse_date("15 MAY 1999"))
+        d = {"@15@": p1, "@1@": p2, "@13@": p3}
+        self.assertEqual(False, 
+            utils.check_unique_birth_and_name(p1, d))
+        self.assertEqual(True, 
+            utils.check_unique_birth_and_name(p2, d))
+        self.assertEqual(False, 
+            utils.check_unique_birth_and_name(p3, d))
 
 # make sure your functions start with the word 'test' and have at least one
 # parameter self (just because its in a class dw about why)
