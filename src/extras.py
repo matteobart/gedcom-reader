@@ -28,6 +28,7 @@ def list_upcoming_birthdays(people):
     #     for member in birthdayList:
     #         print("\nANAMOLY: INDIVIDUALS: US38: list_upcoming_birthdays(): Person '" +
     #               member.id + "' has an upcoming birthday")
+    print("Upcoming Birthday List [US38]:", birthdayList)
     return birthdayList
 
 
@@ -47,7 +48,9 @@ def list_recent_births(people):
             today = datetime.now()
             if (today - person.birthday).days < 30:
                 ret.append(person)
+    print("Recent Births List [US35]:", ret)
     return ret
+
 
 def list_recent_deaths(people):
     ret = []
@@ -56,4 +59,14 @@ def list_recent_deaths(people):
             today = datetime.now()
             if (today - person.death).days < 30:
                 ret.append(person)
+    print("Recent Deaths List [US36]:", ret)
     return ret
+
+
+def list_deceased(people):
+    deceased = []
+    for person in people:
+        if person.death is not None:
+            deceased.append(person.id)
+    print("\nUS29: list_deceased(): the following individuals are deceased: ", deceased)
+    return deceased

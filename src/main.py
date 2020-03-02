@@ -15,14 +15,12 @@ if __name__ == "__main__":
         tup = ged_parser.parse(lines)
         people = tup[0]
         families = tup[1]
+        extras.list_upcoming_birthdays(people)
+        extras.list_recent_births(people)
+        extras.list_recent_deaths(people)
+        extras.list_deceased(people)
         print_families(families)
         print_people(people)
-        birthday_list = extras.list_upcoming_birthdays(people)
-        print("Upcoming Birthday List [US38]:", birthday_list)
-        births_list = extras.list_recent_births(people)
-        print("Recent Births List [US35]:", birthday_list)
-        deaths_list = extras.list_recent_deaths(people)
-        print("Recent Deaths List [US36]:", deaths_list)
 
         for family in families:
             # run ALL family-based "extras" tests

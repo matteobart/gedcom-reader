@@ -4,6 +4,9 @@ import family
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
 
+list_of_months = ['JAN', 'FEB', 'MAR', 'APR', 'MAY',
+                  'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC']
+
 
 def parse_date(date_str):
     return datetime.strptime(date_str, "%d %b %Y")
@@ -173,30 +176,63 @@ def divorce_before_death(family, people):
 
 
 def reject_illegitimate_dates(date):
+    this_date = accept_partial_dates(date)
     try:
-        return parse_date(date)
+        return parse_date(this_date)
     except ValueError:
         print("\nERROR: DATE: US42: reject_illegitimate_dates(): " +
-              date + " is an invalid date")
+              this_date + " is an invalid date")
         return False
 
-# given the line (str) and lines ([str]) 
+
+def accept_partial_dates(date):
+    month = None
+    day = None
+    year = None
+    flag = False
+    partial = date.split(' ')
+    for part in partial:
+        if(part in list_of_months):
+            month = part
+        elif(len(part) <= 2):
+            day = part
+        elif(len(part) > 3):
+            year = part
+    if month is None:
+        month = 'JAN'
+        flag = True
+    if day is None:
+        day = '1'
+        flag = True
+    if year is None:
+        year = '2000'
+        flag = True
+    ret = day + ' ' + month + ' ' + year
+    if(flag == True):
+        print("\nUS41: accept_partial_dates: Accepting: " + date + ' as valid')
+    return ret
+# given the line (str) and lines ([str])
 # will return the line number (int) [index starting @ 1]
 # WARNING: If two lines are the same in the file, will ALWAYS return the first one
+
+
 def get_line_number(line, lines):
     return lines.index(line) + 1
 
 # given a person (Person) and people (id:Person)
-# will return a boolean if person's name and birthday is unique 
+# will return a boolean if person's name and birthday is unique
+
+
 def check_unique_birth_and_name(person, people):
     if person.name == None or person.birthday == None:
-        return True # not enough information yet
+        return True  # not enough information yet
     for p in people.values():
         if p.id == person.id:
             continue
         if p.name == person.name and p.birthday == person.birthday:
-            return False # not unique
+            return False  # not unique
     return True
+
 
 def marriage_after_14(family, people):
     # family, singluar. people, entire dict of individuals
@@ -207,7 +243,7 @@ def marriage_after_14(family, people):
     husband = people[family.husbandId]
     wife = people[family.wifeId]
     returnable = True
-    date_cutoff = get_delta_years(14, married_date) #get date 14 years ago
+    date_cutoff = get_delta_years(14, married_date)  # get date 14 years ago
     if wife.birthday is not None and (date_cutoff - wife.birthday).days < 0:
         print("\nERROR: FAMILY: US10: marriage_after_14(): Family {}:  "
               "marriage date {} should be at least 14 years after birth date {} of wife {}:".format(family.id, married_date, wife.birthday, wife.id))
@@ -219,7 +255,9 @@ def marriage_after_14(family, people):
         returnable = False
     return returnable
 
-def get_delta_years(years, from_date=None): # inspired by SO question 765797, integrated into project by Daniel Kramer
+
+# inspired by SO question 765797, integrated into project by Daniel Kramer
+def get_delta_years(years, from_date=None):
     if from_date is None:
         from_date = datetime.now()
     return from_date - relativedelta(years=years)

@@ -85,7 +85,7 @@ def parse(lines):
                 next_split = next_line.replace("\n", "").split(" ", 2)
                 date = utils.reject_illegitimate_dates(next_split[2])
                 current_entity.death = date
-                utils.birth_before_death(current_entity)
+                # utils.birth_before_death(current_entity)
             elif split[1] == "FAMC":
                 childId = split[2].replace("@", "")
                 current_entity.children.append(childId)
@@ -98,7 +98,7 @@ def parse(lines):
 
                 date = utils.reject_illegitimate_dates(next_split[2])
                 current_entity.married = date
-                utils.birth_before_marriage(current_entity, people)
+                # utils.birth_before_marriage(current_entity, people)
                 utils.marriage_after_14(current_entity, people)
                 # WARNING: this may throw an exception if marriage is before death of individuals
                 utils.marriage_before_death(current_entity, people)
@@ -134,8 +134,8 @@ def parse(lines):
                 # this tag can be used for either person OR family
                 if isinstance(current_entity, Person):
                     # code should never come here
-                    # please see BIRT      
-                    pass              
+                    # please see BIRT
+                    pass
                 elif isinstance(current_entity, Family):
                     # code should never come here
                     # please see DIV & MARR
