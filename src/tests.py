@@ -183,6 +183,9 @@ class TestGedcomMethods(unittest.TestCase):
     def test_accept_partial_dates_month_year(self):
         self.assertEqual('1 JAN 2000', utils.accept_partial_dates("JAN 2000"))
 
+    def test_accept_partial_dates_year(self):
+        self.assertEqual('1 JAN 2000', utils.accept_partial_dates("2000"))
+
     def test_get_line_number(self):
         self.assertEqual(3, utils.get_line_number(
             "hello",
