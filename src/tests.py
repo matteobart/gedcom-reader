@@ -29,13 +29,13 @@ class TestGedcomMethods(unittest.TestCase):
         p1 = Person("@54@", birthday=utils.parse_date(
             "12 MAY 2019"), alive=True)
         p2 = Person("@43@", birthday=utils.parse_date(
-            "28 FEB 2015"), alive=True)
+            "28 MAR 2015"), alive=True)
         p3 = Person("@42@", birthday=utils.parse_date(
             "1 MAR 1900"), alive=False)
         p4 = Person("@22@", birthday=utils.parse_date(
             "30 APR 1965"), alive=True)
         self.assertEqual(
-            [p2], extras.list_upcoming_birthdays([p1, p2, p3, p4]))
+            [p2.id], extras.list_upcoming_birthdays([p1, p2, p3, p4]))
 
     # this test is RELATIVE to the actual day of code running
     def test_birthday_edge(self):
@@ -47,11 +47,11 @@ class TestGedcomMethods(unittest.TestCase):
             "29 FEB 2016"), alive=False)
         p3 = Person("@42@")
         p4 = Person("@22@", birthday=utils.parse_date(
-            "29 FEB 1960"), alive=True)
+            "29 MAR 1960"), alive=True)
         p5 = Person("@21@", birthday=utils.parse_date("19 FEB 1960"))
         p6 = Person("@20@", birthday=utils.parse_date(
             "21 FEB 1961"), alive=True)
-        self.assertEqual([p4], extras.list_upcoming_birthdays(
+        self.assertEqual([p4.id], extras.list_upcoming_birthdays(
             [p1, p2, p3, p4, p5, p6]))
 
     def test_parse_un_unique_indi_ids(self):
@@ -68,10 +68,10 @@ class TestGedcomMethods(unittest.TestCase):
         p1 = Person("@54@")
         p2 = Person("@43@", birthday=utils.parse_date("20 FEB 2020"))
         p3 = Person("@42@")
-        p4 = Person("@22@", birthday=utils.parse_date("1 FEB 2020"))
+        p4 = Person("@22@", birthday=utils.parse_date("19 FEB 2020"))
         p5 = Person("@21@", birthday=utils.parse_date("19 JAN 2019"))
         p6 = Person("@20@", birthday=utils.parse_date("1 FEB 1961"))
-        self.assertEqual([p2, p4], extras.list_recent_births(
+        self.assertEqual([p2.id, p4.id], extras.list_recent_births(
             [p1, p2, p3, p4, p5, p6]))
 
     # this test is RELATIVE to the actual day of code running
@@ -253,12 +253,12 @@ class TestGedcomMethods(unittest.TestCase):
     # this test is RELATIVE to the actual day of code running
     def test_list_recent_deaths_some(self):
         p1 = Person("@54@")
-        p2 = Person("@43@", death=utils.parse_date("20 MAR 2020"))
+        p2 = Person("@43@", death=utils.parse_date("1 MAR 2020"))
         p3 = Person("@42@")
-        p4 = Person("@22@", death=utils.parse_date("18 MAR 2020"))
+        p4 = Person("@22@", death=utils.parse_date("2 MAR 2020"))
         p5 = Person("@21@", death=utils.parse_date("19 JAN 2019"))
         p6 = Person("@20@", death=utils.parse_date("1 FEB 1961"))
-        self.assertEqual([p2, p4], extras.list_recent_deaths(
+        self.assertEqual([p2.id, p4.id], extras.list_recent_deaths(
             [p1, p2, p3, p4, p5, p6]))
 
     # this test is RELATIVE to the actual day of code running
