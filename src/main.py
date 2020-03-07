@@ -15,13 +15,13 @@ if __name__ == "__main__":
         tup = ged_parser.parse(lines)
         people = tup[0]
         families = tup[1]
+        
+        print_families(families)
+        print_people(people)
         extras.list_upcoming_birthdays(people)
         extras.list_recent_births(people)
         extras.list_recent_deaths(people)
         extras.list_deceased(people)
-        print_families(families)
-        print_people(people)
-
         for family in families:
             # run ALL family-based "extras" tests
             extras.fewer_than_15_siblings(family)
