@@ -183,6 +183,9 @@ class TestGedcomMethods(unittest.TestCase):
     def test_accept_partial_dates_month_year(self):
         self.assertEqual('1 JAN 2000', utils.accept_partial_dates("JAN 2000"))
 
+    def test_accept_partial_dates_year(self):
+        self.assertEqual('1 JAN 2000', utils.accept_partial_dates("2000"))
+
     def test_get_line_number(self):
         self.assertEqual(3, utils.get_line_number(
             "hello",
@@ -282,6 +285,71 @@ class TestGedcomMethods(unittest.TestCase):
         self.assertEqual([p2.id, p4.id, p5.id, p6.id], extras.list_deceased(
             [p1, p2, p3, p4, p5, p6]))
 
+    def test_get_parents(self):
+        p1 = Person("@54@", children=["@43@", "@42@"])
+        p2 = Person("@43@")
+        p3 = Person("@42@")
+        p4 = Person("@22@", children=["@43@", "@42@"])
+        p5 = Person("@21@", children=["@54@"])
+        p6 = Person("@20@")
+        self.assertEqual([p1, p4], utils.get_parents("@43@",
+            [p1, p2, p3, p4, p5, p6]))
+
+    def test_get_silblings(self):
+        p1 = Person("@54@", children=["@43@", "@42@"])
+        p2 = Person("@43@")
+        p3 = Person("@42@")
+        p4 = Person("@22@", children=["@43@", "@20@"])
+        p5 = Person("@21@", children=["@54@"])
+        p6 = Person("@20@")
+        self.assertEqual([p3, p6], utils.get_siblings("@43@",
+            [p1, p2, p3, p4, p5, p6]))
+
+    def test_no_first_cousin_marriage(self):
+        p1 = Person("@54@", children=["@43@", "@42@"])
+        p2 = Person("@43@", children=["@22@"])
+        p3 = Person("@42@", children=["@21@"])
+        p4 = Person("@22@")
+        p5 = Person("@21@", spouse=["@20@"])
+        p6 = Person("@20@", spouse=["@21@"])
+        f1 = Family("@F1@", married=utils.parse_date("5 MAY 1970"),
+                         divorced=utils.parse_date("5 MAY 1980"), husbandId="@20@", wifeId="@21@")
+        self.assertEqual(True, utils.no_first_cousin_marriage(f1,
+            [p1, p2, p3, p4, p5, p6]))
+
+    def test_no_first_cousin_marriage_err(self):
+        p1 = Person("@54@", children=["@43@", "@42@"])
+        p2 = Person("@43@", children=["@22@"])
+        p3 = Person("@42@", children=["@21@"])
+        p4 = Person("@22@", spouse=["@21@"])
+        p5 = Person("@21@", spouse=["@22@"])
+        p6 = Person("@20@")
+        f1 = Family("@F1@", married=utils.parse_date("5 MAY 1970"),
+                         divorced=utils.parse_date("5 MAY 1980"), husbandId="@22@", wifeId="@21@")
+        self.assertEqual(False, utils.no_first_cousin_marriage(f1,
+            [p1, p2, p3, p4, p5, p6]))
+
+    def test_no_aunts_and_uncles(self):
+        p1 = Person("@54@", children=["@43@", "@42@"])
+        p2 = Person("@43@", children=["@22@"])
+        p3 = Person("@42@", children=["@21@"])
+        p4 = Person("@22@")
+        p5 = Person("@21@", spouse=["@20@"])
+        p6 = Person("@20@", spouse=["@21@"])
+        f1 = Family("@F1@", married=utils.parse_date("5 MAY 1970"),
+                    divorced=utils.parse_date("5 MAY 1980"), husbandId="@20@", wifeId="@21@")
+        self.assertEqual(True, utils.no_aunts_and_uncles(f1,[p1, p2, p3, p4, p5, p6]))
+
+    def test_no_aunts_and_uncles_err(self):
+        p1 = Person("@54@", children=["@43@", "@42@"])
+        p2 = Person("@43@", children=["@22@"])
+        p3 = Person("@42@", children=["@21@"])
+        p4 = Person("@22@")
+        p5 = Person("@21@", spouse=["@43@"])
+        p6 = Person("@20@")
+        f1 = Family("@F1@", married=utils.parse_date("5 MAY 1970"),
+                    divorced=utils.parse_date("5 MAY 1980"), husbandId="@21@", wifeId="@43@")
+        self.assertEqual(False, utils.no_aunts_and_uncles(f1,[p1, p2, p3, p4, p5, p6]))
 
 # make sure your functions start with the word 'test' and have at least one
 # parameter self (just because its in a class dw about why)
