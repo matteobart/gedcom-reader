@@ -268,11 +268,11 @@ def get_parents(person, people):
     parents = []
     i = 0
     for x in people:
-        curr = people[x]
+        curr = x
         children = curr.children
         if person in children:
             if not(curr in parents):
-                parents[i] = curr
+                parents.append(curr)
                 i += 1
                 if i == 2:
                     break
@@ -290,13 +290,17 @@ def get_siblings(person, people):
     """
     parents = get_parents(person, people)
     siblings = []
+    result = []
     for x in parents:
-        children = parents[x].children
+        children = x.children
         for y in children:
-            if person != children[y] and (not(children[y] in siblings)):
-                siblings.append(children[y])
-    return siblings
-
+            if person != y and (not(y in siblings)):
+                siblings.append(y)
+    for x in siblings:
+        for y in people:
+            if y.id == x:
+                result.append(y)
+    return result
 
 
 def no_first_cousin_marriage(family, people):
@@ -317,17 +321,15 @@ def no_first_cousin_marriage(family, people):
     cousins = []
 
     for x in parentsW:
-        aunts += get_siblings(parentsW[x], people)
-
+        aunts += get_siblings(x.id, people)
     for x in parentsH:
-        aunts += get_siblings(parentsH[x], people)
-
+        aunts += get_siblings(x.id, people)
     for x in aunts:
-        cousins += aunts[x].children
+        cousins += x.children
 
     if husband in cousins or wife in cousins:
         print("\nERROR: FAMILY: US19: no_first_cousin_marriage(): Family {}:  "
-              "invalid marriage :".format(family.id))
+              "invalid marriage".format(family.id))
         return False
 
     return True
@@ -350,15 +352,16 @@ def no_aunts_and_uncles(family, people):
     aunts = []
 
     for x in parentsW:
-        aunts += get_siblings(parentsW[x], people)
+        aunts += get_siblings(x.id, people)
 
     for x in parentsH:
-        aunts += get_siblings(parentsH[x], people)
+        aunts += get_siblings(x.id, people)
 
-    if husband in aunts or wife in aunts:
-        print("\nERROR: FAMILY: US20: no_aunts_and_uncles(): Family {}:  "
-              "invalid marriage :".format(family.id))
-        return False
+    for x in aunts:
+        if (husband == x.id) or (wife == x.id):
+            print("\nERROR: FAMILY: US20: no_aunts_and_uncles(): Family {}:  "
+                  "invalid marriage".format(family.id))
+            return False
 
     return True
 
