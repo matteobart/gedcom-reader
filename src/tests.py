@@ -29,13 +29,13 @@ class TestGedcomMethods(unittest.TestCase):
         p1 = Person("@54@", birthday=utils.parse_date(
             "12 MAY 2019"), alive=True)
         p2 = Person("@43@", birthday=utils.parse_date(
-            "28 FEB 2015"), alive=True)
+            "28 MAR 2015"), alive=True)
         p3 = Person("@42@", birthday=utils.parse_date(
             "1 MAR 1900"), alive=False)
         p4 = Person("@22@", birthday=utils.parse_date(
             "30 APR 1965"), alive=True)
         self.assertEqual(
-            [p2], extras.list_upcoming_birthdays([p1, p2, p3, p4]))
+            [p2.id], extras.list_upcoming_birthdays([p1, p2, p3, p4]))
 
     # this test is RELATIVE to the actual day of code running
     def test_birthday_edge(self):
@@ -47,11 +47,11 @@ class TestGedcomMethods(unittest.TestCase):
             "29 FEB 2016"), alive=False)
         p3 = Person("@42@")
         p4 = Person("@22@", birthday=utils.parse_date(
-            "29 FEB 1960"), alive=True)
+            "29 MAR 1960"), alive=True)
         p5 = Person("@21@", birthday=utils.parse_date("19 FEB 1960"))
         p6 = Person("@20@", birthday=utils.parse_date(
             "21 FEB 1961"), alive=True)
-        self.assertEqual([p4], extras.list_upcoming_birthdays(
+        self.assertEqual([p4.id], extras.list_upcoming_birthdays(
             [p1, p2, p3, p4, p5, p6]))
 
     def test_parse_un_unique_indi_ids(self):
@@ -68,10 +68,10 @@ class TestGedcomMethods(unittest.TestCase):
         p1 = Person("@54@")
         p2 = Person("@43@", birthday=utils.parse_date("20 FEB 2020"))
         p3 = Person("@42@")
-        p4 = Person("@22@", birthday=utils.parse_date("1 FEB 2020"))
+        p4 = Person("@22@", birthday=utils.parse_date("19 FEB 2020"))
         p5 = Person("@21@", birthday=utils.parse_date("19 JAN 2019"))
         p6 = Person("@20@", birthday=utils.parse_date("1 FEB 1961"))
-        self.assertEqual([p2, p4], extras.list_recent_births(
+        self.assertEqual([p2.id, p4.id], extras.list_recent_births(
             [p1, p2, p3, p4, p5, p6]))
 
     # this test is RELATIVE to the actual day of code running
@@ -256,12 +256,12 @@ class TestGedcomMethods(unittest.TestCase):
     # this test is RELATIVE to the actual day of code running
     def test_list_recent_deaths_some(self):
         p1 = Person("@54@")
-        p2 = Person("@43@", death=utils.parse_date("20 MAR 2020"))
+        p2 = Person("@43@", death=utils.parse_date("1 MAR 2020"))
         p3 = Person("@42@")
-        p4 = Person("@22@", death=utils.parse_date("18 MAR 2020"))
+        p4 = Person("@22@", death=utils.parse_date("2 MAR 2020"))
         p5 = Person("@21@", death=utils.parse_date("19 JAN 2019"))
         p6 = Person("@20@", death=utils.parse_date("1 FEB 1961"))
-        self.assertEqual([p2, p4], extras.list_recent_deaths(
+        self.assertEqual([p2.id, p4.id], extras.list_recent_deaths(
             [p1, p2, p3, p4, p5, p6]))
 
     # this test is RELATIVE to the actual day of code running
@@ -285,6 +285,71 @@ class TestGedcomMethods(unittest.TestCase):
         self.assertEqual([p2.id, p4.id, p5.id, p6.id], extras.list_deceased(
             [p1, p2, p3, p4, p5, p6]))
 
+    def test_get_parents(self):
+        p1 = Person("@54@", children=["@43@", "@42@"])
+        p2 = Person("@43@")
+        p3 = Person("@42@")
+        p4 = Person("@22@", children=["@43@", "@42@"])
+        p5 = Person("@21@", children=["@54@"])
+        p6 = Person("@20@")
+        self.assertEqual([p1, p4], utils.get_parents("@43@",
+            [p1, p2, p3, p4, p5, p6]))
+
+    def test_get_silblings(self):
+        p1 = Person("@54@", children=["@43@", "@42@"])
+        p2 = Person("@43@")
+        p3 = Person("@42@")
+        p4 = Person("@22@", children=["@43@", "@20@"])
+        p5 = Person("@21@", children=["@54@"])
+        p6 = Person("@20@")
+        self.assertEqual([p3, p6], utils.get_siblings("@43@",
+            [p1, p2, p3, p4, p5, p6]))
+
+    def test_no_first_cousin_marriage(self):
+        p1 = Person("@54@", children=["@43@", "@42@"])
+        p2 = Person("@43@", children=["@22@"])
+        p3 = Person("@42@", children=["@21@"])
+        p4 = Person("@22@")
+        p5 = Person("@21@", spouse=["@20@"])
+        p6 = Person("@20@", spouse=["@21@"])
+        f1 = Family("@F1@", married=utils.parse_date("5 MAY 1970"),
+                         divorced=utils.parse_date("5 MAY 1980"), husbandId="@20@", wifeId="@21@")
+        self.assertEqual(True, utils.no_first_cousin_marriage(f1,
+            [p1, p2, p3, p4, p5, p6]))
+
+    def test_no_first_cousin_marriage_err(self):
+        p1 = Person("@54@", children=["@43@", "@42@"])
+        p2 = Person("@43@", children=["@22@"])
+        p3 = Person("@42@", children=["@21@"])
+        p4 = Person("@22@", spouse=["@21@"])
+        p5 = Person("@21@", spouse=["@22@"])
+        p6 = Person("@20@")
+        f1 = Family("@F1@", married=utils.parse_date("5 MAY 1970"),
+                         divorced=utils.parse_date("5 MAY 1980"), husbandId="@22@", wifeId="@21@")
+        self.assertEqual(False, utils.no_first_cousin_marriage(f1,
+            [p1, p2, p3, p4, p5, p6]))
+
+    def test_no_aunts_and_uncles(self):
+        p1 = Person("@54@", children=["@43@", "@42@"])
+        p2 = Person("@43@", children=["@22@"])
+        p3 = Person("@42@", children=["@21@"])
+        p4 = Person("@22@")
+        p5 = Person("@21@", spouse=["@20@"])
+        p6 = Person("@20@", spouse=["@21@"])
+        f1 = Family("@F1@", married=utils.parse_date("5 MAY 1970"),
+                    divorced=utils.parse_date("5 MAY 1980"), husbandId="@20@", wifeId="@21@")
+        self.assertEqual(True, utils.no_aunts_and_uncles(f1,[p1, p2, p3, p4, p5, p6]))
+
+    def test_no_aunts_and_uncles_err(self):
+        p1 = Person("@54@", children=["@43@", "@42@"])
+        p2 = Person("@43@", children=["@22@"])
+        p3 = Person("@42@", children=["@21@"])
+        p4 = Person("@22@")
+        p5 = Person("@21@", spouse=["@43@"])
+        p6 = Person("@20@")
+        f1 = Family("@F1@", married=utils.parse_date("5 MAY 1970"),
+                    divorced=utils.parse_date("5 MAY 1980"), husbandId="@21@", wifeId="@43@")
+        self.assertEqual(False, utils.no_aunts_and_uncles(f1,[p1, p2, p3, p4, p5, p6]))
 
 # make sure your functions start with the word 'test' and have at least one
 # parameter self (just because its in a class dw about why)

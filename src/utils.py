@@ -255,6 +255,115 @@ def marriage_after_14(family, people):
         returnable = False
     return returnable
 
+def get_parents(person, people):
+    """
+        Gets list of parents
+
+        written by: Chaeli
+
+        :param person: person id
+        :param people: person dictionary
+        :return: list of ids of parents of person
+     """
+    parents = []
+    i = 0
+    for x in people:
+        curr = x
+        children = curr.children
+        if person in children:
+            if not(curr in parents):
+                parents.append(curr)
+                i += 1
+                if i == 2:
+                    break
+    return parents
+
+def get_siblings(person, people):
+    """
+        Gets list of siblings of given person
+
+        written by: Chaeli
+
+        :param person: person id
+        :param people: person dictionary
+        :return: list of siblings of person
+    """
+    parents = get_parents(person, people)
+    siblings = []
+    result = []
+    for x in parents:
+        children = x.children
+        for y in children:
+            if person != y and (not(y in siblings)):
+                siblings.append(y)
+    for x in siblings:
+        for y in people:
+            if y.id == x:
+                result.append(y)
+    return result
+
+
+def no_first_cousin_marriage(family, people):
+    """
+       Checks that there is not marriage between first cousins
+
+       written by: Chaeli
+
+       :param family: family object
+       :param people: person dictionary
+       :return: Boolean
+    """
+    husband = family.husbandId
+    wife = family.wifeId
+    parentsW = get_parents(wife, people)
+    parentsH= get_parents(husband, people)
+    aunts = []
+    cousins = []
+
+    for x in parentsW:
+        aunts += get_siblings(x.id, people)
+    for x in parentsH:
+        aunts += get_siblings(x.id, people)
+    for x in aunts:
+        cousins += x.children
+
+    if husband in cousins or wife in cousins:
+        print("\nERROR: FAMILY: US19: no_first_cousin_marriage(): Family {}:  "
+              "invalid marriage".format(family.id))
+        return False
+
+    return True
+
+
+def no_aunts_and_uncles(family, people):
+    """
+       Checks that there is not marriage between a person and their aunt/uncle
+
+       written by: Chaeli
+
+       :param family: family object
+       :param people: person dictionary
+       :return: Boolean
+    """
+    husband = family.husbandId
+    wife = family.wifeId
+    parentsW = get_parents(wife, people)
+    parentsH = get_parents(husband, people)
+    aunts = []
+
+    for x in parentsW:
+        aunts += get_siblings(x.id, people)
+
+    for x in parentsH:
+        aunts += get_siblings(x.id, people)
+
+    for x in aunts:
+        if (husband == x.id) or (wife == x.id):
+            print("\nERROR: FAMILY: US20: no_aunts_and_uncles(): Family {}:  "
+                  "invalid marriage".format(family.id))
+            return False
+
+    return True
 
 # inspired by SO question 765797, integrated into project by Daniel Kramer
 def get_delta_years(years, from_date=None):

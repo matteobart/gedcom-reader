@@ -1,8 +1,12 @@
+
+US41: accept_partial_dates: Accepting: 1970 as valid
+
+US41: accept_partial_dates: Accepting: JAN 1920 as valid
 +----+---------------------+----------+-----------+------------------+--------+---------------------+---------------+
 | ID |       Married       | Divorced | HusbandId |   HusbandName    | WifeId |       WifeName      |    Children   |
 +----+---------------------+----------+-----------+------------------+--------+---------------------+---------------+
 | F1 | 1950-05-03 00:00:00 |   None   |     I3    |   Bob /Smith/    |   I2   |     Mary /Smith/    | ['I1', 'I10'] |
-| F2 | 1970-03-03 00:00:00 |   None   |     I4    |  Scott /Miller/  |   I2   |     Mary /Smith/    |     ['I5']    |
+| F2 | 1970-01-01 00:00:00 |   None   |     I4    |  Scott /Miller/  |   I2   |     Mary /Smith/    |     ['I5']    |
 | F3 | 1920-01-01 00:00:00 |   None   |     I6    | Daniel /Jackson/ |   I7   | Elizabeth /Jackson/ |     ['I2']    |
 | F4 | 1920-03-02 00:00:00 |   None   |     I8    |   Jack /Smith/   |   I9   |     Jane /Smith/    |     ['I3']    |
 | F5 | 1920-03-03 00:00:00 |   None   |    I11    | Brandon /Miller/ |  I12   |   Marisa /Miller/   |     ['I4']    |
@@ -23,5 +27,8 @@
 |  I8 |     Jack /Smith/    |   M    | 1900-12-02 00:00:00 | 119 | False | 1993-08-02 00:00:00 |   []   |    ['F4']    |
 |  I9 |     Jane /Smith/    |   F    | 1900-07-02 00:00:00 | 119 |  True |         None        |   []   |    ['F4']    |
 +-----+---------------------+--------+---------------------+-----+-------+---------------------+--------+--------------+
-Birthday List [US38]: []
-Births List [US35]: []
+[US35] Upcoming Birthday List: The following INDIVIDUALS have upcoming birthdays: []
+[US35] Recent Births List: The following INDIVIDUALS were recently born: []
+[US36] Recent Deaths List: The following INDIVIDUALS recently died: []
+
+US29: list_deceased(): the following individuals are deceased:  ['I3', 'I7', 'I8']

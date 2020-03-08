@@ -16,19 +16,19 @@ def list_upcoming_birthdays(people):
             if (month < today.month or (month == today.month and day < today.day)):
                 year += 1
             # if birthday is on leap day and not leap year
-            if (month == 1 and day == 29 and year % 4 != 0):
-                month = 2
+            if (month == 2 and day == 29 and year % 4 != 0):
+                month = 3
                 day = 1
             next_birthday = datetime(year, month, day)
 
             # actual check
             if ((next_birthday-today).days) < 30 and person.alive:
-                birthdayList.append(person)
+                birthdayList.append(person.id)
     # if(len(birthdayList) > 0):
     #     for member in birthdayList:
     #         print("\nANAMOLY: INDIVIDUALS: US38: list_upcoming_birthdays(): Person '" +
     #               member.id + "' has an upcoming birthday")
-    print("Upcoming Birthday List [US38]:", birthdayList)
+    print("[US35] Upcoming Birthday List: The following INDIVIDUALS have upcoming birthdays:", birthdayList)
     return birthdayList
 
 
@@ -47,8 +47,8 @@ def list_recent_births(people):
         if person.birthday is not None:
             today = datetime.now()
             if (today - person.birthday).days < 30:
-                ret.append(person)
-    print("Recent Births List [US35]:", ret)
+                ret.append(person.id)
+    print("[US35] Recent Births List: The following INDIVIDUALS were recently born:", ret)
     return ret
 
 
@@ -58,8 +58,8 @@ def list_recent_deaths(people):
         if person.death is not None:
             today = datetime.now()
             if (today - person.death).days < 30:
-                ret.append(person)
-    print("Recent Deaths List [US36]:", ret)
+                ret.append(person.id)
+    print("[US36] Recent Deaths List: The following INDIVIDUALS recently died:", ret)
     return ret
 
 
