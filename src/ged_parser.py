@@ -98,10 +98,11 @@ def parse(lines):
 
                 date = utils.reject_illegitimate_dates(next_split[2])
                 current_entity.married = date
-                # utils.birth_before_marriage(current_entity, people)
+                utils.birth_before_marriage(current_entity, people)
                 utils.marriage_after_14(current_entity, people)
-                # WARNING: this may throw an exception if marriage is before death of individuals
                 utils.marriage_before_death(current_entity, people)
+                utils.no_marriage_to_children(current_entity, people)
+                utils.no_marriage_to_siblings(current_entity, people)
             elif split[1] == "HUSB":  # FAMILY ONLY
                 husbandId = split[2].replace("@", "")
                 husband = people[husbandId]

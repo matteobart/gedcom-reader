@@ -22,6 +22,14 @@ ERROR: FAMILY: US10: marriage_after_14(): Family @F1@:  marriage date 1970-05-05
 ERROR: FAMILY: US05: marriage_before_death(): Family @F1@: married Date 1961-05-05 00:00:00 should be before death date of wife on 1960-02-19 00:00:00
 
 ERROR: FAMILY: US04: marriage_before_divorce(): Family @F1@:  marriage date 1980-05-05 00:00:00 should be before divorce date 1960-05-05 00:00:00 of family:
+
+ERROR: FAMILY: US20: no_aunts_and_uncles(): Family @F1@:  invalid marriage
+
+ERROR: FAMILY: US19: no_first_cousin_marriage(): Family @F1@:  invalid marriage
+
+ERROR: FAMILY: US17: no_marriage_to_children: Family @F1@:  husband @22@ is a parent of wife @21@:
+
+ERROR: FAMILY: US18: no_marriage_to_siblings: Family @F1@:  husband @24@  and wife @23@ are siblings:
 ERROR: Line 2: FAMILY: US22: This FAM ID is not unique: 43
 ERROR: Line 2: PERSON: US22: This INDI ID is not unique: 43
 [US35] Recent Births List: The following INDIVIDUALS were recently born: []
