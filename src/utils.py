@@ -370,3 +370,85 @@ def get_delta_years(years, from_date=None):
     if from_date is None:
         from_date = datetime.now()
     return from_date - relativedelta(years=years)
+
+
+def no_marriage_to_siblings(family, people: dict):
+    """
+       Checks to see if marriage is not between siblings
+
+       written by: Brenden
+
+       :param family: family object
+       :param people: person dictionary
+       :return: Boolean
+       """
+    husband = people[family.husbandId]
+    wife = people[family.wifeId]
+
+    # Find parents of husband and wife
+    parents = []
+    for curr in people.values():
+        children = curr.children
+        for child in children:
+            if husband.id == child:
+                if not(curr in parents):
+                    parents.append(curr)
+                    if len(parents) == 2:
+                        break
+    for curr in people.values():
+        children = curr.children
+        for child in children:
+            if wife.id == child:
+                if not (curr in parents):
+                    parents.append(curr)
+                    if len(parents) == 2:
+                        break
+
+    # Find siblings of parents
+    siblings = []
+    for parent in parents:
+        children = parent.children
+        for child in children:
+            if person != child and (not (child in siblings)):
+                siblings.append(people[child])
+
+    # Make sure they are not siblings
+    for sibling in siblings:
+        if wife.id == sibling.id or husband.id == sibling.id:
+            print("\nERROR: FAMILY: US18: no_marriage_to_siblings: Family {}:  "
+                  "husband {}  and wife {} are siblings:".format(family.id, husband.id, wife.id,))
+            return False
+    return True
+
+
+def no_marriage_to_children(family, people):
+    """
+       Checks to see a marriage is not between an adult and a child
+
+       written by: Brenden
+
+       :param family: family object
+       :param people: person dictionary
+       :return: Boolean
+       """
+    husband = people[family.husbandId]
+    wife = people[family.wifeId]
+
+    children_of_husband = husband.children
+    children_of_wife = wife.children
+
+    result = True
+
+    for child in children_of_wife:
+        if husband.id == child:
+            print("\nERROR: FAMILY: US17: no_marriage_to_children: Family {}:  "
+                  "wife {} is a parent of husband {}:".format(family.id, wife.id, husband.id, ))
+            result = False
+
+    for child in children_of_husband:
+        if wife.id == child:
+            print("\nERROR: FAMILY: US17: no_marriage_to_children: Family {}:  "
+                  "husband {} is a parent of wife {}:".format(family.id, husband.id, wife.id,))
+            result = False
+
+    return result

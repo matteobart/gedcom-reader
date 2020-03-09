@@ -348,6 +348,43 @@ class TestGedcomMethods(unittest.TestCase):
                     divorced=utils.parse_date("5 MAY 1980"), husbandId="@21@", wifeId="@43@")
         self.assertEqual(False, utils.no_aunts_and_uncles(f1,[p1, p2, p3, p4, p5, p6]))
 
+    def test_no_marriage_to_children(self):
+        testFam = Family("@F1@", married=utils.parse_date("5 MAY 1979"),
+                         divorced=utils.parse_date("5 MAY 1980"), husbandId="@22@", wifeId="@21@")
+        testPeople = {"@22@": Person("@22@", alive=True, birthday=utils.parse_date("28 FEB 1960"), children=["@23@"]),
+                      "@21@": Person("@21@", alive=True, birthday=utils.parse_date("19 FEB 1960")),
+                      "@23@": Person("@23@", alive=True, birthday=utils.parse_date("19 FEB 1978"))}
+
+        self.assertEqual(True, utils.no_marriage_to_children(testFam, testPeople))
+
+    def test_no_marriage_to_children_err(self):
+        testFam = Family("@F1@", married=utils.parse_date("5 MAY 1979"),
+                         divorced=utils.parse_date("5 MAY 1980"), husbandId="@22@", wifeId="@21@")
+        testPeople = {"@22@": Person("@22@", alive=True, birthday=utils.parse_date("28 FEB 1960"), children=["@21@"]),
+                      "@21@": Person("@21@", alive=True, birthday=utils.parse_date("19 FEB 1960"))}
+
+        self.assertEqual(False, utils.no_marriage_to_children(testFam, testPeople))
+
+    def test_no_marriage_to_siblings(self):
+        testFam = Family("@F1@", married=utils.parse_date("5 MAY 1979"),
+                         divorced=utils.parse_date("5 MAY 1980"), husbandId="@22@", wifeId="@21@")
+        testPeople = {"@22@": Person("@22@", alive=True, birthday=utils.parse_date("28 FEB 1960"), children=["@23@", "@24@"]),
+                      "@21@": Person("@21@", alive=True, birthday=utils.parse_date("19 FEB 1960"), children=["@23@", "@24@"]),
+                      "@23@": Person("@23@", alive=True, birthday=utils.parse_date("19 FEB 1978")),
+                      "@24@": Person("@24@", alive=True, birthday=utils.parse_date("19 FEB 1978"))}
+
+        self.assertEqual(True, utils.no_marriage_to_siblings(testFam, testPeople))
+
+    def test_no_marriage_to_siblings_err(self):
+        testFam = Family("@F1@", married=utils.parse_date("5 MAY 1998"),
+                         divorced=utils.parse_date("6 MAY 1998"), husbandId="@24@", wifeId="@23@")
+        testPeople = {"@22@": Person("@22@", alive=True, birthday=utils.parse_date("28 FEB 1960"), children=["@23@", "@24@"]),
+                      "@21@": Person("@21@", alive=True, birthday=utils.parse_date("19 FEB 1960"), children=["@23@", "@24@"]),
+                      "@23@": Person("@23@", alive=True, birthday=utils.parse_date("19 FEB 1978")),
+                      "@24@": Person("@24@", alive=True, birthday=utils.parse_date("19 FEB 1978"))}
+
+        self.assertEqual(False, utils.no_marriage_to_siblings(testFam, testPeople))
+
 # make sure your functions start with the word 'test' and have at least one
 # parameter self (just because its in a class dw about why)
 # ex test_great_name_(self, other_params):
