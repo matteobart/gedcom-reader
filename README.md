@@ -1,6 +1,13 @@
+# Update to utils.py
+It is now standard that all the functions that print errors MUST also return False  
+No functions needed to be changed, but this will be the standard going forward  
+Also, when calling functions in ged_parser that can print errors, please do it like this:  
+`utils.check(line_num, utils.func_name, arg1, arg2, ...)`  
+`utils.check(line_num, utils.some_fun, just_one_arg)`  
+`utils.check(line_num, utils.divorce_before_death, family, people)`  
 
 # gedcom-reader
-Our group assignment for Agile Methods for Software Development
+Our group assignment for Agile Methods for Software Development  
 
 ## Dependencies 
 `pip3 install python-dateutil --user`  

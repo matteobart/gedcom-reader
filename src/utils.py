@@ -160,6 +160,11 @@ def divorce_before_death(family, people):
         print("\nERROR: FAMILY: US06: divorce_before_death(): Family {}:  "
               "invalid divorce date {} :".format(family.id, divorce_date))
         return False
+    
+    if wife.death is None:
+        print("\nERROR: FAMILY: US06: divorce_before_death(): Family {}:  "
+              "invalid wife death date {} :".format(family.id, wife.death))
+        return False
 
     if (divorce_date - wife.death).days > 0:
         print("\nERROR: FAMILY: US06: divorce_before_death(): Family {}:  "
@@ -230,6 +235,8 @@ def check_unique_birth_and_name(person, people):
         if p.id == person.id:
             continue
         if p.name == person.name and p.birthday == person.birthday:
+            print("ERROR: PERSON: US40: This INDI name w/ birthday is not unique: {}".format(
+                        person.id))
             return False  # not unique
     return True
 
@@ -452,3 +459,23 @@ def no_marriage_to_children(family, people):
             result = False
 
     return result
+
+def check(line_num, func, *argv):
+    if (len(argv) == 0):
+        res = func()
+    elif (len(argv) == 1):
+        res = func(argv[0])
+    elif (len(argv) == 2):
+        res = func(argv[0], argv[1])
+    elif (len(argv) == 3):
+        res = func(argv[0], argv[1], argv[2])
+    elif (len(argv) == 4):
+        res = func(argv[0], argv[1], argv[2], argv[3])
+
+    if res == False:
+        print("ERROR on line {}".format(line_num))
+        print("=" * 20)
+
+    return res
+
+
