@@ -68,6 +68,7 @@ def parse(lines):
                 next_line = next(iterator)
                 next_split = next_line.replace("\n", "").split(" ", 2)
                 date = utils.check(line_num, utils.reject_illegitimate_dates, next_split[2])
+                utils.check(line_num, utils.dates_before_current_date, date)
                 diff = relativedelta(datetime.now(), date)
                 current_entity.age = diff.years
                 current_entity.birthday = date
@@ -78,6 +79,8 @@ def parse(lines):
                 next_line = next(iterator)
                 next_split = next_line.replace("\n", "").split(" ", 2)
                 date = utils.check(line_num, utils.reject_illegitimate_dates, next_split[2])
+                utils.check(line_num, utils.dates_before_current_date, date)
+
                 current_entity.death = date
             elif split[1] == "FAMC":
                 childId = split[2].replace("@", "")
@@ -90,6 +93,7 @@ def parse(lines):
                 next_split = next_line.replace("\n", "").split(" ", 2)
 
                 date = utils.check(line_num, utils.reject_illegitimate_dates, next_split[2])
+                utils.check(line_num, utils.dates_before_current_date, date)
                 current_entity.married = date
                 utils.check(line_num, utils.birth_before_marriage, current_entity, people)
                 utils.check(line_num, utils.marriage_after_14, current_entity, people)
@@ -113,6 +117,7 @@ def parse(lines):
                 next_line = next(iterator)
                 next_split = next_line.replace("\n", "").split(" ", 2)
                 date = utils.check(line_num, utils.reject_illegitimate_dates,next_split[2])
+                utils.check(line_num, utils.dates_before_current_date, date)
                 current_entity.divorced = date
                 utils.check(line_num, utils.divorce_before_death, current_entity, people)
                 utils.check(line_num, utils.marriage_before_divorce, current_entity)
@@ -123,6 +128,7 @@ def parse(lines):
             if split[1] == "DATE":
 
                 date = utils.check(line_num, utils.reject_illegitimate_dates, split[2])
+                utils.check(line_num, utils.dates_before_current_date, date)
                 # this tag can be used for either person OR family
                 if isinstance(current_entity, Person):
                     # code should never come here

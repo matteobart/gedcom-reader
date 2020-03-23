@@ -28,7 +28,7 @@ def list_upcoming_birthdays(people):
     #     for member in birthdayList:
     #         print("\nANAMOLY: INDIVIDUALS: US38: list_upcoming_birthdays(): Person '" +
     #               member.id + "' has an upcoming birthday")
-    print("[US35] Upcoming Birthday List: The following INDIVIDUALS have upcoming birthdays:", birthdayList)
+    print("INFO: PEOPLE: US38: list_upcoming_birthdays: The following INDIVIDUALS have upcoming birthdays:", birthdayList)
     return birthdayList
 
 
@@ -36,7 +36,7 @@ def fewer_than_15_siblings(family):
     # returns False if any family has more than 15 siblings, and prints the family
     # otherwise True
     if (family.children and len(family.children) > 15):
-        print("\nERROR: FAMILY: US15: fewer_than_15_siblings(): Family {} has more than 15 child siblings".format(family.id))
+        print("\nANOMALY: FAMILY: US15: fewer_than_15_siblings(): Family {} has more than 15 child siblings".format(family.id))
         return False
     return True
 
@@ -59,7 +59,7 @@ def list_recent_deaths(people):
             today = datetime.now()
             if (today - person.death).days < 30:
                 ret.append(person.id)
-    print("[US36] Recent Deaths List: The following INDIVIDUALS recently died:", ret)
+    print("\nINFO: PEOPLE: US36: list_recent_deaths(): The following INDIVIDUALS recently died:", ret)
     return ret
 
 
@@ -68,7 +68,7 @@ def list_deceased(people):
     for person in people:
         if person.death is not None:
             deceased.append(person.id)
-    print("\nUS29: list_deceased(): the following individuals are deceased: ", deceased)
+    print("\nINFO: PEPOLE: US29: list_deceased(): the following individuals are deceased: ", deceased)
     return deceased
 
 def list_orphans(people, families):

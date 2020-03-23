@@ -387,6 +387,21 @@ class TestGedcomMethods(unittest.TestCase):
                       "@24@": Person("@24@", alive=True, birthday=utils.parse_date("19 FEB 1978"))}
 
         self.assertEqual(False, utils.no_marriage_to_siblings(testFam, testPeople))
+    
+    def test_order_siblings_by_age(self):
+        testFam = Family("@F1@", children=["@21@", "@22@", "@23@"])
+        p4 = Person("@21@", birthday=utils.parse_date("2 MAR 2020"))
+        p5 = Person("@22@", birthday=utils.parse_date("19 JAN 2019"))
+        p6 = Person("@23@", death=utils.parse_date("19 JAN 2019"))
+        self.assertEqual(["@22@", "@21@", "@23@"], utils.order_siblings_by_age(testFam.children, [p4, p5, p6]))
+        print("INFO: FAMILY: US28: order_siblings_by_age: Test Passed! Sibling ids from oldest to youngest:", 
+            utils.order_siblings_by_age(testFam.children, [p4, p5, p6]))
+
+    def test_dates_before_current_date(self):
+        self.assertEqual(True, utils.dates_before_current_date(utils.parse_date("5 MAY 1960")))
+    
+    def test_dates_after_current_date(self):
+        self.assertEqual(False, utils.dates_before_current_date(utils.parse_date("25 MAY 2020")))
 
     def test_orphans(self):
         testFamilies = [Family("@F1@", married=utils.parse_date("5 MAY 1979"),
@@ -431,6 +446,8 @@ class TestGedcomMethods(unittest.TestCase):
 
     def test_orphans_empty(self):
         self.assertEqual(extras.list_large_age_gap([], []), [])
+
+    
 
 # make sure your functions start with the word 'test' and have at least one
 # parameter self (just because its in a class dw about why)
