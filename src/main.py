@@ -22,6 +22,8 @@ if __name__ == "__main__":
         extras.list_recent_births(people)
         extras.list_recent_deaths(people)
         extras.list_deceased(people)
+        extras.list_orphans(people, families)
+        extras.list_large_age_gap(people, families)
         for family in families:
             # run ALL family-based "extras" tests
             extras.fewer_than_15_siblings(family)
