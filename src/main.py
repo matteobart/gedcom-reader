@@ -3,6 +3,8 @@ import ged_parser
 import extras
 from utils import print_families
 from utils import print_people
+from utils import order_siblings_by_age
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='The best GEDCOM reader')
@@ -15,7 +17,11 @@ if __name__ == "__main__":
         tup = ged_parser.parse(lines)
         people = tup[0]
         families = tup[1]
-        
+        for family in families:
+            # run ALL family-based tests
+            extras.fewer_than_15_siblings(family)
+            family.children = order_siblings_by_age(family.children, people)
+
         print_families(families)
         print_people(people)
         extras.list_upcoming_birthdays(people)
@@ -24,6 +30,5 @@ if __name__ == "__main__":
         extras.list_deceased(people)
         extras.list_orphans(people, families)
         extras.list_large_age_gap(people, families)
-        for family in families:
-            # run ALL family-based "extras" tests
-            extras.fewer_than_15_siblings(family)
+        
+

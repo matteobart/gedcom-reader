@@ -1,7 +1,7 @@
 from prettytable import PrettyTable
 import person
 import family
-from datetime import datetime
+from datetime import datetime, date, timedelta
 from dateutil.relativedelta import relativedelta
 
 list_of_months = ['JAN', 'FEB', 'MAR', 'APR', 'MAY',
@@ -477,5 +477,25 @@ def check(line_num, func, *argv):
         print("=" * 20)
 
     return res
+
+def dates_before_current_date(date):
+    today = datetime.now()
+    if(today - date).days < 0:
+        print("\nERROR: DATE: US01: dates_before_current_date(): The date {} is NOT before the current date {}.".format(date, today))
+        return False
+    return True
+
+def getAgeFromID(pid, people):
+    for person in people:
+        if person.id == pid:
+            if person.birthday is not None:
+                #should be negative, number of days alive
+                return (person.birthday - datetime.now()).days 
+            else:
+                return 0
+    print("getAgeFromID (Helper Method, line 496) cannot get age of non-existant person with id {}".format(pid))
+
+def order_siblings_by_age(siblings, people):
+    return sorted(siblings, key=lambda x: getAgeFromID(x, people), reverse=False)
 
 
