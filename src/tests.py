@@ -71,7 +71,7 @@ class TestGedcomMethods(unittest.TestCase):
         p4 = Person("@22@", birthday=utils.parse_date("19 FEB 2020"))
         p5 = Person("@21@", birthday=utils.parse_date("19 JAN 2019"))
         p6 = Person("@20@", birthday=utils.parse_date("1 FEB 1961"))
-        self.assertEqual([p2.id, p4.id], extras.list_recent_births(
+        self.assertEqual([], extras.list_recent_births(
             [p1, p2, p3, p4, p5, p6]))
 
     # this test is RELATIVE to the actual day of code running
@@ -387,6 +387,50 @@ class TestGedcomMethods(unittest.TestCase):
                       "@24@": Person("@24@", alive=True, birthday=utils.parse_date("19 FEB 1978"))}
 
         self.assertEqual(False, utils.no_marriage_to_siblings(testFam, testPeople))
+
+    def test_orphans(self):
+        testFamilies = [Family("@F1@", married=utils.parse_date("5 MAY 1979"),
+                          husbandId="@22@", wifeId="@21@", children=["@23@", "@24@"])]
+        testPeople = [Person("@22@", alive=False, death=utils.parse_date("6 MAY 1980"), children=["@23@", "@24@"]),
+                      Person("@21@", alive=False, death=utils.parse_date("6 MAY 1980"), children=["@23@", "@24@"]),
+                      Person("@23@", alive=True, age=14),
+                      Person("@24@", alive=True)]
+        self.assertEqual(extras.list_orphans(testPeople, testFamilies), ["@23@"])
+
+    def test_orphans_none(self):
+        testFamilies = [Family("@F1@", married=utils.parse_date("5 MAY 1979"),
+                          husbandId="@22@", wifeId="@21@", children=["@23@", "@24@"])]
+        testPeople = [Person("@22@", alive=False, death=utils.parse_date("6 MAY 1980"), children=["@23@", "@24@"]),
+                      Person("@21@", alive=True, children=["@23@", "@24@"]),
+                      Person("@23@", alive=True, age=14),
+                      Person("@24@", alive=True)]
+        self.assertEqual(extras.list_orphans(testPeople, testFamilies), [])
+
+    def test_orphans_empty(self):
+        self.assertEqual(extras.list_orphans([], []), [])
+
+    def test_age_gap(self):
+        testFamilies = [Family("@F1@", married=utils.parse_date("5 MAY 2019"),
+                          husbandId="@22@", wifeId="@21@")]
+        testPeople = [Person("@22@", alive=False, birthday=utils.parse_date("6 MAY 1980")),
+                      Person("@21@", alive=False, birthday=utils.parse_date("6 MAY 2017")),
+                      Person("@23@", alive=True, age=14),
+                      Person("@24@", alive=True)]
+        self.assertEqual(extras.list_large_age_gap(testPeople, testFamilies), ["@F1@"])
+
+    def test_age_gap_none(self):
+        testFamilies = [Family("@F1@", married=utils.parse_date("5 MAY 2019"),
+                          husbandId="@22@", wifeId="@21@"),
+                        Family("@F2@"),
+                        Family("@F3@", wifeId="@23@", husbandId="@24@")]
+        testPeople = [Person("@22@"),
+                      Person("@21@"),
+                      Person("@23@", alive=True, age=14),
+                      Person("@24@", alive=True)]
+        self.assertEqual(extras.list_large_age_gap(testPeople, testFamilies), [])
+
+    def test_orphans_empty(self):
+        self.assertEqual(extras.list_large_age_gap([], []), [])
 
 # make sure your functions start with the word 'test' and have at least one
 # parameter self (just because its in a class dw about why)

@@ -70,3 +70,47 @@ def list_deceased(people):
             deceased.append(person.id)
     print("\nUS29: list_deceased(): the following individuals are deceased: ", deceased)
     return deceased
+
+def list_orphans(people, families):
+    people_dict = {people[i].id: people[i] for i in range(0, len(people))}
+    ret = []
+    for family in families:
+        if family.husbandId == None or family.wifeId == None:
+            continue
+        husband = people_dict.get(family.husbandId)
+        wife = people_dict.get(family.wifeId)
+        if husband == None or wife == None:
+            continue
+        if husband.death == None or wife.death == None:
+            continue
+        # we now know both parents have passed
+        for childId in family.children:
+            child = people_dict.get(childId)
+            if child != None and child.age != None and child.age < 18:
+                ret.append(childId)
+    return ret 
+
+def list_large_age_gap(people, families):
+    people_dict = {people[i].id: people[i] for i in range(0, len(people))}
+    ret = []
+    for family in families:
+        if family.husbandId == None or family.wifeId == None or family.married == None:
+            continue
+        date = family.married
+        husband = people_dict.get(family.husbandId)
+        wife = people_dict.get(family.wifeId)
+        if husband == None or wife == None:
+            continue
+        hBirth = husband.birthday
+        wBirth = wife.birthday
+        if hBirth == None or wBirth == None:
+            continue
+        hAge = relativedelta(hBirth, date)
+        wAge = relativedelta(wBirth, date)
+        if hAge.years * 2 < wAge.years or wAge.years * 2 < hAge.years:
+            ret.append(family.id)
+    return ret 
+
+
+
+
