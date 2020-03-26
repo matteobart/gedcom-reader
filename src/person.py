@@ -1,14 +1,14 @@
 class Person:
-    def __init__(self, 
-                id, 
-                name=None, 
-                gender=None, 
-                birthday=None, 
-                age=None, 
-                alive=None, 
-                death=None, 
-                children=[], 
-                spouse=[]):
+    def __init__(self,
+                 id,
+                 name=None,
+                 gender=None,
+                 birthday=None,
+                 age=None,
+                 alive=None,
+                 death=None,
+                 children=[],
+                 spouse=[]):
         self.id = id
         self.name = name
         self.gender = gender
@@ -19,10 +19,9 @@ class Person:
         self.children = children
         self.spouse = spouse
 
-
     def toTuple(self):
         return(
-            self.id, 
+            self.id,
             self.name,
             self.gender,
             self.birthday,
@@ -32,12 +31,11 @@ class Person:
             self.children,
             self.spouse)
 
-
     def __str__(self):
         return("{}|{}|{}|{}|{}|{}|{}|{}|{}".format(
-            self.id, 
+            self.id,
             self.name,
-            "M" if self.gender else "F",
+            "M" if self.gender == "M" else "F",
             self.birthday,
             self.age,
             self.alive,
@@ -47,17 +45,22 @@ class Person:
 
     def __lt__(self, other):
         return self.id < other.id
+
     def __le__(self, other):
         return self.id <= other.id
+
     def __eq__(self, other):
         if isinstance(other, self.__class__):
             return self.id == other.id
         return False
+
     def __ne__(self, other):
         if isinstance(other, self.__class__):
             return self.id != other.id
         return True
+
     def __gt__(self, other):
         return self.id > other.id
+
     def __ge__(self, other):
         return self.id >= other.id

@@ -4,7 +4,7 @@ import extras
 from utils import print_families
 from utils import print_people
 from utils import order_siblings_by_age
-from utils import include_individual_ages
+from utils import correct_gender_for_role
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='The best GEDCOM reader')
@@ -23,6 +23,7 @@ if __name__ == "__main__":
             family.children = order_siblings_by_age(family.children, people)
 
         print_families(families)
+        correct_gender_for_role(people, families)
         print_people(people)
         extras.list_upcoming_birthdays(people)
         extras.list_recent_births(people)

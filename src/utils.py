@@ -513,3 +513,14 @@ def include_individual_ages(person):
     diff = relativedelta(datetime.now(), person.birthday)
     person.age = diff.years
     return person
+
+
+def correct_gender_for_role(people, families):
+    for family in families:
+        for person in people:
+            if(person.gender == 'F' and person.id == family.husbandId):
+                print('US21: correct_gender_for_role: ERROR in family ' + family.id + ': ' + person.name + '`s gender is ' +
+                      person.gender + '(emale) but his role is `Husband` as seen by husbandId:', family.husbandId)
+            elif(person.gender == 'M' and person.id == family.wifeId):
+                print('US21: correct_gender_for_role: ERROR in family ' + family.id + ': ' + person.name + '`s gender is ' +
+                      person.gender + '(ale) but her role is `Wife` as seen by wifeId:', family.wifeId)
