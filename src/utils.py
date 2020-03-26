@@ -160,7 +160,7 @@ def divorce_before_death(family, people):
         print("\nERROR: FAMILY: US06: divorce_before_death(): Family {}:  "
               "invalid divorce date {} :".format(family.id, divorce_date))
         return False
-    
+
     if wife.death is None:
         print("\nERROR: FAMILY: US06: divorce_before_death(): Family {}:  "
               "invalid wife death date {} :".format(family.id, wife.death))
@@ -236,7 +236,7 @@ def check_unique_birth_and_name(person, people):
             continue
         if p.name == person.name and p.birthday == person.birthday:
             print("ERROR: PERSON: US40: This INDI name w/ birthday is not unique: {}".format(
-                        person.id))
+                person.id))
             return False  # not unique
     return True
 
@@ -262,6 +262,7 @@ def marriage_after_14(family, people):
         returnable = False
     return returnable
 
+
 def get_parents(person, people):
     """
         Gets list of parents
@@ -284,6 +285,7 @@ def get_parents(person, people):
                 if i == 2:
                     break
     return parents
+
 
 def get_siblings(person, people):
     """
@@ -323,7 +325,7 @@ def no_first_cousin_marriage(family, people):
     husband = family.husbandId
     wife = family.wifeId
     parentsW = get_parents(wife, people)
-    parentsH= get_parents(husband, people)
+    parentsH = get_parents(husband, people)
     aunts = []
     cousins = []
 
@@ -373,6 +375,8 @@ def no_aunts_and_uncles(family, people):
     return True
 
 # inspired by SO question 765797, integrated into project by Daniel Kramer
+
+
 def get_delta_years(years, from_date=None):
     if from_date is None:
         from_date = datetime.now()
@@ -460,6 +464,7 @@ def no_marriage_to_children(family, people):
 
     return result
 
+
 def check(line_num, func, *argv):
     if (len(argv) == 0):
         res = func()
@@ -478,6 +483,7 @@ def check(line_num, func, *argv):
 
     return res
 
+
 def dates_before_current_date(date):
     today = datetime.now()
     if(today - date).days < 0:
@@ -485,17 +491,25 @@ def dates_before_current_date(date):
         return False
     return True
 
+
 def getAgeFromID(pid, people):
     for person in people:
         if person.id == pid:
             if person.birthday is not None:
-                #should be negative, number of days alive
-                return (person.birthday - datetime.now()).days 
+                # should be negative, number of days alive
+                return (person.birthday - datetime.now()).days
             else:
                 return 0
     print("getAgeFromID (Helper Method, line 496) cannot get age of non-existant person with id {}".format(pid))
 
+
 def order_siblings_by_age(siblings, people):
     return sorted(siblings, key=lambda x: getAgeFromID(x, people), reverse=False)
 
+# TODO: Discuss how to print User Story Message for this method.
 
+
+def include_individual_ages(person):
+    diff = relativedelta(datetime.now(), person.birthday)
+    person.age = diff.years
+    return person

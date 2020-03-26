@@ -26,7 +26,7 @@ def parse(lines):
         if (len(split) == 2):
             split.append("")
 
-        line_num = utils.get_line_number(line, lines) # lets just roll with it
+        line_num = utils.get_line_number(line, lines)  # lets just roll with it
 
         if split[0] == "0":  # level 0 tag
             if split[2] == "INDI":  # PERSON ONLY
@@ -61,24 +61,29 @@ def parse(lines):
         elif split[0] == "1":  # level 1 tag
             if split[1] == "NAME":  # PERSON ONLY
                 current_entity.name = split[2]
-                utils.check(line_num, utils.check_unique_birth_and_name, current_entity, people)
+                utils.check(
+                    line_num, utils.check_unique_birth_and_name, current_entity, people)
             elif split[1] == "SEX":  # PERSON ONLY
                 current_entity.gender = split[2]
             elif split[1] == "BIRT":  # PERSON ONLY
                 next_line = next(iterator)
                 next_split = next_line.replace("\n", "").split(" ", 2)
-                date = utils.check(line_num, utils.reject_illegitimate_dates, next_split[2])
+                date = utils.check(
+                    line_num, utils.reject_illegitimate_dates, next_split[2])
                 utils.check(line_num, utils.dates_before_current_date, date)
-                diff = relativedelta(datetime.now(), date)
-                current_entity.age = diff.years
+                # diff = relativedelta(datetime.now(), date)
+                # current_entity.age = diff.years
                 current_entity.birthday = date
-                utils.check(line_num, utils.check_unique_birth_and_name, current_entity, people)
+                current_entity = utils.include_individual_ages(current_entity)
+                utils.check(
+                    line_num, utils.check_unique_birth_and_name, current_entity, people)
             elif split[1] == "DEAT":
                 # can check if "Y" is in split[2] if youd like
                 current_entity.alive = False
                 next_line = next(iterator)
                 next_split = next_line.replace("\n", "").split(" ", 2)
-                date = utils.check(line_num, utils.reject_illegitimate_dates, next_split[2])
+                date = utils.check(
+                    line_num, utils.reject_illegitimate_dates, next_split[2])
                 utils.check(line_num, utils.dates_before_current_date, date)
 
                 current_entity.death = date
@@ -92,14 +97,20 @@ def parse(lines):
                 next_line = next(iterator)
                 next_split = next_line.replace("\n", "").split(" ", 2)
 
-                date = utils.check(line_num, utils.reject_illegitimate_dates, next_split[2])
+                date = utils.check(
+                    line_num, utils.reject_illegitimate_dates, next_split[2])
                 utils.check(line_num, utils.dates_before_current_date, date)
                 current_entity.married = date
-                utils.check(line_num, utils.birth_before_marriage, current_entity, people)
-                utils.check(line_num, utils.marriage_after_14, current_entity, people)
-                utils.check(line_num, utils.marriage_before_death,current_entity, people)
-                utils.check(line_num, utils.no_marriage_to_children, current_entity, people)
-                utils.check(line_num, utils.no_marriage_to_siblings, current_entity, people)
+                utils.check(line_num, utils.birth_before_marriage,
+                            current_entity, people)
+                utils.check(line_num, utils.marriage_after_14,
+                            current_entity, people)
+                utils.check(line_num, utils.marriage_before_death,
+                            current_entity, people)
+                utils.check(line_num, utils.no_marriage_to_children,
+                            current_entity, people)
+                utils.check(line_num, utils.no_marriage_to_siblings,
+                            current_entity, people)
             elif split[1] == "HUSB":  # FAMILY ONLY
                 husbandId = split[2].replace("@", "")
                 husband = people[husbandId]
@@ -116,18 +127,22 @@ def parse(lines):
             elif split[1] == "DIV":  # FAMILY ONLY
                 next_line = next(iterator)
                 next_split = next_line.replace("\n", "").split(" ", 2)
-                date = utils.check(line_num, utils.reject_illegitimate_dates,next_split[2])
+                date = utils.check(
+                    line_num, utils.reject_illegitimate_dates, next_split[2])
                 utils.check(line_num, utils.dates_before_current_date, date)
                 current_entity.divorced = date
-                utils.check(line_num, utils.divorce_before_death, current_entity, people)
-                utils.check(line_num, utils.marriage_before_divorce, current_entity)
+                utils.check(line_num, utils.divorce_before_death,
+                            current_entity, people)
+                utils.check(
+                    line_num, utils.marriage_before_divorce, current_entity)
             else:
                 pass
 
         elif split[0] == "2":  # level 2 tag
             if split[1] == "DATE":
 
-                date = utils.check(line_num, utils.reject_illegitimate_dates, split[2])
+                date = utils.check(
+                    line_num, utils.reject_illegitimate_dates, split[2])
                 utils.check(line_num, utils.dates_before_current_date, date)
                 # this tag can be used for either person OR family
                 if isinstance(current_entity, Person):
