@@ -470,6 +470,24 @@ class TestGedcomMethods(unittest.TestCase):
         testPerson = Person("@21@", birthday=utils.parse_date("29 FEB 1920"))
         self.assertEqual((utils.include_individual_ages(testPerson).age), 100)
 
+    def test_correct_gender_for_role_false(self):
+        testFamilies = [Family("@F1@", married=utils.parse_date("5 MAY 2019"),
+                               husbandId="@22@", wifeId="@21@")]
+        testPeople = [Person("@22@", name="Bob Smith", gender="F"),
+                      Person("@21@", name="Mary Smith", gender="M"),
+                      ]
+        self.assertEqual(utils.correct_gender_for_role(
+            testPeople, testFamilies), False)
+
+    def test_correct_gender_for_role_true(self):
+        testFamilies = [Family("@F1@", married=utils.parse_date("5 MAY 2019"),
+                               husbandId="@22@", wifeId="@21@")]
+        testPeople = [Person("@22@", name="Bob Smith", gender="M"),
+                      Person("@21@", name="Mary Smith", gender="F"),
+                      ]
+        self.assertEqual(utils.correct_gender_for_role(
+            testPeople, testFamilies), True)
+
 
 # make sure your functions start with the word 'test' and have at least one
 # parameter self (just because its in a class dw about why)
