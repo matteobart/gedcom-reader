@@ -112,3 +112,23 @@ def list_large_age_gap(people, families):
         if hAge.years * 2 < wAge.years or wAge.years * 2 < hAge.years:
             ret.append(family.id)
     return ret
+
+
+def include_individual_ages(person):
+    diff = relativedelta(datetime.now(), person.birthday)
+    person.age = diff.years
+    return person
+
+
+def correct_gender_for_role(people, families):
+    for family in families:
+        for person in people:
+            if(person.gender == 'F' and person.id == family.husbandId):
+                print('INFO: PEOPLE: US21: correct_gender_for_role: ERROR in family ' + family.id + ': ' + person.name + '`s gender is ' +
+                      person.gender + '(emale) but his role is `Husband` as seen by husbandId:', family.husbandId)
+                return False
+            elif(person.gender == 'M' and person.id == family.wifeId):
+                print('INFO: PEOPLE: US21: correct_gender_for_role: In family ' + family.id + ': ' + person.name + '`s gender is ' +
+                      person.gender + '(ale) but her role is `Wife` as seen by wifeId:', family.wifeId)
+                return False
+    return True

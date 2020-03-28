@@ -4,6 +4,7 @@ from dateutil.relativedelta import relativedelta
 from family import Family
 from person import Person
 import utils
+import extras
 
 # Arguments:
 # lines: [file_lines] - Type: [String]
@@ -74,7 +75,7 @@ def parse(lines):
                 # diff = relativedelta(datetime.now(), date)
                 # current_entity.age = diff.years
                 current_entity.birthday = date
-                current_entity = utils.include_individual_ages(current_entity)
+                current_entity = extras.include_individual_ages(current_entity)
                 utils.check(
                     line_num, utils.check_unique_birth_and_name, current_entity, people)
             elif split[1] == "DEAT":
