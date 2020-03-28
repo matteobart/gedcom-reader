@@ -174,7 +174,7 @@ class TestGedcomMethods(unittest.TestCase):
             False, utils.reject_illegitimate_dates("29 FEB 2016"))
 
     def test_reject_illegitimate_false(self):
-        self.assertEqual(False, utils.reject_illegitimate_dates("31 FEB 2021"))
+        self.assertEqual(None, utils.reject_illegitimate_dates("31 FEB 2021"))
 
     def test_reject_illegitimate_dates_true(self):
         self.assertNotEqual(
