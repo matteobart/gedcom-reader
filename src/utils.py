@@ -64,7 +64,6 @@ def marriage_before_death(family, people):
             returnable = False
     return returnable
 
-
 def birth_before_death(person):
     """
     Checks person's birthday is in fact before death
@@ -108,7 +107,6 @@ def marriage_before_divorce(family):
 
     return True
 
-
 def birth_before_marriage(family, people):
     """
     Checks marriage date is in fact after birth of both spouses
@@ -140,7 +138,6 @@ def birth_before_marriage(family, people):
                                                                                       husband.id))
         return False
     return True
-
 
 def divorce_before_death(family, people):
     """
@@ -262,8 +259,6 @@ def marriage_after_14(family, people):
               "marriage date {} should be at least 14 years after birth date {} of husband {}:".format(family.id, married_date, husband.birthday, husband.id))
         returnable = False
     return returnable
-
-
 def get_parents(person, people):
     """
         Gets list of parents
@@ -312,7 +307,6 @@ def get_siblings(person, people):
                 result.append(y)
     return result
 
-
 def no_first_cousin_marriage(family, people):
     """
        Checks that there is not marriage between first cousins
@@ -343,7 +337,6 @@ def no_first_cousin_marriage(family, people):
         return False
 
     return True
-
 
 def no_aunts_and_uncles(family, people):
     """

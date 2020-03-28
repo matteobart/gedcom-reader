@@ -86,7 +86,6 @@ def parse(lines):
                 date = utils.check(
                     line_num, utils.reject_illegitimate_dates, next_split[2])
                 utils.check(line_num, utils.dates_before_current_date, date)
-
                 current_entity.death = date
             elif split[1] == "FAMC":
                 childId = split[2].replace("@", "")
@@ -111,6 +110,10 @@ def parse(lines):
                 utils.check(line_num, utils.no_marriage_to_children,
                             current_entity, people)
                 utils.check(line_num, utils.no_marriage_to_siblings,
+                            current_entity, people)
+                utils.check(line_num, utils.no_first_cousin_marriage,
+                            current_entity, people)
+                utils.check(line_num, utils.no_aunts_and_uncles,
                             current_entity, people)
             elif split[1] == "HUSB":  # FAMILY ONLY
                 husbandId = split[2].replace("@", "")
