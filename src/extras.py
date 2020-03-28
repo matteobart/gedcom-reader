@@ -68,8 +68,9 @@ def list_deceased(people):
     for person in people:
         if person.death is not None:
             deceased.append(person.id)
-    print("\nINFO: PEPOLE: US29: list_deceased(): the following individuals are deceased: ", deceased)
+    print("\nINFO: PEOPLE: US29: list_deceased(): the following individuals are deceased: ", deceased)
     return deceased
+
 
 def list_orphans(people, families):
     people_dict = {people[i].id: people[i] for i in range(0, len(people))}
@@ -88,7 +89,8 @@ def list_orphans(people, families):
             child = people_dict.get(childId)
             if child != None and child.age != None and child.age < 18:
                 ret.append(childId)
-    return ret 
+    return ret
+
 
 def list_large_age_gap(people, families):
     people_dict = {people[i].id: people[i] for i in range(0, len(people))}
@@ -109,8 +111,4 @@ def list_large_age_gap(people, families):
         wAge = relativedelta(wBirth, date)
         if hAge.years * 2 < wAge.years or wAge.years * 2 < hAge.years:
             ret.append(family.id)
-    return ret 
-
-
-
-
+    return ret

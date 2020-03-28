@@ -23,8 +23,8 @@ if __name__ == "__main__":
             family.children = order_siblings_by_age(family.children, people)
 
         print_families(families)
-        correct_gender_for_role(people, families)
         print_people(people)
+        correct_gender_for_role(people, families)
         extras.list_upcoming_birthdays(people)
         extras.list_recent_births(people)
         extras.list_recent_deaths(people)

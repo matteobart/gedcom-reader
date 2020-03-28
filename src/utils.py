@@ -187,7 +187,7 @@ def reject_illegitimate_dates(date):
     except ValueError:
         print("\nERROR: DATE: US42: reject_illegitimate_dates(): " +
               this_date + " is an invalid date")
-        return False
+        return None
 
 
 def accept_partial_dates(date):
@@ -196,6 +196,7 @@ def accept_partial_dates(date):
     year = None
     flag = False
     partial = date.split(' ')
+
     for part in partial:
         if(part in list_of_months):
             month = part
@@ -485,6 +486,11 @@ def check(line_num, func, *argv):
 
 
 def dates_before_current_date(date):
+    # print(date)
+    if date is None:
+        return True
+    # if not reject_illegitimate_dates(date):
+    #     return True
     today = datetime.now()
     if(today - date).days < 0:
         print("\nERROR: DATE: US01: dates_before_current_date(): The date {} is NOT before the current date {}.".format(date, today))
