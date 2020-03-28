@@ -15,8 +15,8 @@ if __name__ == "__main__":
     with open(args.GEDCOM_file) as file:
         lines = file.readlines()
         tup = ged_parser.parse(lines)
-        people = tup[0]
-        families = tup[1]
+        people = list(tup[0])
+        families = list(tup[1])
         for family in families:
             # run ALL family-based tests
             extras.fewer_than_15_siblings(family)
