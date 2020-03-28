@@ -48,7 +48,7 @@ def list_recent_births(people):
             today = datetime.now()
             if (today - person.birthday).days < 30:
                 ret.append(person.id)
-    print("[US35] Recent Births List: The following INDIVIDUALS were recently born:", ret)
+    print("\nINFO: PEOPLE: US35: list_recent_births(): The following INDIVIDUALS were recently born:", ret)
     return ret
 
 
