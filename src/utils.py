@@ -260,6 +260,7 @@ def marriage_after_14(family, people):
         returnable = False
     return returnable
 def get_parents(person, people):
+
     """
         Gets list of parents
 
@@ -272,8 +273,10 @@ def get_parents(person, people):
     parents = []
     i = 0
     for x in people:
-        curr = x
-        children = curr.children
+        curr = people[x]
+        children = []
+        if not (curr.children == None):
+            children = curr.children
         if person in children:
             if not(curr in parents):
                 parents.append(curr)
@@ -303,7 +306,8 @@ def get_siblings(person, people):
                 siblings.append(y)
     for x in siblings:
         for y in people:
-            if y.id == x:
+
+            if people[y].id == x:
                 result.append(y)
     return result
 
@@ -317,6 +321,7 @@ def no_first_cousin_marriage(family, people):
        :param people: person dictionary
        :return: Boolean
     """
+    print("HERE____________________________________________________________")
     husband = family.husbandId
     wife = family.wifeId
     parentsW = get_parents(wife, people)
@@ -328,8 +333,10 @@ def no_first_cousin_marriage(family, people):
         aunts += get_siblings(x.id, people)
     for x in parentsH:
         aunts += get_siblings(x.id, people)
+
     for x in aunts:
-        cousins += x.children
+        y = people[x]
+        cousins +=y.children
 
     if husband in cousins or wife in cousins:
         print("\nERROR: FAMILY: US19: no_first_cousin_marriage(): Family {}:  "
@@ -359,9 +366,8 @@ def no_aunts_and_uncles(family, people):
 
     for x in parentsH:
         aunts += get_siblings(x.id, people)
-
     for x in aunts:
-        if (husband == x.id) or (wife == x.id):
+        if (husband == x) or (wife == x):
             print("\nERROR: FAMILY: US20: no_aunts_and_uncles(): Family {}:  "
                   "invalid marriage".format(family.id))
             return False
@@ -507,3 +513,49 @@ def order_siblings_by_age(siblings, people):
 
 # TODO: Discuss how to print User Story Message for this method.
 
+def include_individual_ages(person):
+    diff = relativedelta(datetime.now(), person.birthday)
+    person.age = diff.years
+    return person
+
+
+def correct_gender_for_role(people, families):
+    for family in families:
+        for person in people:
+            if(person.gender == 'F' and person.id == family.husbandId):
+                print('US21: correct_gender_for_role: ERROR in family ' + family.id + ': ' + person.name + '`s gender is ' +
+                      person.gender + '(emale) but his role is `Husband` as seen by husbandId:', family.husbandId)
+                return False
+            elif(person.gender == 'M' and person.id == family.wifeId):
+                print('US21: correct_gender_for_role: ERROR in family ' + family.id + ': ' + person.name + '`s gender is ' +
+                      person.gender + '(ale) but her role is `Wife` as seen by wifeId:', family.wifeId)
+                return False
+    return True
+
+def parents_not_too_old(person, people):
+    parents = get_parents(person.id, people)
+    for parent in parents:
+        if parent.gender == 'F':
+            if parent.age - person.age > 60:
+                print("\nERROR: FAMILY: US12: parents_not_too_old: Person {} 's  "
+                      "mother {} is too old:".format(person.id, parent.id, ))
+                return False
+        else:
+            if parent.age -person.age > 80:
+                print("\nERROR: FAMILY: US12: parents_not_too_old: Person {} 's  "
+                      "father {} is too old:".format(person.id, parent.id, ))
+                return False
+    return True
+
+def sibling_spacing(person, people):
+    siblings = get_siblings(person.id, people)
+    for x in siblings:
+        y = people[x]
+        r = relativedelta(y.birthday, person.birthday)
+        months = r.months
+        days = r.days
+        if not(months > 8 or days < 2) :
+            print("\nERROR: FAMILY: US13: sibling_spacing: Person {}:  "
+                  "with sibling {} are too close in birthday:".format(person.id, y.id, ))
+            return False
+    return True
