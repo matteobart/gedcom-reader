@@ -62,8 +62,10 @@ def parse(lines):
         elif split[0] == "1":  # level 1 tag
             if split[1] == "NAME":  # PERSON ONLY
                 current_entity.name = split[2]
-                utils.check(
-                    line_num, utils.check_unique_birth_and_name, current_entity, people)
+                utils.check(line_num, utils.check_unique_birth_and_name, current_entity, people)
+            elif split[1] == "SURN":  # PERSON ONLY
+                current_entity.sur_name = split[2]
+                utils.check(line_num, utils.male_last_names, current_entity, people)
             elif split[1] == "SEX":  # PERSON ONLY
                 current_entity.gender = split[2]
             elif split[1] == "BIRT":  # PERSON ONLY
@@ -92,6 +94,7 @@ def parse(lines):
                 utils.check(line_num, utils.dates_before_current_date, date)
                 current_entity.death = date
             elif split[1] == "FAMC":
+                utils.check(line_num, utils.male_last_names, current_entity, people)
                 utils.check(line_num, utils.multiple_births, current_entity, people)
                 childId = split[2].replace("@", "")
                 current_entity.children.append(childId)
