@@ -29,7 +29,7 @@ class TestGedcomMethods(unittest.TestCase):
         p1 = Person("@54@", birthday=utils.parse_date(
             "12 MAY 2019"), alive=True)
         p2 = Person("@43@", birthday=utils.parse_date(
-            "28 MAR 2015"), alive=True)
+            "28 APR 2015"), alive=True)
         p3 = Person("@42@", birthday=utils.parse_date(
             "1 MAR 1900"), alive=False)
         p4 = Person("@22@", birthday=utils.parse_date(
