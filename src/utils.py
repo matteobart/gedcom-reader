@@ -321,7 +321,6 @@ def no_first_cousin_marriage(family, people):
        :param people: person dictionary
        :return: Boolean
     """
-    print("HERE____________________________________________________________")
     husband = family.husbandId
     wife = family.wifeId
     parentsW = get_parents(wife, people)
