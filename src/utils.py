@@ -558,3 +558,24 @@ def sibling_spacing(person, people):
                   "with sibling {} are too close in birthday:".format(person.id, y.id, ))
             return False
     return True
+
+
+def male_last_names(family, people):
+    children = family.children
+
+
+def multiple_births(person, people):
+    children = person.children
+    if len(children) < 5:
+        return True
+    birth_dates = []
+    for child_id in children:
+        child = people[child_id]
+        birth_dates.append(child.birthday)
+    more_than_5 = [x for x in birth_dates if birth_dates.count(x) >= 5]
+    if len(more_than_5) > 0:
+        print("\nERROR: FAMILY: US14: multiple_births: Person {}:  "
+              "has 5 or more children born on {}:".format(person.id, more_than_5[0]))
+        return False
+    else:
+        return True
