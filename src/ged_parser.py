@@ -94,7 +94,6 @@ def parse(lines):
                 utils.check(line_num, utils.dates_before_current_date, date)
                 current_entity.death = date
             elif split[1] == "FAMC":
-                utils.check(line_num, utils.male_last_names, current_entity, people)
                 utils.check(line_num, utils.multiple_births, current_entity, people)
                 childId = split[2].replace("@", "")
                 current_entity.children.append(childId)
@@ -134,6 +133,7 @@ def parse(lines):
                 current_entity.wifeId = wifeId
                 current_entity.wifeName = wife.name
             elif split[1] == "CHIL":  # FAMILY ONLY
+                utils.check(line_num, utils.male_last_names, current_entity, people)
                 childId = split[2].replace("@", "")
                 current_entity.children.append(childId)
             elif split[1] == "DIV":  # FAMILY ONLY

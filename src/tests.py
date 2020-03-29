@@ -563,7 +563,8 @@ class TestGedcomMethods(unittest.TestCase):
             False, utils.multiple_births(testPerson, testPeople))
 
     def test_male_last_names(self):
-        testPerson = Person("@22@", sur_name="Beets", gender="M", alive=True, birthday=utils.parse_date("28 FEB 1960"),
+        testFamily = Family("@F1@", married=utils.parse_date("5 MAY 1970"),
+                            divorced=utils.parse_date("5 MAY 1980"), husbandId="@22@", wifeId="@21@",
                             children=["@23@", "@24@", "@25@", "@26@", "@27@"])
         testPeople = {
             "@22@": Person("@22@", alive=True, birthday=utils.parse_date("28 FEB 1960"),
@@ -576,11 +577,11 @@ class TestGedcomMethods(unittest.TestCase):
         }
 
         self.assertEqual(
-            True, utils.male_last_names(testPerson, testPeople))
+            True, utils.male_last_names(testFamily, testPeople))
 
     def test_male_last_names(self):
-        testPerson = Person("@22@", sur_name="Beets", gender="M", alive=True, birthday=utils.parse_date("28 FEB 1960"),
-                            children=["@23@", "@24@", "@25@", "@26@", "@27@"])
+        testFamily = Family("@F1@", married=utils.parse_date("5 MAY 1970"),
+                    divorced=utils.parse_date("5 MAY 1980"), husbandId="@22@", wifeId="@21@", children=["@23@", "@24@", "@25@", "@26@", "@27@"])
         testPeople = {
             "@22@": Person("@22@", alive=True, birthday=utils.parse_date("28 FEB 1960"),
                            children=["@23@", "@24@", "@25@", "@26@", "@27@"]),
@@ -591,7 +592,7 @@ class TestGedcomMethods(unittest.TestCase):
             "@27@": Person("@24@", sur_name="Yams", gender="M", alive=True, birthday=utils.parse_date("19 FEB 1978"))
         }
         self.assertEqual(
-            False, utils.male_last_names(testPerson, testPeople))
+            False, utils.male_last_names(testFamily, testPeople))
 
 
 # make sure your functions start with the word 'test' and have at least one

@@ -1,4 +1,8 @@
 
+ERROR: DATE: US42: reject_illegitimate_dates(): 32 DEC 1960 is an invalid date
+ERROR on line 21
+====================
+
 US41: accept_partial_dates: Accepting: 1970 as valid
 
 US41: accept_partial_dates: Accepting: JAN 1920 as valid
@@ -14,21 +18,24 @@ US41: accept_partial_dates: Accepting: JAN 1920 as valid
 +-----+---------------------+--------+---------------------+-----+-------+---------------------+--------+--------------+
 |  ID |         Name        | Gender |       Birthday      | Age | Alive |        Death        | Child  |    Spouse    |
 +-----+---------------------+--------+---------------------+-----+-------+---------------------+--------+--------------+
-|  I1 |     John /Smith/    |   M    | 1960-06-02 00:00:00 |  59 |  True |         None        | ['F1'] |      []      |
-| I10 |    Alice /Smith/    |   F    | 1960-12-02 00:00:00 |  59 |  True |         None        | ['F1'] |      []      |
+|  I1 |     John /Smith/    |   M    | 1960-04-20 00:00:00 |  59 |  True |         None        | ['F1'] |      []      |
+| I10 |    Alice /Smith/    |   F    |         None        |  0  |  True |         None        | ['F1'] |      []      |
 | I11 |   Brandon /Miller/  |   M    | 1900-08-04 00:00:00 | 119 |  True |         None        |   []   |    ['F5']    |
 | I12 |   Marisa /Miller/   |   F    | 1900-05-01 00:00:00 | 119 |  True |         None        |   []   |    ['F5']    |
-|  I2 |     Mary /Smith/    |   F    | 1930-01-12 00:00:00 |  90 |  True |         None        | ['F3'] | ['F1', 'F2'] |
-|  I3 |     Bob /Smith/     |   M    | 1930-01-03 00:00:00 |  90 | False | 1961-05-06 00:00:00 | ['F4'] |    ['F1']    |
+|  I2 |     Mary /Smith/    |   M    | 1930-01-12 00:00:00 |  90 |  True |         None        | ['F3'] | ['F1', 'F2'] |
+|  I3 |     Bob /Smith/     |   F    | 1930-01-03 00:00:00 |  90 | False | 1961-05-06 00:00:00 | ['F4'] |    ['F1']    |
 |  I4 |    Scott /Miller/   |   M    | 1930-11-02 00:00:00 |  89 |  True |         None        | ['F5'] |    ['F2']    |
-|  I5 |    Sarah /Miller/   |   F    | 1970-09-02 00:00:00 |  49 |  True |         None        | ['F2'] |      []      |
+|  I5 |    Sarah /Miller/   |   F    | 2020-03-02 00:00:00 |  0  |  True |         None        | ['F2'] |      []      |
 |  I6 |   Daniel /Jackson/  |   M    | 1900-09-02 00:00:00 | 119 |  True |         None        |   []   |    ['F3']    |
-|  I7 | Elizabeth /Jackson/ |   F    | 1900-02-01 00:00:00 | 120 | False | 1979-10-08 00:00:00 |   []   |    ['F3']    |
+|  I7 | Elizabeth /Jackson/ |   F    | 1900-02-01 00:00:00 | 120 | False | 2020-03-05 00:00:00 |   []   |    ['F3']    |
 |  I8 |     Jack /Smith/    |   M    | 1900-12-02 00:00:00 | 119 | False | 1993-08-02 00:00:00 |   []   |    ['F4']    |
 |  I9 |     Jane /Smith/    |   F    | 1900-07-02 00:00:00 | 119 |  True |         None        |   []   |    ['F4']    |
 +-----+---------------------+--------+---------------------+-----+-------+---------------------+--------+--------------+
-[US35] Upcoming Birthday List: The following INDIVIDUALS have upcoming birthdays: []
-[US35] Recent Births List: The following INDIVIDUALS were recently born: []
-[US36] Recent Deaths List: The following INDIVIDUALS recently died: []
+INFO: PEOPLE: US21: correct_gender_for_role: In family F1: Mary /Smith/`s gender is M(ale) but her role is `Wife` as seen by wifeId: I2
+INFO: PEOPLE: US38: list_upcoming_birthdays: The following INDIVIDUALS have upcoming birthdays: ['I1']
 
-US29: list_deceased(): the following individuals are deceased:  ['I3', 'I7', 'I8']
+INFO: PEOPLE: US35: list_recent_births(): The following INDIVIDUALS were recently born: ['I5']
+
+INFO: PEOPLE: US36: list_recent_deaths(): The following INDIVIDUALS recently died: ['I7']
+
+INFO: PEOPLE: US29: list_deceased(): the following individuals are deceased:  ['I3', 'I7', 'I8']

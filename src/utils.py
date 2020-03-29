@@ -560,26 +560,28 @@ def sibling_spacing(person, people):
     return True
 
 
-def male_last_names(person, people):
+def male_last_names(family, people):
     """
     All males in a family should have the same last name
     written by: Brenden
 
-    :param person: person object
+    :param family: family object
     :param people: person dictionary
     :return: Boolean
     """
-    if person.gender == "F":
-        return True
-    children = person.children
+    dad_id = family.husbandId
+    dad = people[dad_id]
+
+    children = family.children
     for child_id in children:
         child = people[child_id]
-        if child.gender == "M" and child.sur_name != person.sur_name:
-            print("\nERROR: FAMILY: US16: male_last_names: Person {}:  "
-                  "has a child {} with last name {} not equivelent to their last name {}:".format(person.id, child_id, child.sur_name, person.sur_name))
+        if child.gender == "M" and child.sur_name != dad.sur_name:
+            print("\nERROR: FAMILY: US16: male_last_names: Person(Father) {}:  "
+                  "has a child {} with last name {} not equivalent to their last name {}:".format(dad.id, child_id, child.sur_name, dad.sur_name))
             return False
 
     return True
+
 
 def multiple_births(person, people):
     """

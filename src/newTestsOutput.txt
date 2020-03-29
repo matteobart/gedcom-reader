@@ -1,19 +1,30 @@
 
 US41: accept_partial_dates: Accepting: JAN 2000 as valid
 
+US41: accept_partial_dates: Accepting: 2000 as valid
+
 ERROR: PERSON: US03: birth_before_death(): Person @22@:  birth date 1980-02-28 00:00:00 should be before death_ date 1960-02-28 00:00:00 of person:
 
 ERROR: FAMILY: US08: birth_before_marriage(): Family @F1@:  birth date 1960-02-19 00:00:00 should be before marriage date 1950-05-05 00:00:00 of wife @21@:
-[US35] Upcoming Birthday List: The following INDIVIDUALS have upcoming birthdays: ['@22@']
-[US35] Upcoming Birthday List: The following INDIVIDUALS have upcoming birthdays: ['@43@']
+INFO: PEOPLE: US38: list_upcoming_birthdays: The following INDIVIDUALS have upcoming birthdays: ['@22@']
+INFO: PEOPLE: US38: list_upcoming_birthdays: The following INDIVIDUALS have upcoming birthdays: ['@43@']
+ERROR: PERSON: US40: This INDI name w/ birthday is not unique: @15@
+ERROR: PERSON: US40: This INDI name w/ birthday is not unique: @13@
+INFO: PEOPLE: US21: correct_gender_for_role: ERROR in family @F1@: Bob Smith`s gender is F(emale) but his role is `Husband` as seen by husbandId: @22@
+
+ERROR: DATE: US01: dates_before_current_date(): The date 2020-05-25 00:00:00 is NOT before the current date 2020-03-29 14:39:45.173822.
 
 ERROR: FAMILY: US06: divorce_before_death(): Family @F1@:  divorce date 1980-05-05 00:00:00 should be before death_ date 1970-02-28 00:00:00 of wife @21@:
 
-ERROR: FAMILY: US15: fewer_than_15_siblings(): Family @F2@ has more than 15 child siblings
+ANOMALY: FAMILY: US15: fewer_than_15_siblings(): Family @F2@ has more than 15 child siblings
 
-US29: list_deceased(): the following individuals are deceased:  ['@43@', '@22@', '@21@', '@20@']
-[US36] Recent Deaths List: The following INDIVIDUALS recently died: []
-[US36] Recent Deaths List: The following INDIVIDUALS recently died: ['@43@', '@22@']
+INFO: PEOPLE: US29: list_deceased(): the following individuals are deceased:  ['@43@', '@22@', '@21@', '@20@']
+
+INFO: PEOPLE: US36: list_recent_deaths(): The following INDIVIDUALS recently died: []
+
+INFO: PEOPLE: US36: list_recent_deaths(): The following INDIVIDUALS recently died: ['@43@', '@22@']
+
+ERROR: FAMILY: US16: male_last_names: Person(Father) @22@:  has a child @23@ with last name Beets not equivalent to their last name None:
 
 ERROR: FAMILY: US10: marriage_after_14(): Family @F1@:  marriage date 1970-05-05 00:00:00 should be at least 14 years after birth date 1960-02-19 00:00:00 of wife @21@:
 
@@ -23,6 +34,8 @@ ERROR: FAMILY: US05: marriage_before_death(): Family @F1@: married Date 1961-05-
 
 ERROR: FAMILY: US04: marriage_before_divorce(): Family @F1@:  marriage date 1980-05-05 00:00:00 should be before divorce date 1960-05-05 00:00:00 of family:
 
+ERROR: FAMILY: US14: multiple_births: Person @22@:  has 5 or more children born on 1978-02-19 00:00:00:
+
 ERROR: FAMILY: US20: no_aunts_and_uncles(): Family @F1@:  invalid marriage
 
 ERROR: FAMILY: US19: no_first_cousin_marriage(): Family @F1@:  invalid marriage
@@ -30,9 +43,16 @@ ERROR: FAMILY: US19: no_first_cousin_marriage(): Family @F1@:  invalid marriage
 ERROR: FAMILY: US17: no_marriage_to_children: Family @F1@:  husband @22@ is a parent of wife @21@:
 
 ERROR: FAMILY: US18: no_marriage_to_siblings: Family @F1@:  husband @24@  and wife @23@ are siblings:
+INFO: FAMILY: US28: order_siblings_by_age: Test Passed! Sibling ids from oldest to youngest: ['@22@', '@21@', '@23@']
+
+ERROR: FAMILY: US12: parents_not_too_old: Person @23@ 's  father @22@ is too old:
 ERROR: Line 2: FAMILY: US22: This FAM ID is not unique: 43
 ERROR: Line 2: PERSON: US22: This INDI ID is not unique: 43
-[US35] Recent Births List: The following INDIVIDUALS were recently born: []
-[US35] Recent Births List: The following INDIVIDUALS were recently born: ['@43@', '@22@']
+
+INFO: PEOPLE: US35: list_recent_births(): The following INDIVIDUALS were recently born: []
+
+INFO: PEOPLE: US35: list_recent_births(): The following INDIVIDUALS were recently born: []
 
 ERROR: DATE: US42: reject_illegitimate_dates(): 31 FEB 2021 is an invalid date
+
+ERROR: FAMILY: US13: sibling_spacing: Person @23@:  with sibling @24@ are too close in birthday:
