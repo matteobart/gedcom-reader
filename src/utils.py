@@ -558,3 +558,52 @@ def sibling_spacing(person, people):
                   "with sibling {} are too close in birthday:".format(person.id, y.id, ))
             return False
     return True
+
+
+def male_last_names(family, people):
+    """
+    All males in a family should have the same last name
+    written by: Brenden
+
+    :param family: family object
+    :param people: person dictionary
+    :return: Boolean
+    """
+    dad_id = family.husbandId
+    dad = people[dad_id]
+
+    children = family.children
+    for child_id in children:
+        child = people[child_id]
+        if child.gender == "M" and child.sur_name != dad.sur_name:
+            print("\nERROR: FAMILY: US16: male_last_names: Person(Father) {}:  "
+                  "has a child {} with last name {} not equivalent to their last name {}:".format(dad.id, child_id, child.sur_name, dad.sur_name))
+            return False
+
+    return True
+
+
+def multiple_births(person, people):
+    """
+    Checks to see no more than 5 children should be born on the same day
+
+    written by: Brenden
+
+    :param person: family object
+    :param people: person dictionary
+    :return: Boolean
+    """
+    children = person.children
+    if len(children) < 5:
+        return True
+    birth_dates = []
+    for child_id in children:
+        child = people[child_id]
+        birth_dates.append(child.birthday)
+    more_than_5 = [x for x in birth_dates if birth_dates.count(x) >= 5]
+    if len(more_than_5) > 0:
+        print("\nERROR: FAMILY: US14: multiple_births: Person {}:  "
+              "has 5 or more children born on {}:".format(person.id, more_than_5[0]))
+        return False
+    else:
+        return True

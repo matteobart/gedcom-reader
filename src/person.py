@@ -2,6 +2,7 @@ class Person:
     def __init__(self,
                  id,
                  name=None,
+                 sur_name=None,
                  gender=None,
                  birthday=None,
                  age=None,
@@ -11,6 +12,7 @@ class Person:
                  spouse=[]):
         self.id = id
         self.name = name
+        self.sur_name =sur_name
         self.gender = gender
         self.birthday = birthday
         self.age = age
@@ -32,9 +34,10 @@ class Person:
             self.spouse)
 
     def __str__(self):
-        return("{}|{}|{}|{}|{}|{}|{}|{}|{}".format(
+        return("{}|{}|{}|{}|{}|{}|{}|{}|{}|{}".format(
             self.id,
             self.name,
+            self.sur_name,
             "M" if self.gender == "M" else "F",
             self.birthday,
             self.age,
