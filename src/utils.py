@@ -64,7 +64,6 @@ def marriage_before_death(family, people):
             returnable = False
     return returnable
 
-
 def birth_before_death(person):
     """
     Checks person's birthday is in fact before death
@@ -108,7 +107,6 @@ def marriage_before_divorce(family):
 
     return True
 
-
 def birth_before_marriage(family, people):
     """
     Checks marriage date is in fact after birth of both spouses
@@ -140,7 +138,6 @@ def birth_before_marriage(family, people):
                                                                                       husband.id))
         return False
     return True
-
 
 def divorce_before_death(family, people):
     """
@@ -187,7 +184,7 @@ def reject_illegitimate_dates(date):
     except ValueError:
         print("\nERROR: DATE: US42: reject_illegitimate_dates(): " +
               this_date + " is an invalid date")
-        return False
+        return None
 
 
 def accept_partial_dates(date):
@@ -196,6 +193,7 @@ def accept_partial_dates(date):
     year = None
     flag = False
     partial = date.split(' ')
+
     for part in partial:
         if(part in list_of_months):
             month = part
@@ -261,8 +259,6 @@ def marriage_after_14(family, people):
               "marriage date {} should be at least 14 years after birth date {} of husband {}:".format(family.id, married_date, husband.birthday, husband.id))
         returnable = False
     return returnable
-
-
 def get_parents(person, people):
 
     """
@@ -315,7 +311,6 @@ def get_siblings(person, people):
                 result.append(y)
     return result
 
-
 def no_first_cousin_marriage(family, people):
     """
        Checks that there is not marriage between first cousins
@@ -349,7 +344,6 @@ def no_first_cousin_marriage(family, people):
         return False
 
     return True
-
 
 def no_aunts_and_uncles(family, people):
     """
@@ -483,7 +477,7 @@ def check(line_num, func, *argv):
     elif (len(argv) == 4):
         res = func(argv[0], argv[1], argv[2], argv[3])
 
-    if res == False:
+    if res == False or res == None:
         print("ERROR on line {}".format(line_num))
         print("=" * 20)
 
@@ -491,6 +485,11 @@ def check(line_num, func, *argv):
 
 
 def dates_before_current_date(date):
+    # print(date)
+    if date is None:
+        return True
+    # if not reject_illegitimate_dates(date):
+    #     return True
     today = datetime.now()
     if(today - date).days < 0:
         print("\nERROR: DATE: US01: dates_before_current_date(): The date {} is NOT before the current date {}.".format(date, today))
@@ -513,7 +512,6 @@ def order_siblings_by_age(siblings, people):
     return sorted(siblings, key=lambda x: getAgeFromID(x, people), reverse=False)
 
 # TODO: Discuss how to print User Story Message for this method.
-
 
 def include_individual_ages(person):
     diff = relativedelta(datetime.now(), person.birthday)
@@ -561,4 +559,3 @@ def sibling_spacing(person, people):
                   "with sibling {} are too close in birthday:".format(person.id, y.id, ))
             return False
     return True
-

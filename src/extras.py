@@ -48,7 +48,7 @@ def list_recent_births(people):
             today = datetime.now()
             if (today - person.birthday).days < 30:
                 ret.append(person.id)
-    print("[US35] Recent Births List: The following INDIVIDUALS were recently born:", ret)
+    print("\nINFO: PEOPLE: US35: list_recent_births(): The following INDIVIDUALS were recently born:", ret)
     return ret
 
 
@@ -68,8 +68,9 @@ def list_deceased(people):
     for person in people:
         if person.death is not None:
             deceased.append(person.id)
-    print("\nINFO: PEPOLE: US29: list_deceased(): the following individuals are deceased: ", deceased)
+    print("\nINFO: PEOPLE: US29: list_deceased(): the following individuals are deceased: ", deceased)
     return deceased
+
 
 def list_orphans(people, families):
     people_dict = {people[i].id: people[i] for i in range(0, len(people))}
@@ -88,7 +89,8 @@ def list_orphans(people, families):
             child = people_dict.get(childId)
             if child != None and child.age != None and child.age < 18:
                 ret.append(childId)
-    return ret 
+    return ret
+
 
 def list_large_age_gap(people, families):
     people_dict = {people[i].id: people[i] for i in range(0, len(people))}
@@ -109,8 +111,24 @@ def list_large_age_gap(people, families):
         wAge = relativedelta(wBirth, date)
         if hAge.years * 2 < wAge.years or wAge.years * 2 < hAge.years:
             ret.append(family.id)
-    return ret 
+    return ret
 
 
+def include_individual_ages(person):
+    diff = relativedelta(datetime.now(), person.birthday)
+    person.age = diff.years
+    return person
 
 
+def correct_gender_for_role(people, families):
+    for family in families:
+        for person in people:
+            if(person.gender == 'F' and person.id == family.husbandId):
+                print('INFO: PEOPLE: US21: correct_gender_for_role: ERROR in family ' + family.id + ': ' + person.name + '`s gender is ' +
+                      person.gender + '(emale) but his role is `Husband` as seen by husbandId:', family.husbandId)
+                return False
+            elif(person.gender == 'M' and person.id == family.wifeId):
+                print('INFO: PEOPLE: US21: correct_gender_for_role: In family ' + family.id + ': ' + person.name + '`s gender is ' +
+                      person.gender + '(ale) but her role is `Wife` as seen by wifeId:', family.wifeId)
+                return False
+    return True

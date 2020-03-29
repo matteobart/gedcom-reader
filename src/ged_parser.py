@@ -4,6 +4,7 @@ from dateutil.relativedelta import relativedelta
 from family import Family
 from person import Person
 import utils
+import extras
 
 # Arguments:
 # lines: [file_lines] - Type: [String]
@@ -74,7 +75,7 @@ def parse(lines):
                 # diff = relativedelta(datetime.now(), date)
                 # current_entity.age = diff.years
                 current_entity.birthday = date
-                current_entity = utils.include_individual_ages(current_entity)
+                current_entity = extras.include_individual_ages(current_entity)
                 utils.check(
                     line_num, utils.check_unique_birth_and_name, current_entity, people)
                 utils.check(
@@ -89,7 +90,6 @@ def parse(lines):
                 date = utils.check(
                     line_num, utils.reject_illegitimate_dates, next_split[2])
                 utils.check(line_num, utils.dates_before_current_date, date)
-
                 current_entity.death = date
             elif split[1] == "FAMC":
                 childId = split[2].replace("@", "")
@@ -114,6 +114,10 @@ def parse(lines):
                 utils.check(line_num, utils.no_marriage_to_children,
                             current_entity, people)
                 utils.check(line_num, utils.no_marriage_to_siblings,
+                            current_entity, people)
+                utils.check(line_num, utils.no_first_cousin_marriage,
+                            current_entity, people)
+                utils.check(line_num, utils.no_aunts_and_uncles,
                             current_entity, people)
             elif split[1] == "HUSB":  # FAMILY ONLY
                 husbandId = split[2].replace("@", "")

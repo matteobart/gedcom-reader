@@ -174,7 +174,7 @@ class TestGedcomMethods(unittest.TestCase):
             False, utils.reject_illegitimate_dates("29 FEB 2016"))
 
     def test_reject_illegitimate_false(self):
-        self.assertEqual(False, utils.reject_illegitimate_dates("31 FEB 2021"))
+        self.assertEqual(None, utils.reject_illegitimate_dates("31 FEB 2021"))
 
     def test_reject_illegitimate_dates_true(self):
         self.assertNotEqual(
@@ -465,15 +465,15 @@ class TestGedcomMethods(unittest.TestCase):
 
     def test_include_individual_dates_zero(self):
         testPerson = Person("@21@", birthday=utils.parse_date("2 MAR 2020"))
-        self.assertEqual((utils.include_individual_ages(testPerson).age), 0)
+        self.assertEqual((extras.include_individual_ages(testPerson).age), 0)
 
     def test_include_individual_dates_fifty(self):
         testPerson = Person("@21@", birthday=utils.parse_date("22 JAN 1970"))
-        self.assertEqual((utils.include_individual_ages(testPerson).age), 50)
+        self.assertEqual((extras.include_individual_ages(testPerson).age), 50)
 
     def test_include_individual_dates_hundred(self):
         testPerson = Person("@21@", birthday=utils.parse_date("29 FEB 1920"))
-        self.assertEqual((utils.include_individual_ages(testPerson).age), 100)
+        self.assertEqual((extras.include_individual_ages(testPerson).age), 100)
 
     def test_correct_gender_for_role_false(self):
         testFamilies = [Family("@F1@", married=utils.parse_date("5 MAY 2019"),
@@ -481,7 +481,7 @@ class TestGedcomMethods(unittest.TestCase):
         testPeople = [Person("@22@", name="Bob Smith", gender="F"),
                       Person("@21@", name="Mary Smith", gender="M"),
                       ]
-        self.assertEqual(utils.correct_gender_for_role(
+        self.assertEqual(extras.correct_gender_for_role(
             testPeople, testFamilies), False)
 
     def test_correct_gender_for_role_true(self):
@@ -490,7 +490,7 @@ class TestGedcomMethods(unittest.TestCase):
         testPeople = [Person("@22@", name="Bob Smith", gender="M"),
                       Person("@21@", name="Mary Smith", gender="F"),
                       ]
-        self.assertEqual(utils.correct_gender_for_role(
+        self.assertEqual(extras.correct_gender_for_role(
             testPeople, testFamilies), True)
 
     def test_parents_not_too_old(self):

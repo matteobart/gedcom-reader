@@ -4,7 +4,6 @@ import extras
 from utils import print_families
 from utils import print_people
 from utils import order_siblings_by_age
-from utils import correct_gender_for_role
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='The best GEDCOM reader')
@@ -15,16 +14,15 @@ if __name__ == "__main__":
     with open(args.GEDCOM_file) as file:
         lines = file.readlines()
         tup = ged_parser.parse(lines)
-        people = tup[0]
-        families = tup[1]
+        people = list(tup[0])
+        families = list(tup[1])
         for family in families:
             # run ALL family-based tests
             extras.fewer_than_15_siblings(family)
             family.children = order_siblings_by_age(family.children, people)
-
         print_families(families)
-        correct_gender_for_role(people, families)
         print_people(people)
+        extras.correct_gender_for_role(people, families)
         extras.list_upcoming_birthdays(people)
         extras.list_recent_births(people)
         extras.list_recent_deaths(people)
