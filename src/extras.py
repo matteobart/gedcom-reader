@@ -89,6 +89,7 @@ def list_orphans(people, families):
             child = people_dict.get(childId)
             if child != None and child.age != None and child.age < 18:
                 ret.append(childId)
+    print("INFO: PEOPLE: US33: list_orphans: The following people are orphans: " + str(ret))
     return ret
 
 
@@ -111,6 +112,7 @@ def list_large_age_gap(people, families):
         wAge = relativedelta(wBirth, date)
         if hAge.years * 2 < wAge.years or wAge.years * 2 < hAge.years:
             ret.append(family.id)
+    print("INFO: FAMILY: US34: list_large_age_gap: The following families have large age gaps between husband/wife: " + str(ret))
     return ret
 
 
