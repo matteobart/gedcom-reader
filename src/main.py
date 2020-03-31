@@ -28,3 +28,4 @@ if __name__ == "__main__":
         extras.list_recent_deaths(people)
         extras.list_deceased(people)
         extras.list_large_age_gap(people, families)
+        extras.list_orphans(people, families)
