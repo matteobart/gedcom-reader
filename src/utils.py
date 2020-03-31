@@ -233,7 +233,7 @@ def check_unique_birth_and_name(person, people):
         if p.id == person.id:
             continue
         if p.name == person.name and p.birthday == person.birthday:
-            print("ERROR: PERSON: US40: This INDI name w/ birthday is not unique: {}".format(
+            print("ERROR: PERSON: US23: This INDI name w/ birthday is not unique: {}".format(
                 person.id))
             return False  # not unique
     return True
