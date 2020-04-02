@@ -134,30 +134,34 @@ def correct_gender_for_role(people, family):
             return False
     return True
 
+def get_delta_years(years, from_date=None):
+    if from_date is None:
+        from_date = datetime.now()
+    return from_date - relativedelta(years=years)
+
 def less_than_150yo(people):
     returnable = True
     for person in people:
-        if person.alive:
+        if person.alive == True:
             if person.age >= 150:
                 returnable = False
                 print("\nANOMALY: PEOPLE: US07: less_than_150yo(): Person {} should not be more than 150 years old. (born {})".format(person.id, person.birthday))
         else:
-            if (person.death - person.birthday).years >= 150:
+            if person.birthday < get_delta_years(150, person.death):
                 returnable = False
                 print("\nANOMALY: PEOPLE: US07: less_than_150yo(): Person {} was more than 150 years old. (born {}, died {})".format(person.id, person.birthday, person.death))             
     return returnable
 
 def list_upcoming_anniverseries(couples):
     """
-    Input expected as [{husbID: "", wifeID: "", marrDate: ""}, ...]
+    Input expected as [(husbID: string, wifeID: string, marrDate: date}, ...]
     Dependant on list_living_married() (US30)
     """
     a_list = []
     for couple in couples:
-        if couple.birthday is not None:
             today = datetime.now()
-            month = couple.birthday.month
-            day = couple.birthday.day
+            month = couple[2].month
+            day = couple[2].day
             year = today.year
             # if birthday passed go next year
             if (month < today.month or (month == today.month and day < today.day)):
@@ -170,11 +174,7 @@ def list_upcoming_anniverseries(couples):
 
             # actual check
             if ((ann-today).days) < 30:
-                a_list.append((couple.husbID, couple.wifeID))
-    # if(len(birthdayList) > 0):
-    #     for member in birthdayList:
-    #         print("\nANAMOLY: INDIVIDUALS: US38: list_upcoming_birthdays(): Person '" +
-    #               member.id + "' has an upcoming birthday")
-    print("INFO: FAMILY: US39: list_upcoming_anniverseries: The following COUPLES have upcoming anniverseries:", a_list)
+                a_list.append((couple[0], couple[1]))
+    print("INFO: FAMILY: US39: list_upcoming_anniverseries: The following (husband,wife) id COUPLES have upcoming anniverseries:", a_list)
     return a_list
 

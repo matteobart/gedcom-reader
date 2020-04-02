@@ -29,7 +29,10 @@ if __name__ == "__main__":
         print_people(people)
         
         extras.list_upcoming_birthdays(people)
-        extras.list_upcoming_anniverseries(families)
+
+        # MIKE please uncomment when done:
+        # x = list_living_married(families)
+        # extras.list_upcoming_anniverseries(x)
         extras.list_recent_births(people)
         extras.list_recent_deaths(people)
         extras.list_deceased(people)

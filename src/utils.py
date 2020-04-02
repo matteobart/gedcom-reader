@@ -374,8 +374,6 @@ def no_aunts_and_uncles(family, people):
     return True
 
 # inspired by SO question 765797, integrated into project by Daniel Kramer
-
-
 def get_delta_years(years, from_date=None):
     if from_date is None:
         from_date = datetime.now()
