@@ -20,12 +20,22 @@ if __name__ == "__main__":
             # run ALL family-based tests
             extras.fewer_than_15_siblings(family)
             family.children = order_siblings_by_age(family.children, people)
+            extras.correct_gender_for_role(people, family)
+            
+
+
+
         print_families(families)
         print_people(people)
-        extras.correct_gender_for_role(people, families)
+        
         extras.list_upcoming_birthdays(people)
+
+        # MIKE please uncomment when done:
+        # x = list_living_married(families)
+        # extras.list_upcoming_anniverseries(x)
         extras.list_recent_births(people)
         extras.list_recent_deaths(people)
         extras.list_deceased(people)
+        extras.less_than_150yo(people)
         extras.list_large_age_gap(people, families)
         extras.list_orphans(people, families)

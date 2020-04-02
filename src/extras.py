@@ -122,15 +122,59 @@ def include_individual_ages(person):
     return person
 
 
-def correct_gender_for_role(people, families):
-    for family in families:
-        for person in people:
-            if(person.gender == 'F' and person.id == family.husbandId):
-                print('INFO: PEOPLE: US21: correct_gender_for_role: ERROR in family ' + family.id + ': ' + person.name + '`s gender is ' +
-                      person.gender + '(emale) but his role is `Husband` as seen by husbandId:', family.husbandId)
-                return False
-            elif(person.gender == 'M' and person.id == family.wifeId):
-                print('INFO: PEOPLE: US21: correct_gender_for_role: In family ' + family.id + ': ' + person.name + '`s gender is ' +
-                      person.gender + '(ale) but her role is `Wife` as seen by wifeId:', family.wifeId)
-                return False
+def correct_gender_for_role(people, family):
+    for person in people:
+        if(person.gender == 'F' and person.id == family.husbandId):
+            print('INFO: PEOPLE: US21: correct_gender_for_role: ERROR in family ' + family.id + ': ' + person.name + '`s gender is ' +
+                    person.gender + '(emale) but his role is `Husband` as seen by husbandId:', family.husbandId)
+            return False
+        elif(person.gender == 'M' and person.id == family.wifeId):
+            print('INFO: PEOPLE: US21: correct_gender_for_role: In family ' + family.id + ': ' + person.name + '`s gender is ' +
+                    person.gender + '(ale) but her role is `Wife` as seen by wifeId:', family.wifeId)
+            return False
     return True
+
+def get_delta_years(years, from_date=None):
+    if from_date is None:
+        from_date = datetime.now()
+    return from_date - relativedelta(years=years)
+
+def less_than_150yo(people):
+    returnable = True
+    for person in people:
+        if person.alive == True:
+            if person.age >= 150:
+                returnable = False
+                print("\nANOMALY: PEOPLE: US07: less_than_150yo(): Person {} should not be more than 150 years old. (born {})".format(person.id, person.birthday))
+        else:
+            if person.birthday < get_delta_years(150, person.death):
+                returnable = False
+                print("\nANOMALY: PEOPLE: US07: less_than_150yo(): Person {} was more than 150 years old. (born {}, died {})".format(person.id, person.birthday, person.death))             
+    return returnable
+
+def list_upcoming_anniverseries(couples):
+    """
+    Input expected as [(husbID: string, wifeID: string, marrDate: date}, ...]
+    Dependant on list_living_married() (US30)
+    """
+    a_list = []
+    for couple in couples:
+            today = datetime.now()
+            month = couple[2].month
+            day = couple[2].day
+            year = today.year
+            # if birthday passed go next year
+            if (month < today.month or (month == today.month and day < today.day)):
+                year += 1
+            # if birthday is on leap day and not leap year
+            if (month == 2 and day == 29 and year % 4 != 0):
+                month = 3
+                day = 1
+            ann = datetime(year, month, day)
+
+            # actual check
+            if ((ann-today).days) < 30:
+                a_list.append((couple[0], couple[1]))
+    print("INFO: FAMILY: US39: list_upcoming_anniverseries: The following (husband,wife) id COUPLES have upcoming anniverseries:", a_list)
+    return a_list
+
