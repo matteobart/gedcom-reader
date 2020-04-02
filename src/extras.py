@@ -152,7 +152,7 @@ def less_than_150yo(people):
                 print("\nANOMALY: PEOPLE: US07: less_than_150yo(): Person {} was more than 150 years old. (born {}, died {})".format(person.id, person.birthday, person.death))             
     return returnable
 
-def list_upcoming_anniverseries(couples):
+def list_upcoming_anniversaries(couples):
     """
     Input expected as [(husbID: string, wifeID: string, marrDate: date}, ...]
     Dependant on list_living_married() (US30)
@@ -177,4 +177,3 @@ def list_upcoming_anniverseries(couples):
                 a_list.append((couple[0], couple[1]))
     print("INFO: FAMILY: US39: list_upcoming_anniverseries: The following (husband,wife) id COUPLES have upcoming anniverseries:", a_list)
     return a_list
-

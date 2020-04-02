@@ -604,13 +604,13 @@ class TestGedcomMethods(unittest.TestCase):
         self.assertEqual(
             True, extras.less_than_150yo(testPeople))
 
-    def test_anniverseries(self):
+    def test_anniversaries(self):
         testCouples = [
             ("21", "22", utils.parse_date("5 MAY 1970")), 
             ("23", "24", utils.parse_date("25 APR 1970"))
         ]
         self.assertEqual(
-            [("23", "24")], extras.list_upcoming_anniverseries(testCouples))
+            [("23", "24")], extras.list_upcoming_anniversaries(testCouples))
        
     
 
