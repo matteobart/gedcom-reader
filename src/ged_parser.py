@@ -99,6 +99,7 @@ def parse(lines):
                 current_entity.children.append(childId)
             elif split[1] == "FAMS":
                 spouseId = split[2].replace("@", "")
+                utils.check(line_num, utils.is_bigamy, current_entity, families)
                 current_entity.spouse.append(spouseId)
             elif split[1] == "MARR":  # FAMILY ONLY
                 next_line = next(iterator)
@@ -125,11 +126,13 @@ def parse(lines):
             elif split[1] == "HUSB":  # FAMILY ONLY
                 husbandId = split[2].replace("@", "")
                 husband = people[husbandId]
+                utils.check(line_num, utils.is_bigamy, husband, families)
                 current_entity.husbandId = husbandId
                 current_entity.husbandName = husband.name
             elif split[1] == "WIFE":  # FAMILY ONLY
                 wifeId = split[2].replace("@", "")
                 wife = people[wifeId]
+                utils.check(line_num, utils.is_bigamy, wife, families)
                 current_entity.wifeId = wifeId
                 current_entity.wifeName = wife.name
             elif split[1] == "CHIL":  # FAMILY ONLY
