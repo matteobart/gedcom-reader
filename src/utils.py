@@ -605,3 +605,15 @@ def multiple_births(person, people):
         return False
     else:
         return True
+
+def is_bigamy(person, families):
+    if person.spouse == None:
+        return True
+    for familyId in person.spouse:
+        family = families.get(familyId)
+        if family == None:
+            continue
+        if family.divorced != None:
+            print("\nERROR: PERSON: US11: No bigamy: Person {} is already married in {}".format(person.id, familyId))
+            return False
+    return True

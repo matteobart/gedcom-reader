@@ -612,8 +612,49 @@ class TestGedcomMethods(unittest.TestCase):
         self.assertEqual(
             [("23", "24")], extras.list_upcoming_anniversaries(testCouples))
        
-    
+    def test_some_bigamy(self):
+        f1 = Family("@F1@", married=utils.parse_date("5 MAY 1960"),
+                         divorced=utils.parse_date("5 MAY 1980"), husbandId="@21@",  wifeId="@22@")
+        p0 = Person("@21@", spouse=["@F1@"], gender="M", alive=True, age=42, birthday=utils.parse_date("19 FEB 1978"))
+        p1 = Person("@22@", spouse=["@F1@"], gender="F", alive=True, age=42, birthday=utils.parse_date("19 FEB 1978"))
+        p2 = Person("@23@", gender="M", alive=True, age=42, birthday=utils.parse_date("19 FEB 1978"))
+        testFams = {"@F1@": f1}
+        self.assertEqual(utils.is_bigamy(p0, testFams), False)
+        self.assertEqual(utils.is_bigamy(p1, testFams), False)
+        self.assertEqual(utils.is_bigamy(p2, testFams), True)
 
+    def test_no_bigamy(self):
+        print('heeere')
+        f1 = Family("@F1@", married=utils.parse_date("5 MAY 1960"),
+                         divorced=utils.parse_date("5 MAY 1980"), husbandId="@29@",  wifeId="@30@")
+        p0 = Person("@21@", spouse=[], gender="M", alive=True, age=42, birthday=utils.parse_date("19 FEB 1978"))
+        p1 = Person("@22@", spouse=None, gender="F", alive=True, age=42, birthday=utils.parse_date("19 FEB 1978"))
+        p2 = Person("@23@", gender="M", alive=True, age=42, birthday=utils.parse_date("19 FEB 1978"))
+        testFams = {"@F1@": f1}
+        self.assertEqual(utils.is_bigamy(p0, testFams), True)
+        self.assertEqual(utils.is_bigamy(p1, testFams), True)
+        self.assertEqual(utils.is_bigamy(p2, testFams), True)
+
+    def test_all_bigamy(self):
+        f1 = Family("@F1@", married=utils.parse_date("5 MAY 1960"),
+                         divorced=utils.parse_date("5 MAY 1980"), husbandId="@21@",  wifeId="@22@")
+        f2 = Family("@F2@", married=utils.parse_date("5 MAY 1960"),
+                         divorced=utils.parse_date("5 MAY 1980"), husbandId="@22@",  wifeId="@23@")
+        f3 = Family("@F3@", married=utils.parse_date("5 MAY 1960"),
+                         divorced=utils.parse_date("5 MAY 1980"), husbandId="@23@",  wifeId="@24@")
+        p0 = Person("@21@", spouse=["@F1@"], gender="M", alive=True, age=42)
+        p1 = Person("@22@", spouse=["@F1@"], gender="F", alive=True, age=45)
+        p2 = Person("@23@", spouse=["@F2@"], gender="M", alive=True, age=89)
+        p3 = Person("@24@", spouse=["@F2@"], gender="F", alive=True, age=21)
+        p4 = Person("@25@", spouse=["@F3@"], gender="M", alive=True, age=92)
+        p5 = Person("@26@", spouse=["@F3@"], gender="F", alive=True, age=3)
+        testFams = {"@F1@": f1, "@F2@": f2, "@F3@": f3}
+        self.assertEqual(utils.is_bigamy(p0, testFams), False)
+        self.assertEqual(utils.is_bigamy(p1, testFams), False)
+        self.assertEqual(utils.is_bigamy(p2, testFams), False)
+        self.assertEqual(utils.is_bigamy(p3, testFams), False)
+        self.assertEqual(utils.is_bigamy(p4, testFams), False)
+        self.assertEqual(utils.is_bigamy(p5, testFams), False)
 
 # make sure your functions start with the word 'test' and have at least one
 # parameter self (just because its in a class dw about why)
