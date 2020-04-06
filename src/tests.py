@@ -610,7 +610,7 @@ class TestGedcomMethods(unittest.TestCase):
             ("23", "24", utils.parse_date("25 APR 1970"))
         ]
         self.assertEqual(
-            [("23", "24")], extras.list_upcoming_anniversaries(testCouples))
+            [("21", "22"), ("23", "24")], extras.list_upcoming_anniversaries(testCouples))
        
     def test_some_bigamy(self):
         f1 = Family("@F1@", married=utils.parse_date("5 MAY 1960"),
@@ -624,7 +624,6 @@ class TestGedcomMethods(unittest.TestCase):
         self.assertEqual(utils.is_bigamy(p2, testFams), True)
 
     def test_no_bigamy(self):
-        print('heeere')
         f1 = Family("@F1@", married=utils.parse_date("5 MAY 1960"),
                          divorced=utils.parse_date("5 MAY 1980"), husbandId="@29@",  wifeId="@30@")
         p0 = Person("@21@", spouse=[], gender="M", alive=True, age=42, birthday=utils.parse_date("19 FEB 1978"))
@@ -655,6 +654,63 @@ class TestGedcomMethods(unittest.TestCase):
         self.assertEqual(utils.is_bigamy(p3, testFams), False)
         self.assertEqual(utils.is_bigamy(p4, testFams), False)
         self.assertEqual(utils.is_bigamy(p5, testFams), False)
+
+    def test_none_check_corresponding_entries(self):
+        print("Let's check US26!")
+        print("Nothing should be printed between these two lines")
+        print("_________________________________________________")
+        f1 = Family("@F1@", husbandId="@21@", wifeId="@22@")
+        f2 = Family("@F2@", husbandId="@23@", wifeId="@24@")
+        f3 = Family("@F3@", husbandId="@25@", wifeId="@26@")
+        p0 = Person("@21@", spouse=["@F1@"], gender="M", alive=True, age=42)
+        p1 = Person("@22@", spouse=["@F1@"], gender="F", alive=True, age=45)
+        p2 = Person("@23@", spouse=["@F2@"], gender="M", alive=True, age=89)
+        p3 = Person("@24@", spouse=["@F2@"], gender="F", alive=True, age=21)
+        p4 = Person("@25@", spouse=["@F3@"], gender="M", alive=True, age=92)
+        p5 = Person("@26@", spouse=["@F3@"], gender="F", alive=True, age=3)
+        extras.check_corresponding_entries([p0, p1, p2, p3, p4, p5], [f1, f2, f3])
+        print("_________________________________________________")
+
+    def test_none2_check_corresponding_entries(self):
+        print("Let's check US26! again")
+        print("Nothing should be printed between these two lines")
+        print("_________________________________________________")
+        f1 = Family("@F1@", husbandId="@21@", wifeId="@22@", children=[])
+        f2 = Family("@F2@", husbandId="@23@", wifeId="@24@", children=["@27@"])
+        f3 = Family("@F3@", husbandId="@25@", wifeId="@26@", children=["@28@", "@29@"])
+        p0 = Person("@21@", spouse=["@F1@"], gender="M", alive=True, age=42)
+        p1 = Person("@22@", spouse=["@F1@"], gender="F", alive=True, age=45)
+        p2 = Person("@23@", spouse=["@F2@"], gender="M", alive=True, age=89)
+        p3 = Person("@24@", spouse=["@F2@"], gender="F", alive=True, age=21)
+        p4 = Person("@25@", spouse=["@F3@"], gender="M", alive=True, age=92)
+        p5 = Person("@26@", spouse=["@F3@"], gender="F", alive=True, age=3)
+        p6 = Person("@27@", gender="F", alive=True, children=["@F2@"])
+        p7 = Person("@28@", gender="F", alive=True, children=["@F3@"])
+        p8 = Person("@29@", gender="F", alive=True, children=["@F3@"])
+        extras.check_corresponding_entries(
+            [p0, p1, p2, p3, p4, p5, p6, p7, p8], [f1, f2, f3])
+        print("_________________________________________________")
+
+    def test_some_check_corresponding_entries(self):
+        print("Let's check US26! finally")
+        print("There should be a lot printed between these two lines")
+        print("_________________________________________________")
+        f1 = Family("@F1@", wifeId="@22@", children=[])
+        f2 = Family("@F2@", husbandId="@24@", wifeId="@24@", children=["@27@"])
+        f3 = Family("@F3@", husbandId="@25@", wifeId="@26@", children=["@29@"])
+        p0 = Person("@21@", spouse=["@F1@"], gender="M", alive=True, age=42)
+        p1 = Person("@22@", spouse=["@F1@"], gender="F", alive=True, age=45)
+        p2 = Person("@23@", spouse=["@F2@"], gender="M", alive=True, age=89)
+        p3 = Person("@24@", spouse=["@F2@"], gender="F", alive=True, age=21)
+        p4 = Person("@25@", spouse=["@F3@"], gender="M", alive=True, age=92)
+        p5 = Person("@26@", spouse=["@F3@"], gender="F", alive=True, age=3)
+        p6 = Person("@27@", gender="F", alive=True, children=[])
+        p7 = Person("@28@", gender="F", alive=True, children=["@F3@"])
+        p8 = Person("@29@", gender="F", alive=True, children=["@F3@"])
+        extras.check_corresponding_entries(
+            [p0, p1, p2, p3, p4, p5, p6, p7, p8], [f1, f2, f3])
+        print("_________________________________________________")
+
 
 # make sure your functions start with the word 'test' and have at least one
 # parameter self (just because its in a class dw about why)

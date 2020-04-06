@@ -39,3 +39,4 @@ if __name__ == "__main__":
         extras.less_than_150yo(people)
         extras.list_large_age_gap(people, families)
         extras.list_orphans(people, families)
+        extras.check_corresponding_entries(people, families)
