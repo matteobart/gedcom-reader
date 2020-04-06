@@ -177,3 +177,62 @@ def list_upcoming_anniversaries(couples):
                 a_list.append((couple[0], couple[1]))
     print("INFO: FAMILY: US39: list_upcoming_anniverseries: The following (husband,wife) id COUPLES have upcoming anniverseries:", a_list)
     return a_list
+
+def check_corresponding_entries(people, families):
+    people_dict = {people[i].id: people[i] for i in range(0, len(people))}
+    family_dict = {families[i].id: families[i] for i in range(0, len(families))}
+    for family in families:
+        hId = family.husbandId
+        wId = family.wifeId
+        cIds = family.children
+        husband = people_dict.get(hId)
+        wife = people_dict.get(wId)
+        if hId == None:
+            print("INFO: FAMILY: US26: check_corresponding_entries: Husband id is missing from family ({})".format(family.id))
+        elif husband == None: #check to make sure person exists
+            print("INFO: PEOPLE: US26: check_corresponding_entries: Husband ({}) is in family ({}), but missing from people".format(hId, family.id))
+        else:
+            if husband.name != family.husbandName: #check names match
+                print("INFO: PEOPLE: US26: check_corresponding_entries: Husband ({}) is in family ({}), but have different names".format(hId, family.id))
+            if family.id not in husband.spouse: #check his family is listed under spouses
+                print("INFO: PEOPLE: US26: check_corresponding_entries: Husband ({}) is missing his family ({}), from his person".format(hId, family.id))
+        if wId == None:
+            print("INFO: FAMILY: US26: check_corresponding_entries: Wife id is missing from family ({})".format(family.id))
+        elif wife == None: #check to make sure person exists
+            print("INFO: PEOPLE: US26: check_corresponding_entries: Wife ({}) is in family ({}), but missing from people".format(wId, family.id))
+        else:
+            if wife.name != family.wifeName: #check names match
+                print("INFO: PEOPLE: US26: check_corresponding_entries: Wife ({}) is in family ({}), but have different names".format(wId, family.id))
+            if family.id not in wife.spouse: #check his family is listed under spouses
+                print("INFO: PEOPLE: US26: check_corresponding_entries: Wife ({}) is missing her family ({}), from her person".format(wId, family.id))
+
+        for cId in cIds:
+            child = people_dict.get(cId)
+            if child == None:
+                print("INFO: PEOPLE: US26: check_corresponding_entries: Child ({}) is in family ({}), but missing from people".format(cId, family.id))
+            else:
+                if family.id not in child.children:
+                    print("INFO: PEOPLE: US26: check_corresponding_entries: Child ({}) is in family ({}), but missing its family id from person children property".format(cId, family.id))
+
+    for person in people:
+        for familyId in person.children:
+            family = family_dict.get(familyId)
+            if family == None:
+                print("INFO: FAMILY: US26 Family ({}), that person ({}) is a child in, is missing from families".format(familyId, person.id))
+            else:
+                if person.id not in family.children:
+                    print("INFO: FAMILY: US26 Family ({}) is missing their child ({}). Should be in children list".format(familyId, person.id))
+
+        for familyId in person.spouse:
+            family = family_dict.get(familyId)
+            if family == None:
+                print("INFO: FAMILY: US26 Family ({}), that person ({}) is a spouse in, is missing from families".format(familyId, person.id))
+            else:
+                if person.gender == "M" and person.id != family.husbandId:
+                    print("INFO: FAMILY: US26 Person ({}) says they are part of family ({}), but they are not the father!".format(person.id, familyId))
+                
+                if person.gender == "F" and person.id != family.wifeId:
+                    print("INFO: FAMILY: US26 Person ({}) says they are part of family ({}), but they are not the mother!".format(person.id, familyId))
+
+
+
