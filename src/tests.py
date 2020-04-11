@@ -728,6 +728,19 @@ class TestGedcomMethods(unittest.TestCase):
                         "@23@":Person("@23@", alive=True, birthday=utils.parse_date("18 FEB 1978"))}
         self.assertEqual(utils.birth_before_death_of_parents(p, test_people), False)
 
+
+    def test_birth_after_marriage_of_parents(self):
+        p1 = Person("@23@", alive=True, birthday=utils.parse_date("18 FEB 1978"))
+        f1 =Family("@F1@", husbandId="@21@", wifeId="@22@", children=["@23@"], married=utils.parse_date("10 FEB 1978"))
+        self.assertEqual(extras.birth_after_marriage_of_parents([p1], [f1]), True)
+
+    def test_birth_after_marriage_of_parents_err(self):
+        p = Person("@23@", alive=True, birthday=utils.parse_date("18 FEB 1978"))
+        f1 = Family("@F1@", husbandId="@21@", wifeId="@22@", children=["@23@"],
+                     divorced=utils.parse_date("20 FEB 1977"),married=utils.parse_date("10 FEB 1977"))
+        self.assertEqual(extras.birth_after_marriage_of_parents([p], [f1]), False)
+
+
 # make sure your functions start with the word 'test' and have at least one
 # parameter self (just because its in a class dw about why)
 # ex test_great_name_(self, other_params):

@@ -40,3 +40,5 @@ if __name__ == "__main__":
         extras.list_large_age_gap(people, families)
         extras.list_orphans(people, families)
         extras.check_corresponding_entries(people, families)
+        extras.birth_after_marriage_of_parents(people, families)
+
