@@ -121,18 +121,18 @@ def birth_before_marriage(family, people):
     husband = people[family.husbandId]
     wife = people[family.wifeId]
     if married_date is None:
-        print("\nERROR: FAMILY: US08: birth_before_marriage(): Family {}:  "
+        print("\nERROR: FAMILY: US02: birth_before_marriage(): Family {}:  "
               "invalid marriage date {} :".format(family.id, married_date))
         return False
     if wife.birthday is not None and (married_date - wife.birthday).days < 0:
-        print("\nERROR: FAMILY: US08: birth_before_marriage(): Family {}:  "
+        print("\nERROR: FAMILY: US02: birth_before_marriage(): Family {}:  "
               "birth date {} should be before marriage date {} of wife {}:".format(family.id, wife.birthday,
                                                                                    married_date,
                                                                                    wife.id))
         return False
 
     if husband.birthday is not None and (married_date - husband.birthday).days < 0:
-        print("\nERROR: FAMILY: US08: birth_before_marriage(): Family {}:  "
+        print("\nERROR: FAMILY: US02: birth_before_marriage(): Family {}:  "
               "birth date {} should be before marriage date {} of husband {}:".format(family.id, husband.birthday,
                                                                                       married_date,
                                                                                       husband.id))

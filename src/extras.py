@@ -268,7 +268,6 @@ def list_living_married(people, families):
             unique_ret))
     return unique_ret
 
-
 def list_recent_survivors(people, families):
     """
     Returns a list of all individuals whose spouse has died in the past 30 days
@@ -305,3 +304,43 @@ def list_recent_survivors(people, families):
         "\nINFO: PEOPLE: US37: list_recent_survivors: The following ID's are of people whose spouse has died in the past 30 days: " + str(
             unique_ret))
     return unique_ret
+
+
+def birth_after_marriage_of_parents(people,families):
+
+    """
+    Checks to see that a person is born after marriage of mother and father
+
+    written by: Chaeli
+
+    """
+    for person in people:
+        for family in families:
+            if person.birthday != None:
+                if person.id in family.children:
+                    birth = person.birthday
+                    if family.divorced != None:
+                        divorce = family.divorced
+                        r = relativedelta(birth, divorce)
+                        months = r.months
+                        if months > 9 :
+                           print(
+                               "\nERROR: PERSON: US08: birth_before_marriage_of_parents: Person {} is born more than 9 months after divorce of family {}".format(
+                                person.id,
+                                family.id))
+                           return False
+
+                    elif family.married != None:
+                        marriage = family.married
+                        if (marriage - birth).days > 0:
+                            print(
+                                "\nERROR: PERSON: US08: birth_before_marriage_of_parents: Person {} is born before marriage of family {}".format(
+                                    person.id,
+                                    family.id))
+                            return False
+                    else:
+                        print(
+                            "\nERROR: PERSON: US08: birth_before_marriage_of_parents: Error with divorce/marriage status of family {}".format(
+                                family.id))
+                        return False
+    return True
