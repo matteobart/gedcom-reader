@@ -617,3 +617,33 @@ def is_bigamy(person, families):
             print("\nERROR: PERSON: US11: No bigamy: Person {} is already married in {}".format(person.id, familyId))
             return False
     return True
+
+def birth_before_death_of_parents(person, people):
+    """
+    Checks to see that a person is born before death of mother and at most 9 months before death of father
+
+    written by: Chaeli
+
+    :param person: person object
+    :param people: person dictionary
+    :return: Boolean
+    """
+    parents = get_parents(person.id, people)
+    birth = person.birthday
+    for p in parents:
+        if p.death != None:
+            r = relativedelta(birth, p.death)
+            months = r.months
+            if p.gender == "M":
+                if months > 9 :
+                    print("\nERROR: PERSON: US09: birth_before_death_of_parents: Person {} is born over 9 months after father {}'s death".format(person.id,
+                                                                                                        p.id))
+                    return False
+            else:
+                if (p.death - birth).days < 0:
+                    print(
+                        "\nERROR: PERSON: US09: birth_before_death_of_parents: Person {} is born after mother {}'s death ".format(
+                            person.id,
+                            p.id))
+                    return False
+    return True
