@@ -84,6 +84,8 @@ def parse(lines):
                     line_num, utils.parents_not_too_old, current_entity, people)
                 utils.check(
                     line_num, utils.sibling_spacing, current_entity, people)
+                utils.check(
+                    line_num, utils. birth_before_death_of_parents, current_entity, people)
             elif split[1] == "DEAT":
                 # can check if "Y" is in split[2] if youd like
                 current_entity.alive = False
