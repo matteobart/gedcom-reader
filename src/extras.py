@@ -30,7 +30,7 @@ def list_upcoming_birthdays(people):
     #     for member in birthdayList:
     #         print("\nANAMOLY: INDIVIDUALS: US38: list_upcoming_birthdays(): Person '" +
     #               member.id + "' has an upcoming birthday")
-    print("INFO: PEOPLE: US38: list_upcoming_birthdays: The following INDIVIDUALS have upcoming birthdays:", birthdayList)
+    print("\nINFO: PEOPLE: US38: list_upcoming_birthdays: The following INDIVIDUALS have upcoming birthdays:", birthdayList)
     return birthdayList
 
 
@@ -364,15 +364,33 @@ def list_living_single(people, families):
                 if(person.id != family.husbandId and person.id != family.wifeId):
                     if(person.id not in singles_list):
                         singles_list.append(person.id)
-    print('INFO: PEOPLE: US31: list_living_single: The following individuals are older than 30 and single ', singles_list)
+    print('\nINFO: PEOPLE: US31: list_living_single: The following individuals are older than 30 and single ', singles_list)
     return singles_list
 
 
-def list_multiple_births(people):
-    multiple_births_list = []
+def list_multiple_births(people, families):
+    """
+    Returns a list of all individuals who had more than one child on the same day
+
+    written by: Brenden
+
+    :param people: list of person objects
+    :return: List
+    """
     people_dict = {people[i].id: people[i] for i in range(0, len(people))}
-    for person in people:
-        if(not multiple_births(person, people_dict)):
-            multiple_births_list.append(person.id)
-    print('INFO: PEOPLE: US32: list_multiple_births: The following individuals had multiple children born on the same day: ', multiple_births_list)
-    return multiple_births_list
+    ret = []
+    for family in families:
+        children = family.children
+        birth_dates = []
+        for child_id in children:
+            child = people_dict[child_id]
+            birth_dates.append(child.birthday)
+        more_than_1 = [x for x in birth_dates if birth_dates.count(x) >= 2]
+        if len(more_than_1) > 0:
+            ret.append(family.wifeId)
+    unique_ret = list(set(ret))
+    print(
+        '\nINFO: PEOPLE: US32: list_multiple_births: The following individuals had multiple children (2 or more) born on the same day: ',
+        unique_ret)
+
+    return unique_ret
