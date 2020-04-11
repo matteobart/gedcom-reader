@@ -728,6 +728,58 @@ class TestGedcomMethods(unittest.TestCase):
                         "@23@":Person("@23@", alive=True, birthday=utils.parse_date("18 FEB 1978"))}
         self.assertEqual(utils.birth_before_death_of_parents(p, test_people), False)
 
+    # this test is RELATIVE to the actual day of code running
+    def test_list_recent_survivors_none(self):
+        f1 = Family("@F1@", husbandId="@21@", wifeId="@22@")
+        f2 = Family("@F2@", husbandId="@23@", wifeId="@24@")
+        f3 = Family("@F3@", husbandId="@25@", wifeId="@26@")
+        p1 = Person("@21@")
+        p2 = Person("@22@", alive=False, death=utils.parse_date("29 FEB 2016"))
+        p3 = Person("@23@")
+        p4 = Person("@24@", alive=False, death=utils.parse_date("29 FEB 1960"))
+        p5 = Person("@25@", alive=False, death=utils.parse_date("19 FEB 1960"))
+        p6 = Person("@26@", alive=False, death=utils.parse_date("20 FEB 1961"))
+        self.assertEqual([], extras.list_recent_survivors(
+            [p1, p2, p3, p4, p5, p6], [f1, f2, f3]))
+
+    def test_list_recent_survivors(self):
+        f1 = Family("@F1@", husbandId="@21@", wifeId="@22@")
+        f2 = Family("@F2@", husbandId="@23@", wifeId="@24@")
+        f3 = Family("@F3@", husbandId="@25@", wifeId="@26@")
+        p1 = Person("@21@")
+        p2 = Person("@22@", alive=False, death=utils.parse_date("29 FEB 2016"))
+        p3 = Person("@23@")
+        p4 = Person("@24@", alive=False, death=utils.parse_date("29 FEB 1960"))
+        p5 = Person("@25@", alive=True)
+        p6 = Person("@26@", alive=False, death=utils.parse_date("10 APR 2020"))
+        self.assertEqual(["@25@"], extras.list_recent_survivors(
+            [p1, p2, p3, p4, p5, p6], [f1, f2, f3]))
+
+    def test_list_living_married_none(self):
+        f1 = Family("@F1@", husbandId="@21@", wifeId="@22@")
+        f2 = Family("@F2@", husbandId="@23@", wifeId="@24@")
+        f3 = Family("@F3@", husbandId="@25@", wifeId="@26@")
+        p1 = Person("@21@")
+        p2 = Person("@22@", alive=False)
+        p3 = Person("@23@", alive=False)
+        p4 = Person("@24@", alive=False)
+        p5 = Person("@25@", alive=False)
+        p6 = Person("@26@", alive=True)
+        self.assertEqual([], extras.list_living_married(
+            [p1, p2, p3, p4, p5, p6], [f1, f2, f3]))
+
+    def test_list_living_married(self):
+        f1 = Family("@F1@", husbandId="@21@", wifeId="@22@")
+        f2 = Family("@F2@", husbandId="@23@", wifeId="@24@")
+        f3 = Family("@F3@", husbandId="@25@", wifeId="@26@", divorced=False)
+        p1 = Person("@21@")
+        p2 = Person("@22@", alive=False)
+        p3 = Person("@23@", alive=False)
+        p4 = Person("@24@", alive=True)
+        p5 = Person("@25@", alive=True)
+        p6 = Person("@26@", alive=True)
+        self.assertEqual(["@25@", "@26@"], extras.list_living_married(
+            [p1, p2, p3, p4, p5, p6], [f1, f2, f3]))
 
     def test_birth_after_marriage_of_parents(self):
         p1 = Person("@23@", alive=True, birthday=utils.parse_date("18 FEB 1978"))
@@ -739,7 +791,6 @@ class TestGedcomMethods(unittest.TestCase):
         f1 = Family("@F1@", husbandId="@21@", wifeId="@22@", children=["@23@"],
                      divorced=utils.parse_date("20 FEB 1977"),married=utils.parse_date("10 FEB 1977"))
         self.assertEqual(extras.birth_after_marriage_of_parents([p], [f1]), False)
-
 
 # make sure your functions start with the word 'test' and have at least one
 # parameter self (just because its in a class dw about why)
