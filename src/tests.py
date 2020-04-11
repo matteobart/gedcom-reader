@@ -712,6 +712,22 @@ class TestGedcomMethods(unittest.TestCase):
         print("_________________________________________________")
 
 
+    def test_birth_before_death_of_parents(self):
+        p = Person("@23@", alive=True, birthday=utils.parse_date("18 FEB 1978"))
+
+        test_people={   "@21@":Person("@21@", gender="M", alive=True,  children=["@23@"]),
+                        "@22@":Person("@22@", gender="F", alive=False, death=utils.parse_date("19 FEB 1978"), children=["@23@"]),
+                        "@23@":Person("@23@", alive=True, birthday=utils.parse_date("18 FEB 1978"))}
+        self.assertEqual(utils.birth_before_death_of_parents(p, test_people), True)
+
+    def test_birth_before_death_of_parents_err(self):
+        p = Person("@23@", alive=True, birthday=utils.parse_date("18 FEB 1978"))
+
+        test_people={   "@21@":Person("@21@", gender="M", alive=False,  children=["@23@"], death=utils.parse_date("19 FEB 1977")),
+                        "@22@":Person("@22@", gender="F", alive=False, death=utils.parse_date("19 FEB 1977"), children=["@23@"]),
+                        "@23@":Person("@23@", alive=True, birthday=utils.parse_date("18 FEB 1978"))}
+        self.assertEqual(utils.birth_before_death_of_parents(p, test_people), False)
+
 # make sure your functions start with the word 'test' and have at least one
 # parameter self (just because its in a class dw about why)
 # ex test_great_name_(self, other_params):
