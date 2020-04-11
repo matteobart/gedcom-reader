@@ -1,6 +1,7 @@
 from datetime import datetime, date, timedelta
 from dateutil.relativedelta import relativedelta
 
+import person
 from mock import patch, MagicMock
 
 
@@ -89,7 +90,7 @@ def list_orphans(people, families):
             child = people_dict.get(childId)
             if child != None and child.age != None and child.age < 18:
                 ret.append(childId)
-    print("INFO: PEOPLE: US33: list_orphans: The following people are orphans: " + str(ret))
+    print("\nINFO: PEOPLE: US33: list_orphans: The following people are orphans: " + str(ret))
     return ret
 
 
@@ -112,7 +113,7 @@ def list_large_age_gap(people, families):
         wAge = relativedelta(wBirth, date)
         if hAge.years * 2 < wAge.years or wAge.years * 2 < hAge.years:
             ret.append(family.id)
-    print("INFO: FAMILY: US34: list_large_age_gap: The following families have large age gaps between husband/wife: " + str(ret))
+    print("\nINFO: FAMILY: US34: list_large_age_gap: The following families have large age gaps between husband/wife: " + str(ret))
     return ret
 
 
@@ -125,11 +126,11 @@ def include_individual_ages(person):
 def correct_gender_for_role(people, family):
     for person in people:
         if(person.gender == 'F' and person.id == family.husbandId):
-            print('INFO: PEOPLE: US21: correct_gender_for_role: ERROR in family ' + family.id + ': ' + person.name + '`s gender is ' +
+            print('\nINFO: PEOPLE: US21: correct_gender_for_role: ERROR in family ' + family.id + ': ' + person.name + '`s gender is ' +
                     person.gender + '(emale) but his role is `Husband` as seen by husbandId:', family.husbandId)
             return False
         elif(person.gender == 'M' and person.id == family.wifeId):
-            print('INFO: PEOPLE: US21: correct_gender_for_role: In family ' + family.id + ': ' + person.name + '`s gender is ' +
+            print('\nINFO: PEOPLE: US21: correct_gender_for_role: In family ' + family.id + ': ' + person.name + '`s gender is ' +
                     person.gender + '(ale) but her role is `Wife` as seen by wifeId:', family.wifeId)
             return False
     return True
@@ -175,7 +176,7 @@ def list_upcoming_anniversaries(couples):
             # actual check
             if ((ann-today).days) < 30:
                 a_list.append((couple[0], couple[1]))
-    print("INFO: FAMILY: US39: list_upcoming_anniverseries: The following (husband,wife) id COUPLES have upcoming anniverseries:", a_list)
+    print("\nINFO: FAMILY: US39: list_upcoming_anniverseries: The following (husband,wife) id COUPLES have upcoming anniverseries:", a_list)
     return a_list
 
 def check_corresponding_entries(people, families):
@@ -188,51 +189,119 @@ def check_corresponding_entries(people, families):
         husband = people_dict.get(hId)
         wife = people_dict.get(wId)
         if hId == None:
-            print("INFO: FAMILY: US26: check_corresponding_entries: Husband id is missing from family ({})".format(family.id))
+            print("\nINFO: FAMILY: US26: check_corresponding_entries: Husband id is missing from family ({})".format(family.id))
         elif husband == None: #check to make sure person exists
-            print("INFO: PEOPLE: US26: check_corresponding_entries: Husband ({}) is in family ({}), but missing from people".format(hId, family.id))
+            print("\nINFO: PEOPLE: US26: check_corresponding_entries: Husband ({}) is in family ({}), but missing from people".format(hId, family.id))
         else:
             if husband.name != family.husbandName: #check names match
-                print("INFO: PEOPLE: US26: check_corresponding_entries: Husband ({}) is in family ({}), but have different names".format(hId, family.id))
+                print("\nINFO: PEOPLE: US26: check_corresponding_entries: Husband ({}) is in family ({}), but have different names".format(hId, family.id))
             if family.id not in husband.spouse: #check his family is listed under spouses
-                print("INFO: PEOPLE: US26: check_corresponding_entries: Husband ({}) is missing his family ({}), from his person".format(hId, family.id))
+                print("\nINFO: PEOPLE: US26: check_corresponding_entries: Husband ({}) is missing his family ({}), from his person".format(hId, family.id))
         if wId == None:
-            print("INFO: FAMILY: US26: check_corresponding_entries: Wife id is missing from family ({})".format(family.id))
+            print("\nINFO: FAMILY: US26: check_corresponding_entries: Wife id is missing from family ({})".format(family.id))
         elif wife == None: #check to make sure person exists
-            print("INFO: PEOPLE: US26: check_corresponding_entries: Wife ({}) is in family ({}), but missing from people".format(wId, family.id))
+            print("\nINFO: PEOPLE: US26: check_corresponding_entries: Wife ({}) is in family ({}), but missing from people".format(wId, family.id))
         else:
             if wife.name != family.wifeName: #check names match
-                print("INFO: PEOPLE: US26: check_corresponding_entries: Wife ({}) is in family ({}), but have different names".format(wId, family.id))
+                print("\nINFO: PEOPLE: US26: check_corresponding_entries: Wife ({}) is in family ({}), but have different names".format(wId, family.id))
             if family.id not in wife.spouse: #check his family is listed under spouses
-                print("INFO: PEOPLE: US26: check_corresponding_entries: Wife ({}) is missing her family ({}), from her person".format(wId, family.id))
+                print("\nINFO: PEOPLE: US26: check_corresponding_entries: Wife ({}) is missing her family ({}), from her person".format(wId, family.id))
 
         for cId in cIds:
             child = people_dict.get(cId)
             if child == None:
-                print("INFO: PEOPLE: US26: check_corresponding_entries: Child ({}) is in family ({}), but missing from people".format(cId, family.id))
+                print("\nINFO: PEOPLE: US26: check_corresponding_entries: Child ({}) is in family ({}), but missing from people".format(cId, family.id))
             else:
                 if family.id not in child.children:
-                    print("INFO: PEOPLE: US26: check_corresponding_entries: Child ({}) is in family ({}), but missing its family id from person children property".format(cId, family.id))
+                    print("\nINFO: PEOPLE: US26: check_corresponding_entries: Child ({}) is in family ({}), but missing its family id from person children property".format(cId, family.id))
 
     for person in people:
         for familyId in person.children:
             family = family_dict.get(familyId)
             if family == None:
-                print("INFO: FAMILY: US26 Family ({}), that person ({}) is a child in, is missing from families".format(familyId, person.id))
+                print("\nINFO: FAMILY: US26 Family ({}), that person ({}) is a child in, is missing from families".format(familyId, person.id))
             else:
                 if person.id not in family.children:
-                    print("INFO: FAMILY: US26 Family ({}) is missing their child ({}). Should be in children list".format(familyId, person.id))
+                    print("\nINFO: FAMILY: US26 Family ({}) is missing their child ({}). Should be in children list".format(familyId, person.id))
 
         for familyId in person.spouse:
             family = family_dict.get(familyId)
             if family == None:
-                print("INFO: FAMILY: US26 Family ({}), that person ({}) is a spouse in, is missing from families".format(familyId, person.id))
+                print("\nINFO: FAMILY: US26 Family ({}), that person ({}) is a spouse in, is missing from families".format(familyId, person.id))
             else:
                 if person.gender == "M" and person.id != family.husbandId:
-                    print("INFO: FAMILY: US26 Person ({}) says they are part of family ({}), but they are not the father!".format(person.id, familyId))
+                    print("\nINFO: FAMILY: US26 Person ({}) says they are part of family ({}), but they are not the father!".format(person.id, familyId))
                 
                 if person.gender == "F" and person.id != family.wifeId:
-                    print("INFO: FAMILY: US26 Person ({}) says they are part of family ({}), but they are not the mother!".format(person.id, familyId))
+                    print("\nINFO: FAMILY: US26 Person ({}) says they are part of family ({}), but they are not the mother!".format(person.id, familyId))
 
 
+def list_living_married(people, families):
+    """
+    Returns a list of all individuals who are currently alive and their spouse is alive
 
+    written by: Brenden
+
+    :param people: list of person objects
+    :param families: dict of family objects
+    :return: List
+    """
+    people_dict = {people[i].id: people[i] for i in range(0, len(people))}
+    ret = []
+    for family in families:
+        if family.husbandId == None or family.wifeId == None:
+            continue
+        husband = people_dict.get(family.husbandId)
+        wife = people_dict.get(family.wifeId)
+        if husband == None or wife == None or family.divorced == True:
+            continue
+        if husband.alive and wife.alive:
+            ret.append(family.husbandId)
+            ret.append(family.wifeId)
+
+    unique_ret = []
+    for x in ret:
+        if x not in unique_ret:
+            unique_ret.append(x)
+    print(
+        "\nINFO: PEOPLE: US30: list_living_married: The following ID's are of people who currently are married and alive: " + str(
+            unique_ret))
+    return unique_ret
+
+
+def list_recent_survivors(people, families):
+    """
+    Returns a list of all individuals whose spouse has died in the past 30 days
+
+    written by: Brenden
+
+    :param people: list of person objects
+    :param families: dict of family objects
+    :return: List
+    """
+    people_dict = {people[i].id: people[i] for i in range(0, len(people))}
+    today = datetime.today()
+    ret = []
+    for family in families:
+        if family.husbandId == None or family.wifeId == None:
+            continue
+        husband = people_dict.get(family.husbandId)
+        wife = people_dict.get(family.wifeId)
+        if husband.alive == None or wife.alive == None:
+            continue
+        if husband.alive and not wife.alive:
+            if wife.death != None:
+                if today - wife.death < timedelta(days=30):
+                    ret.append(family.husbandId)
+        if not husband.alive and wife.alive:
+            if husband.death != None:
+                if today - husband.death < timedelta(days=30):
+                    ret.append(family.wifeId)
+    unique_ret = []
+    for x in ret:
+        if x not in unique_ret:
+            unique_ret.append(x)
+    print(
+        "\nINFO: PEOPLE: US37: list_recent_survivors: The following ID's are of people whose spouse has died in the past 30 days: " + str(
+            unique_ret))
+    return unique_ret
