@@ -836,6 +836,37 @@ class TestGedcomMethods(unittest.TestCase):
         self.assertEqual(extras.list_living_single(
             [p0, p1], [f2]), [])
 
+    def test_multiple_births_not_empty(self):
+        # testPerson = Person("@22@", alive=True, birthday=utils.parse_date(
+        #     "28 FEB 1960"), children=["@23@", "@24@", "@25@", "@26@", "@27@"])
+        testPeople = [
+            Person("@22@", alive=True, birthday=utils.parse_date(
+                "28 FEB 1960"), children=["@23@", "@24@", "@25@", "@26@", "@27@"]),
+            Person("@23@", alive=True, birthday=utils.parse_date(
+                "19 FEB 1978"), children=[]),
+            Person("@24@", alive=True, birthday=utils.parse_date(
+                "19 FEB 1978"), children=[]),
+            Person("@25@", alive=True, birthday=utils.parse_date(
+                "19 FEB 1978"), children=[]),
+            Person("@26@", alive=True, birthday=utils.parse_date(
+                "19 FEB 1978"), children=[]),
+            Person("@27@", alive=True, birthday=utils.parse_date(
+                "19 FEB 1978"), children=[])
+        ]
+
+        self.assertEqual(extras.list_multiple_births(testPeople), [
+                         '@22@'])
+
+    def test_multiple_births_empty(self):
+        testPeople = [
+            Person("@22@", alive=True, birthday=utils.parse_date(
+                "28 FEB 1960"), children=[]),
+            Person("@21@", alive=True, birthday=utils.parse_date("19 FEB 1960")),
+            Person("@23@", alive=True, birthday=utils.parse_date("19 FEB 1978")),
+            Person("@24@", alive=True, birthday=utils.parse_date("19 FEB 1978"))]
+
+        self.assertEqual(extras.list_multiple_births(testPeople), [])
+
 
 # make sure your functions start with the word 'test' and have at least one
 # parameter self (just because its in a class dw about why)

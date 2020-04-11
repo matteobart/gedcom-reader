@@ -64,6 +64,7 @@ def marriage_before_death(family, people):
             returnable = False
     return returnable
 
+
 def birth_before_death(person):
     """
     Checks person's birthday is in fact before death
@@ -107,6 +108,7 @@ def marriage_before_divorce(family):
 
     return True
 
+
 def birth_before_marriage(family, people):
     """
     Checks marriage date is in fact after birth of both spouses
@@ -138,6 +140,7 @@ def birth_before_marriage(family, people):
                                                                                       husband.id))
         return False
     return True
+
 
 def divorce_before_death(family, people):
     """
@@ -259,8 +262,9 @@ def marriage_after_14(family, people):
               "marriage date {} should be at least 14 years after birth date {} of husband {}:".format(family.id, married_date, husband.birthday, husband.id))
         returnable = False
     return returnable
-def get_parents(person, people):
 
+
+def get_parents(person, people):
     """
         Gets list of parents
 
@@ -311,6 +315,7 @@ def get_siblings(person, people):
                 result.append(y)
     return result
 
+
 def no_first_cousin_marriage(family, people):
     """
        Checks that there is not marriage between first cousins
@@ -335,7 +340,7 @@ def no_first_cousin_marriage(family, people):
 
     for x in aunts:
         y = people[x]
-        cousins +=y.children
+        cousins += y.children
 
     if husband in cousins or wife in cousins:
         print("\nERROR: FAMILY: US19: no_first_cousin_marriage(): Family {}:  "
@@ -343,6 +348,7 @@ def no_first_cousin_marriage(family, people):
         return False
 
     return True
+
 
 def no_aunts_and_uncles(family, people):
     """
@@ -374,6 +380,8 @@ def no_aunts_and_uncles(family, people):
     return True
 
 # inspired by SO question 765797, integrated into project by Daniel Kramer
+
+
 def get_delta_years(years, from_date=None):
     if from_date is None:
         from_date = datetime.now()
@@ -510,6 +518,7 @@ def order_siblings_by_age(siblings, people):
 
 # TODO: Discuss how to print User Story Message for this method.
 
+
 def include_individual_ages(person):
     diff = relativedelta(datetime.now(), person.birthday)
     person.age = diff.years
@@ -529,6 +538,7 @@ def correct_gender_for_role(people, families):
                 return False
     return True
 
+
 def parents_not_too_old(person, people):
     parents = get_parents(person.id, people)
     for parent in parents:
@@ -538,11 +548,12 @@ def parents_not_too_old(person, people):
                       "mother {} is too old:".format(person.id, parent.id, ))
                 return False
         else:
-            if parent.age -person.age > 80:
+            if parent.age - person.age > 80:
                 print("\nERROR: FAMILY: US12: parents_not_too_old: Person {} 's  "
                       "father {} is too old:".format(person.id, parent.id, ))
                 return False
     return True
+
 
 def sibling_spacing(person, people):
     siblings = get_siblings(person.id, people)
@@ -551,7 +562,7 @@ def sibling_spacing(person, people):
         r = relativedelta(y.birthday, person.birthday)
         months = r.months
         days = r.days
-        if not(months > 8 or days < 2) :
+        if not(months > 8 or days < 2):
             print("\nERROR: FAMILY: US13: sibling_spacing: Person {}:  "
                   "with sibling {} are too close in birthday:".format(person.id, y.id, ))
             return False
@@ -606,6 +617,7 @@ def multiple_births(person, people):
     else:
         return True
 
+
 def is_bigamy(person, families):
     if person.spouse == None:
         return True
@@ -614,9 +626,11 @@ def is_bigamy(person, families):
         if family == None:
             continue
         if family.divorced != None:
-            print("\nERROR: PERSON: US11: No bigamy: Person {} is already married in {}".format(person.id, familyId))
+            print("\nERROR: PERSON: US11: No bigamy: Person {} is already married in {}".format(
+                person.id, familyId))
             return False
     return True
+
 
 def birth_before_death_of_parents(person, people):
     """
@@ -635,9 +649,9 @@ def birth_before_death_of_parents(person, people):
             r = relativedelta(birth, p.death)
             months = r.months
             if p.gender == "M":
-                if months > 9 :
+                if months > 9:
                     print("\nERROR: PERSON: US09: birth_before_death_of_parents: Person {} is born over 9 months after father {}'s death".format(person.id,
-                                                                                                        p.id))
+                                                                                                                                                 p.id))
                     return False
             else:
                 if (p.death - birth).days < 0:

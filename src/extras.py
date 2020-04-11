@@ -3,6 +3,7 @@ from dateutil.relativedelta import relativedelta
 
 import person
 from mock import patch, MagicMock
+from utils import multiple_births
 
 
 def list_upcoming_birthdays(people):
@@ -378,3 +379,13 @@ def list_living_single(people, families):
                         singles_list.append(person.id)
     print('INFO: PEOPLE: US31: list_living_single: The following individuals are older than 30 and single ', singles_list)
     return singles_list
+
+
+def list_multiple_births(people):
+    multiple_births_list = []
+    people_dict = {people[i].id: people[i] for i in range(0, len(people))}
+    for person in people:
+        if(not multiple_births(person, people_dict)):
+            multiple_births_list.append(person.id)
+    print('INFO: PEOPLE: US32: list_multiple_births: The following individuals had multiple children born on the same day: ', multiple_births_list)
+    return multiple_births_list

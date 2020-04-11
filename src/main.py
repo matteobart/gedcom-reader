@@ -35,6 +35,7 @@ if __name__ == "__main__":
         extras.list_recent_survivors(people, families)
         extras.list_recent_deaths(people)
         extras.list_deceased(people)
+        extras.list_multiple_births(people)
         extras.less_than_150yo(people)
         extras.list_orphans(people, families)
         extras.list_living_single(people, families)
