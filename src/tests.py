@@ -812,7 +812,7 @@ class TestGedcomMethods(unittest.TestCase):
         f1 = Family("@F1@", husbandId="@21@", wifeId="@22@", children=[
                     "@23@"], married=utils.parse_date("10 FEB 1978"))
         self.assertEqual(
-            extras.birth_after_marriage_of_parents([p1], [f1]), True)
+            extras.birth_after_marriage_of_parents([p1], [f1]), [])
 
     def test_birth_after_marriage_of_parents_err(self):
         p = Person("@23@", alive=True,
@@ -820,7 +820,7 @@ class TestGedcomMethods(unittest.TestCase):
         f1 = Family("@F1@", husbandId="@21@", wifeId="@22@", children=["@23@"],
                     divorced=utils.parse_date("20 FEB 1977"), married=utils.parse_date("10 FEB 1977"))
         self.assertEqual(
-            extras.birth_after_marriage_of_parents([p], [f1]), False)
+            extras.birth_after_marriage_of_parents([p], [f1]),["@23@"])
 
     def test_list_living_single_not_empty(self):
         f2 = Family("@F2@", husbandId="@24@", wifeId="@24@", children=["@27@"])
