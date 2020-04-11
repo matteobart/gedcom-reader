@@ -336,6 +336,7 @@ def birth_after_marriage_of_parents(people, families):
     written by: Chaeli
 
     """
+    list = []
     for person in people:
         for family in families:
             if person.birthday != None:
@@ -346,26 +347,16 @@ def birth_after_marriage_of_parents(people, families):
                         r = relativedelta(birth, divorce)
                         months = r.months
                         if months > 9:
-                            print(
-                                "\nERROR: PERSON: US08: birth_before_marriage_of_parents: Person {} is born more than 9 months after divorce of family {}".format(
-                                    person.id,
-                                    family.id))
-                            return False
-
+                            list.append(person.id)
                     elif family.married != None:
                         marriage = family.married
                         if (marriage - birth).days > 0:
-                            print(
-                                "\nERROR: PERSON: US08: birth_before_marriage_of_parents: Person {} is born before marriage of family {}".format(
-                                    person.id,
-                                    family.id))
-                            return False
+                            list.append(person.id)
                     else:
-                        print(
-                            "\nERROR: PERSON: US08: birth_before_marriage_of_parents: Error with divorce/marriage status of family {}".format(
-                                family.id))
-                        return False
-    return True
+                        list.append(person.id)
+    print("\nINFO: FAMILY: US08: birth_after_marriage_of_parents: People born before marriage of parents/over 9 months after divorce {}".format(
+                                list))
+    return list
 
 
 def list_living_single(people, families):
