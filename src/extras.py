@@ -266,10 +266,10 @@ def list_living_married(people, families):
 
     :param people: list of person objects
     :param families: dict of family objects
-    :return: List
+    :return: List of tuples
     """
     people_dict = {people[i].id: people[i] for i in range(0, len(people))}
-    ret = []
+    unique_ret = []
     for family in families:
         if family.husbandId == None or family.wifeId == None:
             continue
@@ -278,13 +278,9 @@ def list_living_married(people, families):
         if husband == None or wife == None or family.divorced == True:
             continue
         if husband.alive and wife.alive:
-            ret.append(family.husbandId)
-            ret.append(family.wifeId)
-
-    unique_ret = []
-    for x in ret:
-        if x not in unique_ret:
-            unique_ret.append(x)
+            unique_ret.append((family.husbandId, family.wifeId, family.married))
+    
+    
     print(
         "\nINFO: PEOPLE: US30: list_living_married: The following ID's are of people who currently are married and alive: " + str(
             unique_ret))
