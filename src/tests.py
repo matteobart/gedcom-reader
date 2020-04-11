@@ -836,36 +836,25 @@ class TestGedcomMethods(unittest.TestCase):
         self.assertEqual(extras.list_living_single(
             [p0, p1], [f2]), [])
 
-    def test_multiple_births_not_empty(self):
-        # testPerson = Person("@22@", alive=True, birthday=utils.parse_date(
-        #     "28 FEB 1960"), children=["@23@", "@24@", "@25@", "@26@", "@27@"])
-        testPeople = [
-            Person("@22@", alive=True, birthday=utils.parse_date(
-                "28 FEB 1960"), children=["@23@", "@24@", "@25@", "@26@", "@27@"]),
-            Person("@23@", alive=True, birthday=utils.parse_date(
-                "19 FEB 1978"), children=[]),
-            Person("@24@", alive=True, birthday=utils.parse_date(
-                "19 FEB 1978"), children=[]),
-            Person("@25@", alive=True, birthday=utils.parse_date(
-                "19 FEB 1978"), children=[]),
-            Person("@26@", alive=True, birthday=utils.parse_date(
-                "19 FEB 1978"), children=[]),
-            Person("@27@", alive=True, birthday=utils.parse_date(
-                "19 FEB 1978"), children=[])
-        ]
-
-        self.assertEqual(extras.list_multiple_births(testPeople), [
-                         '@22@'])
-
     def test_multiple_births_empty(self):
-        testPeople = [
-            Person("@22@", alive=True, birthday=utils.parse_date(
-                "28 FEB 1960"), children=[]),
-            Person("@21@", alive=True, birthday=utils.parse_date("19 FEB 1960")),
-            Person("@23@", alive=True, birthday=utils.parse_date("19 FEB 1978")),
-            Person("@24@", alive=True, birthday=utils.parse_date("19 FEB 1978"))]
+        f1 = Family("@F1@", husbandId="@21@", wifeId="@22@", children=["@21@", "@22@"])
+        p1 = Person("@21@", birthday=utils.parse_date(
+            "19 FEB 1978"))
+        p2 = Person("@22@", birthday=utils.parse_date(
+            "20 FEB 1978"))
 
-        self.assertEqual(extras.list_multiple_births(testPeople), [])
+        self.assertEqual([], extras.list_multiple_births(
+            [p1, p2], [f1]))
+
+    def test_multiple_births(self):
+        f1 = Family("@F1@", husbandId="@21@", wifeId="@22@", children=["@21@", "@22@"])
+        p1 = Person("@21@", birthday=utils.parse_date(
+                "19 FEB 1978"))
+        p2 = Person("@22@",birthday=utils.parse_date(
+                "19 FEB 1978"))
+
+        self.assertEqual(["@22@"], extras.list_multiple_births(
+            [p1, p2], [f1]))
 
 
 # make sure your functions start with the word 'test' and have at least one
