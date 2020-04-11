@@ -21,13 +21,10 @@ if __name__ == "__main__":
             extras.fewer_than_15_siblings(family)
             family.children = order_siblings_by_age(family.children, people)
             extras.correct_gender_for_role(people, family)
-            
-
-
 
         print_families(families)
         print_people(people)
-        
+
         extras.list_upcoming_birthdays(people)
 
         # MIKE please uncomment when done:
@@ -40,7 +37,7 @@ if __name__ == "__main__":
         extras.list_deceased(people)
         extras.less_than_150yo(people)
         extras.list_orphans(people, families)
+        extras.list_living_single(people, families)
         extras.list_large_age_gap(people, families)
         extras.check_corresponding_entries(people, families)
         extras.birth_after_marriage_of_parents(people, families)
-
